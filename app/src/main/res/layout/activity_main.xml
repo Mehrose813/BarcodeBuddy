@@ -9,27 +9,39 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="500dp"
-        android:layout_height="500dp"
-        android:layout_marginStart="-30sp"
-        android:layout_marginTop="-60sp"
-        android:background="@drawable/border"
-        android:backgroundTint="@color/light_green"
-        />
+    <ImageView
+        android:layout_marginTop="0dp"
+        android:layout_margin="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:src="@drawable/background" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Unlock the secrets of your plate  Track your health, don’t hesitate!
-Sugar, fats, and all in sight,
-Take control and live your life right!"
-        android:layout_marginTop="15sp"
-        android:textSize="20sp"
-        android:layout_marginStart="10sp"
+        android:text="Wellcome to
+
+                             Barcode Buddy"
+        android:textSize="25sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
+        android:layout_marginStart="10sp"
+        android:padding="10sp"
+        android:layout_marginTop="-180sp"/>
+
+    <TextView
+        android:layout_width="380sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10sp"
+        android:layout_marginTop="100sp"
+        android:padding="10sp"
+        android:text="Unlock the secrets of your plate
+           Track your health, don’t hesitate!
+           Sugar, fats, and all in sight,
+                  Take control and live your life right!"
         android:textColor="@color/dark_green"
-        />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
     <Button
@@ -37,7 +49,8 @@ Take control and live your life right!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginTop="40sp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="10sp"
         android:backgroundTint="@color/dark_green"
         android:text="Get Started"
         android:textColor="@color/white" />

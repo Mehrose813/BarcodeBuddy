@@ -23,7 +23,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
         android:hint="Enter you email"
         android:background="@drawable/border_style"
@@ -37,14 +37,14 @@
         android:text="@string/password"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
         />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
         android:hint="Enter you password"
         android:background="@drawable/border_style"
@@ -60,7 +60,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:text="@string/account"
             android:layout_marginStart="15dp"
             android:textSize="17dp"
@@ -70,9 +70,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10sp"
             android:text="@string/signup"
-            android:textSize="17dp"
+            android:textSize="20dp"
             android:textColor="@color/dark_green"
             android:id="@+id/txt_sigup"
 
@@ -83,7 +84,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="15dp"
         android:backgroundTint="@color/light_green"
         android:background="@drawable/border_style"
