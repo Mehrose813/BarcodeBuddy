@@ -6,16 +6,41 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click me"
-        android:id="@+id/btn"
+    <TextView
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_marginStart="-30sp"
+        android:layout_marginTop="-60sp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/light_green"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unlock the secrets of your plate  Track your health, don’t hesitate!
+Sugar, fats, and all in sight,
+Take control and live your life right!"
+        android:layout_marginTop="15sp"
+        android:textSize="20sp"
+        android:layout_marginStart="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/dark_green"
+        />
+
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="40sp"
+        android:backgroundTint="@color/dark_green"
+        android:text="Get Started"
+        android:textColor="@color/white" />
 
 
 </LinearLayout>

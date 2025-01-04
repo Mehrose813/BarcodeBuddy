@@ -122,13 +122,15 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="15dp"
-        android:background="@color/light_green"
+        android:backgroundTint="@color/light_green"
         android:text="@string/btn_sigup"
-        android:id="@+id/btn_signup"/>
+        android:background="@drawable/border_style"
+        />
 
 
 
