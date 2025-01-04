@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Barcode Buddy</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="account">Don\'t have an account?</string>
+    <string name="signup">Sigup</string>
+    <string name="btn_login">LogIn</string>
+
+
+    <string name="name_a2">Name</string>
+    <string name="conpass">Confirm Password</string>
+    <string name="login">Login</string>
+    <string name="btn_sigup">SignUp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
