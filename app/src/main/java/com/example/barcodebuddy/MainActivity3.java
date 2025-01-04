@@ -9,14 +9,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity3 extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main3);
 
-        setContentView(R.layout.activity_main);
-        Intent intent=new Intent(MainActivity.this,MainActivity3.class);
-        startActivity(intent);
-    }
+   }
 }
