@@ -77,6 +77,7 @@ TextView txtLogin;
                 auth.signin(SignUpActivity.this, email, password, new ResponseCallBack() {
                     @Override
                     public void onSuccess() {
+
                         startActivity(intent);
                     }
 
