@@ -9,12 +9,12 @@
     android:layout_margin="30dp"
     tools:context=".MainActivity3">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hlo  i am alina plese ftch this code"
-        android:textStyle="bold"
-        android:textSize="30dp"
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="30dp"
+    android:text="Hy i am Aleena"
+    android:textStyle="bold"
+    android:gravity="center"
 />
-
 </LinearLayout>
