@@ -11,6 +11,10 @@
     <string name="conpass">Confirm Password</string>
     <string name="login">Login</string>
     <string name="btn_sigup">SignUp</string>
+    <string name="your_name">Your Name</string>
+    <string name="your_email">Your Email</string>
+    <string name="your_passwordl">Your Password</string>
+    <string name="profile">Hi!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="profileFragment">Profile Information</string>
 </resources>
