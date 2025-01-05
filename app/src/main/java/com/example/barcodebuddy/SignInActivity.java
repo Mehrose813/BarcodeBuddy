@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ public class SignInActivity extends AppCompatActivity {
 AppCompatButton btnLogin;
 EditText email,passw;
 TextView txtSigup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,13 @@ TextView txtSigup;
         email = findViewById(R.id.mail);
         passw = findViewById(R.id.pass);
         txtSigup = findViewById(R.id.txt_sigup);
+
+
+        ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this);
+        progressDialog.setTitle("Login in process");
+        progressDialog.setMessage("Please wait.....");
+        progressDialog.setCancelable(false);
+
 
         txtSigup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,17 +55,28 @@ TextView txtSigup;
 
                 String mail = email.getText().toString();
                 String pass = passw.getText().toString();
-
+                String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
                 //validation
                 if (mail.isEmpty()) {
                     email.setError("Email is required");
                     email.requestFocus();
                     return;
                 }
+                else{
+                    email.setError(null);
+                }
 
                 if (pass.isEmpty()) {
                     passw.setError("Password is required");
                     passw.requestFocus();
+                    return;
+                }
+                else {
+                    passw.setError(null);
+                }
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
+                    email.setError("Enter a valid email");
+                    email.requestFocus();
                     return;
                 }
 
@@ -65,27 +85,35 @@ TextView txtSigup;
                     passw.requestFocus();
                     return;
                 }
-
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
-                    email.setError("Enter a valid email");
-                    email.requestFocus();
+                if(!pass.matches(passwordVal)){
+                    if (pass.contains(" ")) {
+                        passw.setError("Spaces are not allowed in the password");
+                    } else {
+                        passw.setError("Password must contain at least one special character");
+                    }
                     return;
                 }
 
-                AuthDAO auth = new AuthDAO();
-                auth.signin(SignInActivity.this, mail, pass, new ResponseCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        Intent intent = new Intent(SignInActivity.this,SignUpActivity.class);
-                        startActivity(intent);
-                    }
 
-                    @Override
-                    public void onError(String msg) {
-                        Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
 
-                    }
-                });
+                    progressDialog.show();
+
+                    AuthDAO auth = new AuthDAO();
+                    auth.signin(SignInActivity.this, mail, pass, new ResponseCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            progressDialog.dismiss();
+                            Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
 
 
             }

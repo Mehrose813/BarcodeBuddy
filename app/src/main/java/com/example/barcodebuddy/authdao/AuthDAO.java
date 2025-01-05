@@ -1,6 +1,7 @@
 package com.example.barcodebuddy.authdao;
 
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class AuthDAO {
 
-    public void signin(Context context ,String mail , String pass ,ResponseCallBack callBack){
+    public void signin(Activity context , String mail , String pass , ResponseCallBack callBack){
         FirebaseAuth.getInstance().signInWithEmailAndPassword(mail,pass)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -30,7 +31,7 @@ public class AuthDAO {
 
     }
 
-    public void signup(Context context , String email, String password , ResponseCallBack callback){
+    public void signup(Activity context , String email, String password , ResponseCallBack callback){
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override

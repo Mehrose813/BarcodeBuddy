@@ -30,7 +30,7 @@ Button btn;
                     startActivity(intent);
                 }
                 else {
-                    Intent intent = new Intent(MainActivity.this,HomeFragment.class);
+                    Intent intent = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(intent);
 
                 }

@@ -9,26 +9,57 @@
     android:orientation="vertical"
     tools:context=".SignUpActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:src="@drawable/background"
+        android:layout_marginTop="0dp"
+        android:scaleType="fitXY"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:layout_marginStart="10dp"
+        android:padding="10dp"
+        android:layout_marginTop="-180dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:layout_marginStart="10dp"
+        android:padding="10dp"
+        android:layout_marginTop="-10dp"
+        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/name_a2"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="120dp"
         android:layout_marginStart="15dp"
         />
 
     <EditText
-        android:layout_width="match_parent"
+        android:id="@+id/name"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15sp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
         android:hint="Enter you name"
         android:background="@drawable/border_style"
         android:padding="10dp"
-        android:id="@+id/name"
+
         />
 
     <TextView
@@ -37,16 +68,15 @@
         android:text="@string/email"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
         />
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
-        android:layout_marginEnd="15sp"
         android:hint="Enter you email"
         android:background="@drawable/border_style"
         android:padding="10dp"
@@ -59,16 +89,15 @@
         android:text="@string/password"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
         />
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
-        android:layout_marginEnd="15sp"
         android:hint="Enter you password"
         android:background="@drawable/border_style"
         android:padding="10dp"
@@ -81,16 +110,15 @@
         android:text="@string/conpass"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
         />
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="15dp"
-        android:layout_marginEnd="15sp"
         android:hint="Confirm your password"
         android:background="@drawable/border_style"
         android:padding="10dp"
@@ -105,7 +133,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/account"
             android:layout_marginStart="15dp"
             android:textSize="17dp"
@@ -115,7 +143,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/login"
             android:textSize="20dp"
             android:textColor="@color/dark_green"
@@ -127,12 +155,11 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_signup"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"
-        android:layout_marginEnd="15sp"
-        android:backgroundTint="@color/light_green"
+        android:backgroundTint="@color/dark_green"
         android:text="@string/btn_sigup"
         android:background="@drawable/border_style"
         />
