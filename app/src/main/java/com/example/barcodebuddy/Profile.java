@@ -1,9 +1,13 @@
 package com.example.barcodebuddy;
 
-public class ProfileClass {
-    String name,email;
-    int password;
+public class Profile {
+    String name ,email,password;
 
+    public Profile(String name , String email,String password){
+        this.name=name;
+        this.email=email;
+        this.password=password;
+    }
     public String getName() {
         return name;
     }
@@ -20,11 +24,14 @@ public class ProfileClass {
         this.email = email;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
+    }
+    public Profile(){
+
     }
 }

@@ -1,0 +1,10 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#3A8A28"/> <!-- دائرے کا رنگ -->
+    <size
+        android:width="100dp"
+        android:height="100dp" /> <!-- دائرے کا سائز -->
+    <stroke
+        android:width="2dp"
+        android:color="#3A8A28" /> <!-- بارڈر کا رنگ -->
+</shape>

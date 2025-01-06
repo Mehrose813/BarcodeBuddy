@@ -1,15 +1,21 @@
 package com.example.barcodebuddy;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.barcodebuddy.authdao.AuthDAO;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,8 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class UserFragment extends Fragment {
-    private TextView tvName, tvEmail, tvPassword;
-    private DatabaseReference databaseReference;
+    TextView tvName, tvEmail, tvPassword;
+    Button btnLogout;
 
     public UserFragment() {
         // Required empty public constructor
@@ -36,38 +42,58 @@ public class UserFragment extends Fragment {
         tvName = view.findViewById(R.id.tv_name);
         tvEmail = view.findViewById(R.id.tv_email);
         tvPassword = view.findViewById(R.id.tv_password);
+        btnLogout = view.findViewById(R.id.btn_logout);
 
-        // Get current user info
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        if (currentUser != null) {
-            String userId = currentUser.getUid();  // Get the current user's UID
-            databaseReference = FirebaseDatabase.getInstance().getReference("profile").child(userId);
+        AuthDAO authDAO = new AuthDAO();
+        authDAO.fetchDetail(userId, new ResponseFetch() {
 
-            // Retrieve user data from Firebase Realtime Database
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        // Get ProfileClass data from Firebase
-                        ProfileClass profileClass = snapshot.getValue(ProfileClass.class);
-                        if (profileClass != null) {
-                            // Display user data on the UI
-                            tvName.setText(profileClass.getName());
-                            tvEmail.setText(profileClass.getEmail());
-                            tvPassword.setText(profileClass.getPassword());  // Avoid displaying password in UI if unnecessary
-                        }
+            @Override
+            public void onSuccess(Profile profile) {
+
+                tvName.setText(profile.getName());
+                tvEmail.setText(profile.getEmail());
+                tvPassword.setText(profile.getPassword());
+            }
+
+            @Override
+            public void onError(String msg) {
+                Toast.makeText(getContext(), "Error: " + msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                builder.setTitle("Logout Account");
+                builder.setMessage("Are you Sure");
+                builder.setCancelable(true);
+
+                AlertDialog alert = builder.create();
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getContext(),SignInActivity.class);
+                        startActivity(intent);
+
                     }
-                }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alert.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d("Error", "Database error: ");
-                }
-            });
-        }
-
-        return view;
+                return view;
     }
 }
