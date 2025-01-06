@@ -30,36 +30,8 @@ Button btnLogout;
 
         LinearLayout container = findViewById(R.id.container);
         BottomNavigationView nav = findViewById(R.id.btm_nav);
-        btnLogout = findViewById(R.id.btn_logout);
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                builder.setTitle("Logout Account");
-                builder.setMessage("Are you Sure");
-                builder.setCancelable(true);
-
-                AlertDialog alert = builder.create();
-
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(HomeActivity.this,SignInActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        alert.dismiss();
-                    }
-                });
-                builder.show();
-            }
-        });
 
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

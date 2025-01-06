@@ -124,7 +124,7 @@ TextView txtLogin;
                 else{
                 progressDialog.show();
                 AuthDAO auth = new AuthDAO();
-                auth.signup(SignUpActivity.this, email, password, new ResponseCallBack() {
+                auth.signup(SignUpActivity.this,name, email, password, new ResponseCallBack() {
                     @Override
                     public void onSuccess() {
 
