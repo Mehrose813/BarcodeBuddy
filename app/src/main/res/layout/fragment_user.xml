@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   android:background="#FF54AC5A"
-    tools:context=".HomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FF54AC5A"
+    >
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="170dp"
+    android:background="@drawable/border"/>
 
    <de.hdodenhof.circleimageview.CircleImageView
        android:id="@+id/imageView_profilepic"
@@ -15,8 +18,19 @@
        android:layout_height="120dp"
        android:src="@drawable/profilepicic"
        android:layout_centerHorizontal="true"
-       android:layout_marginTop="60dp"
+       android:layout_marginTop="90dp"
+
     />
+    <ImageView
+        android:id="@+id/imageView_camera"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:src="@drawable/camera"
+        android:layout_alignEnd="@id/imageView_profilepic"
+        android:layout_alignBottom="@id/imageView_profilepic"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp" />
 
     <TextView
         android:id="@+id/tv_hi"
@@ -29,6 +43,7 @@
         android:layout_below="@+id/imageView_profilepic"
         android:layout_marginStart="20dp"
        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
         />
    <TextView
        android:id="@+id/tv_name1"
@@ -49,9 +64,9 @@
         android:layout_height="wrap_content"
         android:text="@string/your_name"
         android:layout_below="@+id/tv_name1"
-        android:padding="10dp"
+        android:padding="15dp"
         android:textColor="#666565"
-        android:textSize="20sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -77,8 +92,8 @@
         android:layout_height="wrap_content"
         android:text="@string/your_email"
         android:layout_below="@+id/tv_email1"
-        android:padding="10dp"
-        android:textSize="20sp"
+        android:padding="15dp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:textColor="#666565"
         android:layout_marginStart="10dp"
@@ -105,13 +120,24 @@
         android:layout_height="wrap_content"
         android:text="@string/your_passwordl"
         android:layout_below="@+id/tv_pass"
-        android:padding="10dp"
+        android:padding="15dp"
         android:textColor="#666565"
-        android:textSize="20sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/border_textstyle"
         />
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Update"
+    android:textColor="@color/light_green"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_below="@id/tv_password"
+    android:backgroundTint="@color/white"
+    android:layout_marginTop="30dp"
+    android:textSize="25sp"/>
 
 </RelativeLayout>
