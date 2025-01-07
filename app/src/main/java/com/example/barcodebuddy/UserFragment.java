@@ -80,6 +80,7 @@ public class UserFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(getContext(),SignInActivity.class);
+                        FirebaseAuth.getInstance().signOut();
                         startActivity(intent);
 
                         requireActivity().finish();
