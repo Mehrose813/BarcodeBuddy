@@ -132,6 +132,7 @@ TextView txtLogin;
                         Intent intent = new Intent(SignUpActivity.this,HomeActivity.class);
 
                         startActivity(intent);
+                        finish();
                     }
 
                     @Override

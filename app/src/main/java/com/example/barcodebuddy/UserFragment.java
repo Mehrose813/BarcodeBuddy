@@ -82,6 +82,8 @@ public class UserFragment extends Fragment {
                         Intent intent = new Intent(getContext(),SignInActivity.class);
                         startActivity(intent);
 
+                        requireActivity().finish();
+
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

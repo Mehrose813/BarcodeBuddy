@@ -62,17 +62,11 @@ TextView txtSigup;
                     email.requestFocus();
                     return;
                 }
-                else{
-                    email.setError(null);
-                }
 
                 if (pass.isEmpty()) {
                     passw.setError("Password is required");
                     passw.requestFocus();
                     return;
-                }
-                else {
-                    passw.setError(null);
                 }
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
                     email.setError("Enter a valid email");
@@ -105,6 +99,7 @@ TextView txtSigup;
                             progressDialog.dismiss();
                             Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
                             startActivity(intent);
+                            finish();
                         }
 
                         @Override

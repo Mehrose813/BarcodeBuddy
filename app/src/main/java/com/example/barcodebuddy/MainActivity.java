@@ -28,10 +28,12 @@ Button btn;
                 if(FirebaseAuth.getInstance().getCurrentUser()==null){
                     Intent intent = new Intent(MainActivity.this,SignInActivity.class);
                     startActivity(intent);
+                    finish();
                 }
                 else {
                     Intent intent = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(intent);
+                    finish();
 
                 }
             }
