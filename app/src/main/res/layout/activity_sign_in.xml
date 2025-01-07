@@ -88,6 +88,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
         android:hint="Enter you password"
+        android:inputType="textPassword"
         android:background="@drawable/border_style"
         android:padding="10dp"
         />

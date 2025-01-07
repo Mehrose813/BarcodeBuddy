@@ -4,17 +4,19 @@
     <string name="password">Password</string>
     <string name="account">Don\'t have an account?</string>
     <string name="signup">Signup</string>
-    <string name="btn_login">LogIn</string>
+    <string name="btn_login">SignIn</string>
 
 
     <string name="name_a2">Name</string>
     <string name="conpass">Confirm Password</string>
-    <string name="login">Login</string>
+    <string name="login">Signin</string>
     <string name="btn_sigup">SignUp</string>
     <string name="your_name">Your Name</string>
     <string name="your_email">Your Email</string>
     <string name="your_passwordl">Your Password</string>
     <string name="profile">Hi!</string>
+    <string name="account_sigup">Already have an account?</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="profileFragment">Profile Information</string>
     <string name="edit_button">Edit</string>

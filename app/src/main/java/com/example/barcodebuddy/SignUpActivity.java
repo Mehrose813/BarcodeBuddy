@@ -48,6 +48,7 @@ TextView txtLogin;
                 Intent intent = new Intent(SignUpActivity.this,SignInActivity.class);
 
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -67,9 +68,19 @@ TextView txtLogin;
                     nameSign.requestFocus();
                     return;
                 }
+                if(!name.matches(nameRegex)){
+                    nameSign.setError("Spaces are not allowed in naming");
+                    nameSign.requestFocus();
+                    return;
+                }
 
                 if (email.isEmpty()) {
                     mail.setError("Email is required");
+                    mail.requestFocus();
+                    return;
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    mail.setError("Enter a valid email");
                     mail.requestFocus();
                     return;
                 }
@@ -79,26 +90,8 @@ TextView txtLogin;
                     pass.requestFocus();
                     return;
                 }
-                if(confirm.isEmpty()){
-                    conPass.setError("Password confirmation is required");
-                    conPass.requestFocus();
-                    return;
-                }
-
-                if(!name.matches(nameRegex)){
-                    nameSign.setError("Spaces are not allowed in naming");
-                    nameSign.requestFocus();
-                    return;
-                }
-
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    mail.setError("Enter a valid email");
-                    mail.requestFocus();
-                    return;
-                }
-
-                if(password.length() <6){
-                    pass.setError("Password should be atleast 6 characters");
+                if(password.length() <8){
+                    pass.setError("Password should be atleast 8 characters");
                     pass.requestFocus();
                     return;
                 }
@@ -110,7 +103,11 @@ TextView txtLogin;
                     }
                     return;
                 }
-
+                if(confirm.isEmpty()){
+                    conPass.setError("Password confirmation is required");
+                    conPass.requestFocus();
+                    return;
+                }
                 if(!confirm.equals(password)){
                     conPass.setError("Password is not correct");
                     conPass.requestFocus();
