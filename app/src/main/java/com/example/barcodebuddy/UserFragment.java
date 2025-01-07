@@ -41,7 +41,7 @@ public class UserFragment extends Fragment {
         // Initialize TextViews
         tvName = view.findViewById(R.id.tv_name);
         tvEmail = view.findViewById(R.id.tv_email);
-        tvPassword = view.findViewById(R.id.tv_password);
+      //  tvPassword = view.findViewById(R.id.tv_password);
         btnLogout = view.findViewById(R.id.btn_logout);
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -54,7 +54,7 @@ public class UserFragment extends Fragment {
 
                 tvName.setText(profile.getName());
                 tvEmail.setText(profile.getEmail());
-                tvPassword.setText(profile.getPassword());
+             //   tvPassword.setText(profile.getPassword());
             }
 
             @Override
