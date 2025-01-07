@@ -70,8 +70,7 @@ public class UserFragment extends Fragment {
             public void onClick(View view) {
 
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
-                builder.setTitle("Logout Account");
-                builder.setMessage("Are you Sure");
+                builder.setTitle("Are you Sure you want to logout?");
                 builder.setCancelable(true);
 
                 AlertDialog alert = builder.create();

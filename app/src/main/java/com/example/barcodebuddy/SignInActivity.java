@@ -46,6 +46,7 @@ TextView txtSigup;
             public void onClick(View view) {
                 Intent intent = new Intent(SignInActivity.this,SignUpActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -62,20 +63,20 @@ TextView txtSigup;
                     email.requestFocus();
                     return;
                 }
-
-                if (pass.isEmpty()) {
-                    passw.setError("Password is required");
-                    passw.requestFocus();
-                    return;
-                }
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
                     email.setError("Enter a valid email");
                     email.requestFocus();
                     return;
                 }
 
-                if(pass.length() <6){
-                    passw.setError("Password should be atleast 6 characters");
+                if (pass.isEmpty()) {
+                    passw.setError("Password is required");
+                    passw.requestFocus();
+                    return;
+                }
+
+                if(pass.length() <8){
+                    passw.setError("Password should be atleast 8 characters");
                     passw.requestFocus();
                     return;
                 }
