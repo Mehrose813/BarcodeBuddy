@@ -36,7 +36,7 @@ TextView txtSigup;
 
 
         ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this);
-        progressDialog.setTitle("Login in process");
+        progressDialog.setTitle("SignIn in process");
         progressDialog.setMessage("Please wait.....");
         progressDialog.setCancelable(false);
 

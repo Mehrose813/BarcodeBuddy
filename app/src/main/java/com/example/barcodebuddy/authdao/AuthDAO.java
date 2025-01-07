@@ -46,7 +46,7 @@ public class AuthDAO {
                            String userId =auth.getCurrentUser().getUid();
                             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
-                            Profile profile = new Profile(name,email,password);
+                            Profile profile = new Profile(name,email);
                             userRef.setValue(profile)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -80,10 +80,9 @@ public class AuthDAO {
                     DataSnapshot snapshot = task.getResult();
                     String email = snapshot.child("email").getValue(String.class);
                     String name = snapshot.child("name").getValue(String.class);
-                    String password = snapshot.child("password").getValue(String.class);
 
                     // Create a Profile object with the fetched data
-                    Profile profile = new Profile(name, email, password);
+                    Profile profile = new Profile(name, email);
 
                     // Pass the profile object to the callback
                     callback.onSuccess(profile); // Pass the profile object here

@@ -37,7 +37,7 @@ TextView txtLogin;
         nameSign = findViewById(R.id.name);
 
         ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this);
-        progressDialog.setTitle("Login in process");
+        progressDialog.setTitle("SignUp in process");
         progressDialog.setMessage("Please wait.....");
         progressDialog.setCancelable(false);
 

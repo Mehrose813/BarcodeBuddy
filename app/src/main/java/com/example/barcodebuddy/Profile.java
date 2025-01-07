@@ -3,10 +3,9 @@ package com.example.barcodebuddy;
 public class Profile {
     String name ,email,password;
 
-    public Profile(String name , String email,String password){
+    public Profile(String name , String email){
         this.name=name;
         this.email=email;
-        this.password=password;
     }
     public String getName() {
         return name;
