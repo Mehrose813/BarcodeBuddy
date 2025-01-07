@@ -22,22 +22,33 @@ Button btn;
 
         btn = findViewById(R.id.btn);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(FirebaseAuth.getInstance().getCurrentUser()==null){
+
+        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+            btn.setVisibility(View.VISIBLE);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Intent intent = new Intent(MainActivity.this,SignInActivity.class);
                     startActivity(intent);
-                    finish();
+                   finish();
                 }
-                else {
-                    Intent intent = new Intent(MainActivity.this,HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+            });
 
-                }
-            }
-        });
+        }
+
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            btn.setVisibility(View.GONE);
+            Intent intent = new Intent(MainActivity.this,HomeActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
+
+
+
+
+
+
 
     }
 }
