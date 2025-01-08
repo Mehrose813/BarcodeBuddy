@@ -19,6 +19,7 @@
         android:src="@drawable/profile" />
 
     <ImageView
+        android:id="@+id/editicon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignBottom="@id/profile"

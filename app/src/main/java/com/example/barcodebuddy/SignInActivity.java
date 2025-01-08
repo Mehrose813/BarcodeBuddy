@@ -97,10 +97,7 @@ TextView txtSigup;
                     auth.signin(SignInActivity.this, mail, pass, new ResponseCallBack() {
                         @Override
                         public void onSuccess() {
-                            progressDialog.dismiss();
-                            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
+                            Toast.makeText(SignInActivity.this, "SignIn Successfully", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
