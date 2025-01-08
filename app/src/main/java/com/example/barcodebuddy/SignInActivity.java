@@ -3,61 +3,59 @@ package com.example.barcodebuddy;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.barcodebuddy.authdao.AuthDAO;
 import com.example.barcodebuddy.authdao.ResponseCallBack;
 
 public class SignInActivity extends AppCompatActivity {
-AppCompatButton btnLogin;
-EditText email,passw;
-TextView txtSigup;
+
+    AppCompatButton btnLogin, btnAdmin;
+    EditText email, passw;
+    TextView txtSigup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_in);
 
         btnLogin = findViewById(R.id.btn_login);
         email = findViewById(R.id.mail);
         passw = findViewById(R.id.pass);
         txtSigup = findViewById(R.id.txt_sigup);
-
+        btnAdmin = findViewById(R.id.btn_admin);
 
         ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this);
         progressDialog.setTitle("SignIn in process");
         progressDialog.setMessage("Please wait.....");
         progressDialog.setCancelable(false);
 
-
+        // Signup Button Click Listener
         txtSigup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignInActivity.this,SignUpActivity.class);
+                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
 
+        // Login Button Click Listener
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String mail = email.getText().toString();
                 String pass = passw.getText().toString();
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
-                //validation
+
+                // Validation
                 if (mail.isEmpty()) {
                     email.setError("Email is required");
                     email.requestFocus();
@@ -75,12 +73,12 @@ TextView txtSigup;
                     return;
                 }
 
-                if(pass.length() <8){
-                    passw.setError("Password should be atleast 8 characters");
+                if (pass.length() < 8) {
+                    passw.setError("Password should be at least 8 characters");
                     passw.requestFocus();
                     return;
                 }
-                if(!pass.matches(passwordVal)){
+                if (!pass.matches(passwordVal)) {
                     if (pass.contains(" ")) {
                         passw.setError("Spaces are not allowed in the password");
                     } else {
@@ -89,31 +87,57 @@ TextView txtSigup;
                     return;
                 }
 
+                progressDialog.show();
 
+                // Sign-in Logic
+                AuthDAO auth = new AuthDAO();
+                auth.signin(SignInActivity.this, mail, pass, new ResponseCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        progressDialog.dismiss();
+                        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
-                    progressDialog.show();
-
-                    AuthDAO auth = new AuthDAO();
-                    auth.signin(SignInActivity.this, mail, pass, new ResponseCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            progressDialog.dismiss();
-                            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-
-                        @Override
-                        public void onError(String msg) {
-                            progressDialog.dismiss();
-                            Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-
-
+                    @Override
+                    public void onError(String msg) {
+                        progressDialog.dismiss();
+                        Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
+        // Admin Login Button Click Listener
+        btnAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgressDialog adminProgressDialog = new ProgressDialog(SignInActivity.this);
+                adminProgressDialog.setTitle("Admin SignIn in process");
+                adminProgressDialog.setMessage("Please wait.....");
+                adminProgressDialog.setCancelable(false);
+                adminProgressDialog.show();
+
+                // Hardcoded Admin Credentials
+                AuthDAO authDAO = new AuthDAO();
+                authDAO.signin(SignInActivity.this, "superadmin@gmail.com", "11223344", new ResponseCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        adminProgressDialog.dismiss();
+                        Intent intent = new Intent(SignInActivity.this, AdminMainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        adminProgressDialog.dismiss();
+                        Log.e("AdminLoginError", "Error: " + msg);  // Log the error for debugging
+                        Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 }
