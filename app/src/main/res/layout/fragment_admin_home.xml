@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AdminHomeFragment">
+
+    <Button
+        android:id="@+id/btn_add_product"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Add product"
+        android:layout_marginTop="250dp"
+        android:layout_marginStart="130dp"
+        />
+
+    <Button
+        android:id="@+id/btn_add_ingredients"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Add Ingredients"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="130dp"
+        />
+
+
+
+</LinearLayout>
