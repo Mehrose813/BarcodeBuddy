@@ -102,6 +102,8 @@ public class UserFragment extends Fragment {
         ivEditicon = view.findViewById(R.id.editicon);
         ivProfile = view.findViewById(R.id.profile);
 
+        //ab get krni ha
+      
 
         //icon listner
         ivEditicon.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +113,8 @@ public class UserFragment extends Fragment {
 
             }
         });
+
+
         btnLogout = view.findViewById(R.id.btn_logout);
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -178,14 +182,15 @@ public class UserFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
 
                         if (task.isSuccessful()) {
-                            Log.e("onComplete", "Image saved");
+
                         }
                     }
                 });
 
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(FirebaseAuth.getInstance().getUid())
-                .child("imageid")
+                .child("profileimageid")
                 .setValue(uuid);
+
     }
 }

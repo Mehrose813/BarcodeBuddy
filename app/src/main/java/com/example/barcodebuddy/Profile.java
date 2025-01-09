@@ -1,14 +1,14 @@
 package com.example.barcodebuddy;
 
 public class Profile {
-    String name ,email,password,imageId;
+    String name ,email,password,profileimageid;
 
-    public String getImageId() {
-        return imageId;
+    public String getProfileimageid() {
+        return profileimageid;
     }
 
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
+    public void setProfileimageid(String profileimageid) {
+        this.profileimageid = profileimageid;
     }
 
     public Profile(String name , String email){
