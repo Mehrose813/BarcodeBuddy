@@ -87,7 +87,7 @@ public class AuthDAO {
                     // Pass the profile object to the callback
                     callback.onSuccess(profile); // Pass the profile object here
                 } else {
-                    callback.onError("Failed to fetch user details");
+                    callback.onError(task.getException().getMessage());
                 }
             }
 
