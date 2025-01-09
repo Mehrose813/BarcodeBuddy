@@ -168,29 +168,129 @@ public class UserFragment extends Fragment {
             }
         });
 
+        //gat krna
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(FirebaseAuth.getInstance().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Profile profile = snapshot.getValue(Profile.class);
+                        if (profile != null) {
+                            FirebaseDatabase.getInstance().getReference("Images")
+                                    .child(profile.getProfileimageid())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()) {
+                                                String imageString = snapshot.getValue().toString();
+                                                ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
+                                            } else {
+                                                // Handle the case where image doesn't exist
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Log.e("Firebase", "Image fetch failed: " + error.getMessage());
+                                        }
+                                    });
+                        } else {
+                            Log.e("Firebase", "Profile not found");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Firebase", "User fetch failed: " + error.getMessage());
+                    }
+                });
+
+
         return view;
     }
 
     private void saveImage(Uri imageuri) {
         String imageString = MyUtilClass.imageUriToBase64(imageuri, requireContext().getContentResolver());
-        String uuid = UUID.randomUUID().toString();
 
-        FirebaseDatabase.getInstance().getReference("Images").child(uuid)
+        // Get the existing profile image ID from Firebase
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(FirebaseAuth.getInstance().getUid())
+                .child("profileimageid")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String existingImageId = snapshot.getValue(String.class);
+
+                        if (existingImageId != null) {
+                            // If the image ID already exists, use it to update the image
+                            updateImage(existingImageId, imageString);
+                        } else {
+                            // If no image ID exists, generate a new one
+                            String uuid = UUID.randomUUID().toString();
+                            saveNewImage(uuid, imageString);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Firebase", "Error fetching profile image ID: " + error.getMessage());
+                    }
+                });
+    }
+
+    private void updateImage(String imageId, String imageString) {
+        // Update the existing image in Firebase
+        FirebaseDatabase.getInstance().getReference("Images")
+                .child(imageId)
                 .setValue(imageString)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-
                         if (task.isSuccessful()) {
-
+                            // Successfully updated the image
+                            Log.d("Firebase", "Image updated successfully.");
+                        } else {
+                            Log.e("Firebase", "Failed to update image.");
                         }
                     }
                 });
+    }
 
+    private void saveNewImage(String uuid, String imageString) {
+        // Save the new image with a new UUID in Firebase
+        FirebaseDatabase.getInstance().getReference("Images")
+                .child(uuid)
+                .setValue(imageString)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // Successfully saved the new image
+                            updateProfileImageId(uuid);
+                        } else {
+                            Log.e("Firebase", "Failed to save new image.");
+                        }
+                    }
+                });
+    }
+
+    private void updateProfileImageId(String uuid) {
+        // Update the profile's image ID in the Users node
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(FirebaseAuth.getInstance().getUid())
                 .child("profileimageid")
-                .setValue(uuid);
-
+                .setValue(uuid)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Firebase", "Profile image ID updated successfully.");
+                        } else {
+                            Log.e("Firebase", "Failed to update profile image ID.");
+                        }
+                    }
+                });
     }
+
+
 }
