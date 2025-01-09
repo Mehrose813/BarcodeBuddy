@@ -105,7 +105,7 @@ public class AddIngredientActivity extends AppCompatActivity {
     public void saveIngredient(){
 
         if(ingredientList.isEmpty()){
-            Toast.makeText(this, "Select ingredient to save", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No ingredient to save", Toast.LENGTH_SHORT).show();
             return;
         }
         String userId = databaseReference.push().getKey();
