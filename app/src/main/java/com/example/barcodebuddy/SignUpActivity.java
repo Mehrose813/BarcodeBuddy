@@ -59,6 +59,7 @@ TextView txtLogin;
                 String password = pass.getText().toString();
                 String confirm = conPass.getText().toString();
                 String name = nameSign.getText().toString();
+                String type="user";
 
                 String nameRegex = "^[^\\s]+$";
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
@@ -121,7 +122,7 @@ TextView txtLogin;
                 else{
                 progressDialog.show();
                 AuthDAO auth = new AuthDAO();
-                auth.signup(SignUpActivity.this,name, email, password, new ResponseCallBack() {
+                auth.signup(SignUpActivity.this,name, email, password, type,new ResponseCallBack() {
                     @Override
                     public void onSuccess() {
 
