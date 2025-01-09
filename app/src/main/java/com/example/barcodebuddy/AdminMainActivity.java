@@ -39,7 +39,7 @@ LinearLayout container;
                     loadFragment(new AdminStatusFragment());
                 }
                 else{
-                    loadFragment(new AdminProfileFragment());
+                    loadFragment(new UserFragment());
                 }
 
                 return true;

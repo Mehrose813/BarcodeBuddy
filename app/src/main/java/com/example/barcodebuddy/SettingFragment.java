@@ -43,14 +43,6 @@ public class SettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        Button btn = view.findViewById(R.id.btn_product);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AddIngredientActivity.class);
-                startActivity(intent);
-            }
-        });
 
         return view;
     }

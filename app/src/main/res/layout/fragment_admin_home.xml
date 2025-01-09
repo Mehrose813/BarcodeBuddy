@@ -4,24 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#7CE483"
     tools:context=".AdminHomeFragment">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"/>
 
     <Button
         android:id="@+id/btn_add_product"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add product"
-        android:layout_marginTop="250dp"
-        android:layout_marginStart="130dp"
+        android:textSize="20dp"
+        android:backgroundTint="@color/dark_green"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
         />
 
     <Button
         android:id="@+id/btn_add_ingredients"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Ingredients"
+        android:textSize="20dp"
+        android:backgroundTint="@color/dark_green"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="130dp"
+        android:layout_gravity="center_horizontal"
         />
 
 
