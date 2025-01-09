@@ -102,14 +102,28 @@ public class UserFragment extends Fragment {
         ivEditicon = view.findViewById(R.id.editicon);
         ivProfile = view.findViewById(R.id.profile);
 
-        //ab get krni ha
-      
+        //alert
+        AlertDialog.Builder build=new AlertDialog.Builder(getContext());
+        build.setTitle("Update profile");
+        build.setPositiveButton("Galery", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                pickerImage();
+            }
+        });
+        build.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                captureImage();
+            }
+        });
 
         //icon listner
         ivEditicon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                captureImage();
+              AlertDialog alertDialog=build.create();
+              alertDialog.show();
 
             }
         });
