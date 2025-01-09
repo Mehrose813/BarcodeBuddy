@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class AddProductActivity extends AppCompatActivity {
 
-    Spinner select_product;
+    Spinner selectProduct;
     ImageView addProduct,addDesc;
     EditText edDesc;
     LinearLayout detailLayout;
@@ -43,7 +43,7 @@ public class AddProductActivity extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference("Products");
 
         // Initialize Views
-        select_product = findViewById(R.id.spinner);
+        selectProduct = findViewById(R.id.spinner);
         addProduct = findViewById(R.id.iv_add_p);
         edDesc = findViewById(R.id.ed_desc);
         addDesc = findViewById(R.id.iv_desc);
@@ -56,16 +56,14 @@ public class AddProductActivity extends AppCompatActivity {
         // Set up Adapter for Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pName);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        select_product.setAdapter(adapter);
+        selectProduct.setAdapter(adapter);
 
         // Spinner item selection listener
-        select_product.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        selectProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String value = parent.getItemAtPosition(position).toString();
                 textView.setText(value);
-                //detail.setText(value);
-                //Toast.makeText(AddProductActivity.this, value + " is selected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -78,11 +76,10 @@ public class AddProductActivity extends AppCompatActivity {
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedItem = select_product.getSelectedItem().toString();
+                String selectedItem = selectProduct.getSelectedItem().toString();
                textView.setText(selectedItem);
                 if (!selectedItem.equals("select Product Name")) {
-                    // Save the selected product to Firebase
-                    //saveProductToFirebase(selectedItem);
+                    //Toast.makeText(AddProductActivity.this, "select item name", Toast.LENGTH_SHORT).show();
                 } else {
                     // Show a toast if no product is selected
                     Toast.makeText(AddProductActivity.this, "Please select a product", Toast.LENGTH_SHORT).show();
@@ -92,6 +89,7 @@ public class AddProductActivity extends AppCompatActivity {
         addDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 textView.setText(edDesc.getText().toString());
             }
         });
@@ -99,7 +97,7 @@ public class AddProductActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveProductToFirebase(select_product.getSelectedItem().toString(),edDesc.getText().toString());
+                saveProductToFirebase(selectProduct.getSelectedItem().toString(),edDesc.getText().toString());
             }
         });
 
