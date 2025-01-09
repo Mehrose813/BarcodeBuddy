@@ -89,6 +89,15 @@ public class SignInActivity extends AppCompatActivity {
 
                 progressDialog.show();
 
+                // Check if admin credentials are entered
+                if (mail.equals("superadmin@gmail.com") && pass.equals("super#123")) {
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(SignInActivity.this, AdminMainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return;  // Admin credentials matched, no need to proceed with regular sign-in
+                }
+
                 // Sign-in Logic
                 AuthDAO auth = new AuthDAO();
                 auth.signin(SignInActivity.this, mail, pass, new ResponseCallBack() {
@@ -110,34 +119,35 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         // Admin Login Button Click Listener
-        btnAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProgressDialog adminProgressDialog = new ProgressDialog(SignInActivity.this);
-                adminProgressDialog.setTitle("Admin SignIn in process");
-                adminProgressDialog.setMessage("Please wait.....");
-                adminProgressDialog.setCancelable(false);
-                adminProgressDialog.show();
-
-                // Hardcoded Admin Credentials
-                AuthDAO authDAO = new AuthDAO();
-                authDAO.signin(SignInActivity.this, "superadmin@gmail.com", "11223344", new ResponseCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        adminProgressDialog.dismiss();
-                        Intent intent = new Intent(SignInActivity.this, AdminMainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        adminProgressDialog.dismiss();
-                        Log.e("AdminLoginError", "Error: " + msg);  // Log the error for debugging
-                        Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+//        btnAdmin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ProgressDialog adminProgressDialog = new ProgressDialog(SignInActivity.this);
+//                adminProgressDialog.setTitle("Admin SignIn in process");
+//                adminProgressDialog.setMessage("Please wait.....");
+//                adminProgressDialog.setCancelable(false);
+//                adminProgressDialog.show();
+//
+//                // Hardcoded Admin Credentials
+//                AuthDAO authDAO = new AuthDAO();
+//                authDAO.signin(SignInActivity.this, "superadmin@gmail.com", "super#123", new ResponseCallBack() {
+//                    @Override
+//                    public void onSuccess() {
+//                        adminProgressDialog.dismiss();
+//                        Intent intent = new Intent(SignInActivity.this, AdminMainActivity.class);
+//                        startActivity(intent);
+//                    }
+//
+//                    @Override
+//                    public void onError(String msg) {
+//                        adminProgressDialog.dismiss();
+//                        Log.e("AdminLoginError", "Error: " + msg);  // Log the error for debugging
+//                        Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
+//            }
+//        });
     }
 }
