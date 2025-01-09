@@ -28,7 +28,7 @@ public class AuthDAO {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
                         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -40,15 +40,16 @@ public class AuthDAO {
                                         Intent intent = new Intent(context, AdminMainActivity.class);
                                         context.startActivity(intent);
                                         context.finish();
-                                        callBack.onSuccess(); // Call success after navigation
+                                        //callBack.onSuccess(); // Call success after navigation
                                     } else {
                                         // Navigate to User screen
-                                        Intent intent = new Intent(context, HomeActivity.class);
-                                        context.startActivity(intent);
-                                        context.finish();
+//                                        Intent intent = new Intent(context, HomeActivity.class);
+//                                        context.startActivity(intent);
+//                                        context.finish();
                                         callBack.onSuccess(); // Call success after navigation
                                     }
                                 } else {
+                                    FirebaseAuth.getInstance().signOut(); // Log out user
                                     callBack.onError("User data not found in the database.");
                                 }
                             }
@@ -67,7 +68,7 @@ public class AuthDAO {
 
 
 
-    public void signup(Activity context , String name ,String email, String password,String type , ResponseCallBack callback)
+    public void signup(Activity context , String name ,String email, String password,String type , ResponseCallBack callbac)
     {
         FirebaseAuth auth =FirebaseAuth.getInstance();
                 auth.createUserWithEmailAndPassword(email,password)
@@ -84,16 +85,16 @@ public class AuthDAO {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
-                                                callback.onSuccess();
+                                                callbac.onSuccess();
                                             }
                                             else{
-                                                callback.onError(task.getException().getMessage());
+                                                callbac.onError(task.getException().getMessage());
                                             }
                                         }
                                     });
                         }
                         else{
-                            callback.onError(task.getException().getMessage());
+                            callbac.onError(task.getException().getMessage());
                         }
                     }
                 });

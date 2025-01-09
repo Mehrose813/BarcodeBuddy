@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.barcodebuddy.authdao.AuthDAO;
 import com.example.barcodebuddy.authdao.ResponseCallBack;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SignInActivity extends AppCompatActivity {
     AppCompatButton btnLogin;
@@ -89,10 +90,7 @@ public class SignInActivity extends AppCompatActivity {
                     return;
                 }
 
-
-
                 progressDialog.show();
-
 
 
                 // Check if admin credentials are entered
@@ -113,7 +111,24 @@ public class SignInActivity extends AppCompatActivity {
                     public void onSuccess() {
                         progressDialog.dismiss();
                         // Navigation handled in signin() method
-                        Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(SignInActivity.this,HomeActivity.class);
+//                        startActivity(intent);
+//                        Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
+//                        finish();
+
+                        FirebaseAuth.getInstance().getCurrentUser().reload()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                                        startActivity(intent);
+                                        Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        Toast.makeText(SignInActivity.this, "Error refreshing user state. Please restart the app.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
                     }
 
                     @Override
