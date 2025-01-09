@@ -10,8 +10,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.collection.LLRBNode;
@@ -53,6 +56,7 @@ public class AddIngredientActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveIngredient();
 
             }
         });
@@ -95,5 +99,34 @@ public class AddIngredientActivity extends AppCompatActivity {
 
         // Clear input fields
         quantityIngredient.setText("");
+    }
+
+
+    public void saveIngredient(){
+
+        if(ingredientList.isEmpty()){
+            Toast.makeText(this, "Select ingredient to save", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String userId = databaseReference.push().getKey();
+        if(userId!=null){
+
+            databaseReference.child(userId).setValue(ingredientList)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(AddIngredientActivity.this, "Ingredients save successfully", Toast.LENGTH_SHORT).show();
+                            ingredientList.clear();
+                            selectedIngredientLayout.removeAllViews();
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(AddIngredientActivity.this, "Failed to save ingredients", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 }

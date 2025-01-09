@@ -113,6 +113,8 @@ public class SignInActivity extends AppCompatActivity {
                     public void onSuccess() {
                         progressDialog.dismiss();
                         // Navigation handled in signin() method
+                        Intent intent = new Intent(SignInActivity.this,HomeActivity.class);
+                        startActivity(intent);
                         Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
                     }
 
