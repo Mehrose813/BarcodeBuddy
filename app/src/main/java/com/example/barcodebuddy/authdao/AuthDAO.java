@@ -22,55 +22,52 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class AuthDAO {
-private String type="admin";
+
     public void signin(Activity context, String mail, String pass, ResponseCallBack callBack) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(mail, pass)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
-                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        String type = snapshot.child("type").getValue(String.class);
-
-                                        if ("admin".equals(type)) {
-                                            Intent intent = new Intent(context, AdminMainActivity.class);
-                                            context.startActivity(intent);
-                                            context.finish();
-                                            callBack.onSuccess();
-                                        } else if ("user".equals(type)) {
-                                            Intent intent = new Intent(context, HomeActivity.class);
-                                            context.startActivity(intent);
-                                            context.finish();
-                                            callBack.onSuccess();
-                                        } else {
-                                            callBack.onError("Invalid type value");
-                                        }
+                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    String type = snapshot.child("type").getValue(String.class);
+                                    if ("admin".equals(type)) {
+                                        // Navigate to Admin screen
+                                        Intent intent = new Intent(context, AdminMainActivity.class);
+                                        context.startActivity(intent);
+                                        context.finish();
+                                        callBack.onSuccess(); // Call success after navigation
                                     } else {
-                                        callBack.onError("User data not found in database");
+                                        // Navigate to User screen
+                                        Intent intent = new Intent(context, HomeActivity.class);
+                                        context.startActivity(intent);
+                                        context.finish();
+                                        callBack.onSuccess(); // Call success after navigation
                                     }
+                                } else {
+                                    callBack.onError("User data not found in the database.");
                                 }
+                            }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    callBack.onError("Database error: " + error.getMessage());
-                                }
-                            });
-                        } else {
-                            callBack.onError("Sign-in failed: " + task.getException().getMessage());
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                callBack.onError("Database error: " + error.getMessage());
+                            }
+                        });
+                    } else {
+                        callBack.onError("Authentication failed: " + task.getException().getMessage());
                     }
                 });
     }
 
 
 
-    public void signup(Activity context , String name ,String email, String password , ResponseCallBack callback)
+
+    public void signup(Activity context , String name ,String email, String password,String type , ResponseCallBack callback)
     {
         FirebaseAuth auth =FirebaseAuth.getInstance();
                 auth.createUserWithEmailAndPassword(email,password)
@@ -81,7 +78,7 @@ private String type="admin";
                            String userId =auth.getCurrentUser().getUid();
                             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
-                            Profile profile = new Profile(name,email);
+                            Profile profile = new Profile(name,email,type);
                             userRef.setValue(profile)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -115,9 +112,10 @@ private String type="admin";
                     DataSnapshot snapshot = task.getResult();
                     String email = snapshot.child("email").getValue(String.class);
                     String name = snapshot.child("name").getValue(String.class);
+                    String type=snapshot.child("type").getValue(String.class);
 
                     // Create a Profile object with the fetched data
-                    Profile profile = new Profile(name, email);
+                    Profile profile = new Profile(name, email,type);
 
                     // Pass the profile object to the callback
                     callback.onSuccess(profile); // Pass the profile object here
