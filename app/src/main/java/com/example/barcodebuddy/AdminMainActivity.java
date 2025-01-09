@@ -25,7 +25,7 @@ LinearLayout container;
         setContentView(R.layout.activity_admin_main);
 
         navAdmin = findViewById(R.id.nav_admin);
-        container = findViewById(R.id.layout_admin);
+        container = findViewById(R.id.container);
 
         loadFragment(new AdminHomeFragment());
 
