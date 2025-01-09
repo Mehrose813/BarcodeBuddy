@@ -23,288 +23,268 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.barcodebuddy.authdao.AuthDAO;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 
 public class UserFragment extends Fragment {
-    TextView tvName, tvEmail, tvPassword;
-    Button btnLogout;
 
-    ImageView ivEditicon;
-
-    private Uri imageui;
-    private ImageView ivProfile;
+    private TextView tvName, tvEmail;
+    private Button btnLogout;
+    private ImageView ivEditIcon, ivProfile;
+    private Uri imageUri;
 
     private final ActivityResultLauncher<Uri> captureImage =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
-                        @Override
-                        public void onActivityResult(Boolean result) {
-                            if (result) {
-                                //Hence capture image and display image
-                            }
-                            if (imageui != null) {
-                                ivProfile.setImageURI(imageui);
-                                //Do somethging with the capture image
-                                saveImage(imageui);
-                            }
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if (result != null && result) {
+                        if (imageUri != null) {
+                            ivProfile.setImageURI(imageUri);
+                            saveImage(imageUri);
+                        } else {
+                            Log.e("CaptureImage", "Image URI is null.");
                         }
+                    } else {
+                        Log.e("CaptureImage", "Image capture failed.");
                     }
-            );
-    private final ActivityResultLauncher<String> pickImage = registerForActivityResult(new ActivityResultContracts
-            .GetContent(), new ActivityResultCallback<Uri>() {
-        @Override
-        public void onActivityResult(Uri result) {
-            if (result != null) {
-                ivProfile.setImageURI(result);
-                saveImage(imageui);
-            }
-        }
-    });
+                }
+            });
 
-    private void captureImage() {
-        imageui = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new ContentValues());
-
-        captureImage.launch(imageui);
-
-    }
-
-    private void pickerImage() {
-        imageui = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new ContentValues());
-        pickImage.launch("Image/*");
-    }
-
+    private final ActivityResultLauncher<String> pickImage =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri result) {
+                    if (result != null) {
+                        ivProfile.setImageURI(result);
+                        saveImage(result);
+                    } else {
+                        Log.e("PickImage", "Image selection failed.");
+                    }
+                }
+            });
 
     public UserFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
 
-        // Initialize TextViews
+        // Initialize Views
         tvName = view.findViewById(R.id.tv_name);
         tvEmail = view.findViewById(R.id.tv_email);
-        //changes
-        ivEditicon = view.findViewById(R.id.editicon);
+        ivEditIcon = view.findViewById(R.id.editicon);
         ivProfile = view.findViewById(R.id.profile);
-
-        //alert
-        AlertDialog.Builder build=new AlertDialog.Builder(getContext());
-        build.setTitle("Update profile");
-        build.setPositiveButton("Galery", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                pickerImage();
-            }
-        });
-        build.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                captureImage();
-            }
-        });
-
-        //icon listner
-        ivEditicon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              AlertDialog alertDialog=build.create();
-              alertDialog.show();
-
-            }
-        });
-
-
         btnLogout = view.findViewById(R.id.btn_logout);
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        setupEditIcon();
+        setupLogoutButton();
+        fetchUserProfile();
 
-        AuthDAO authDAO = new AuthDAO();
-        authDAO.fetchDetail(userId, new ResponseFetch() {
+        return view;
+    }
 
-            @Override
-            public void onSuccess(Profile profile) {
+    private void setupEditIcon() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Update Profile");
+               builder .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pickImage.launch("image/*");
+                    }
+                });
+               builder .setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       imageUri = requireContext().getContentResolver()
+                               .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
+                       if (imageUri != null) {
+                           captureImage.launch(imageUri);
+                       } else {
+                           Log.e("CaptureImage", "Failed to create Image URI.");
+                       }
+                   }
+               });
 
-                tvName.setText(profile.getName());
-                tvEmail.setText(profile.getEmail());
-                //   tvPassword.setText(profile.getPassword());
-            }
-
-            @Override
-            public void onError(String msg) {
-                Toast.makeText(getContext(), "Error: " + msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        ivEditIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
-                builder.setTitle("Are you Sure you want to logout?");
-                builder.setCancelable(true);
-
-                AlertDialog alert = builder.create();
-
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(getContext(), SignInActivity.class);
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(intent);
-
-                        requireActivity().finish();
-
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        alert.dismiss();
-                    }
-                });
+                builder.create();
                 builder.show();
             }
         });
+    }
 
-        //gat krna
+    private void setupLogoutButton() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle("Are you sure you want to logout?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // Logout the user
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(getContext(), SignInActivity.class));
+                                requireActivity().finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // Dismiss the dialog
+                                dialogInterface.dismiss();
+                            }
+                        });
+
+                // Show the dialog
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+    }
+
+
+    private void fetchUserProfile() {
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) {
+            Log.e("Firebase", "User ID is null.");
+            return;
+        }
+
         FirebaseDatabase.getInstance().getReference("Users")
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(userId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Profile profile = snapshot.getValue(Profile.class);
                         if (profile != null) {
-                            FirebaseDatabase.getInstance().getReference("Images")
-                                    .child(profile.getProfileimageid())
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if (snapshot.exists()) {
-                                                String imageString = snapshot.getValue().toString();
-                                                ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
-                                            } else {
-                                                // Handle the case where image doesn't exist
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Log.e("Firebase", "Image fetch failed: " + error.getMessage());
-                                        }
-                                    });
+                            tvName.setText(profile.getName());
+                            tvEmail.setText(profile.getEmail());
+                            fetchProfileImage(profile.getProfileimageid());
                         } else {
-                            Log.e("Firebase", "Profile not found");
+                            Log.e("Firebase", "Profile data is null.");
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("Firebase", "User fetch failed: " + error.getMessage());
+                        Log.e("Firebase", "Error fetching user data: " + error.getMessage());
                     }
                 });
-
-
-        return view;
     }
 
-    private void saveImage(Uri imageuri) {
-        String imageString = MyUtilClass.imageUriToBase64(imageuri, requireContext().getContentResolver());
+    private void fetchProfileImage(String imageId) {
+        if (imageId == null) {
+            Log.e("Firebase", "Image ID is null.");
+            return;
+        }
 
-        // Get the existing profile image ID from Firebase
+        FirebaseDatabase.getInstance().getReference("Images")
+                .child(imageId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String imageString = snapshot.getValue(String.class);
+                            ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
+                        } else {
+                            Log.e("Firebase", "Image not found in database.");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Firebase", "Error fetching image: " + error.getMessage());
+                    }
+                });
+    }
+
+    private void saveImage(Uri uri) {
+        if (uri == null) {
+            Log.e("SaveImage", "Image URI is null.");
+            return;
+        }
+
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) {
+            Log.e("Firebase", "User ID is null.");
+            return;
+        }
+
+        String imageString = MyUtilClass.imageUriToBase64(uri, requireContext().getContentResolver());
         FirebaseDatabase.getInstance().getReference("Users")
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(userId)
                 .child("profileimageid")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String existingImageId = snapshot.getValue(String.class);
-
                         if (existingImageId != null) {
-                            // If the image ID already exists, use it to update the image
                             updateImage(existingImageId, imageString);
                         } else {
-                            // If no image ID exists, generate a new one
-                            String uuid = UUID.randomUUID().toString();
-                            saveNewImage(uuid, imageString);
+                            String newImageId = UUID.randomUUID().toString();
+                            saveNewImage(newImageId, imageString);
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("Firebase", "Error fetching profile image ID: " + error.getMessage());
+                        Log.e("Firebase", "Error fetching image ID: " + error.getMessage());
                     }
                 });
     }
 
     private void updateImage(String imageId, String imageString) {
-        // Update the existing image in Firebase
         FirebaseDatabase.getInstance().getReference("Images")
                 .child(imageId)
                 .setValue(imageString)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // Successfully updated the image
-                            Log.d("Firebase", "Image updated successfully.");
-                        } else {
-                            Log.e("Firebase", "Failed to update image.");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Firebase", "Image updated successfully.");
+                    } else {
+                        Log.e("Firebase", "Failed to update image.");
                     }
                 });
     }
 
-    private void saveNewImage(String uuid, String imageString) {
-        // Save the new image with a new UUID in Firebase
+    private void saveNewImage(String imageId, String imageString) {
         FirebaseDatabase.getInstance().getReference("Images")
-                .child(uuid)
+                .child(imageId)
                 .setValue(imageString)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // Successfully saved the new image
-                            updateProfileImageId(uuid);
-                        } else {
-                            Log.e("Firebase", "Failed to save new image.");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        updateProfileImageId(imageId);
+                    } else {
+                        Log.e("Firebase", "Failed to save new image.");
                     }
                 });
     }
 
-    private void updateProfileImageId(String uuid) {
-        // Update the profile's image ID in the Users node
+    private void updateProfileImageId(String imageId) {
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) {
+            Log.e("Firebase", "User ID is null.");
+            return;
+        }
+
         FirebaseDatabase.getInstance().getReference("Users")
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(userId)
                 .child("profileimageid")
-                .setValue(uuid)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Firebase", "Profile image ID updated successfully.");
-                        } else {
-                            Log.e("Firebase", "Failed to update profile image ID.");
-                        }
+                .setValue(imageId)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Firebase", "Profile image ID updated successfully.");
+                    } else {
+                        Log.e("Firebase", "Failed to update profile image ID.");
                     }
                 });
     }
-
-
 }
