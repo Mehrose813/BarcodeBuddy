@@ -1,7 +1,15 @@
 package com.example.barcodebuddy;
 
 public class Profile {
-    String name ,email,password,profileimageid;
+    String name ,email,password,profileimageid,type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getProfileimageid() {
         return profileimageid;
@@ -13,9 +21,10 @@ public class Profile {
 
 
 
-    public Profile(String name , String email){
+    public Profile(String name , String email,String type){
         this.name=name;
         this.email=email;
+        this.type=type;
     }
     public String getName() {
         return name;
