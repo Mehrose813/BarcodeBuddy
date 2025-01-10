@@ -31,8 +31,8 @@
             android:layout_marginStart="20dp" />
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/iv_add_p"
             android:src="@drawable/baseline_add_circle_24"
             android:layout_marginStart="50dp"
@@ -41,6 +41,50 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/ed_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:hint="enter description of product"
+            android:layout_marginStart="20dp"
+            />
+
+
+        <ImageView
+            android:id="@+id/iv_desc"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/baseline_add_circle_24"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/detail">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_save_product_and_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Save "
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+/>
 
 
 </LinearLayout>
