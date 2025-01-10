@@ -22,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.example.barcodebuddy.authdao.AuthDAO;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,33 +37,29 @@ public class UserFragment extends Fragment {
     private ImageView ivEditIcon, ivProfile;
     private Uri imageUri;
 
+    // For capturing an image
     private final ActivityResultLauncher<Uri> captureImage =
-            registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
-                @Override
-                public void onActivityResult(Boolean result) {
-                    if (result != null && result) {
-                        if (imageUri != null) {
-                            ivProfile.setImageURI(imageUri);
-                            saveImage(imageUri);
-                        } else {
-                            Log.e("CaptureImage", "Image URI is null.");
-                        }
+            registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
+                if (result != null && result) {
+                    if (imageUri != null) {
+                        ivProfile.setImageURI(imageUri);
+                      updateUserProfileAndImage(imageUri); // Save image and update profile
                     } else {
-                        Log.e("CaptureImage", "Image capture failed.");
+                        Log.e("CaptureImage", "Image URI is null.");
                     }
+                } else {
+                    Log.e("CaptureImage", "Image capture failed.");
                 }
             });
 
+    // For picking an image
     private final ActivityResultLauncher<String> pickImage =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-                @Override
-                public void onActivityResult(Uri result) {
-                    if (result != null) {
-                        ivProfile.setImageURI(result);
-                        saveImage(result);
-                    } else {
-                        Log.e("PickImage", "Image selection failed.");
-                    }
+            registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+                if (result != null) {
+                    ivProfile.setImageURI(result);
+                   updateUserProfileAndImage(result); // Save image and update profile
+                } else {
+                    Log.e("PickImage", "Image selection failed.");
                 }
             });
 
@@ -92,31 +87,22 @@ public class UserFragment extends Fragment {
 
     private void setupEditIcon() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Update Profile");
-               builder .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        pickImage.launch("image/*");
+        builder.setTitle("Update Profile")
+                .setPositiveButton("Gallery", (dialogInterface, i) -> pickImage.launch("image/*"))
+                .setNegativeButton("Camera", (dialogInterface, i) -> {
+                    imageUri = requireContext().getContentResolver()
+                            .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
+                    if (imageUri != null) {
+                        captureImage.launch(imageUri);
+                    } else {
+                        Log.e("CaptureImage", "Failed to create Image URI.");
                     }
                 });
-               builder .setNegativeButton("Camera", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialogInterface, int i) {
-                       imageUri = requireContext().getContentResolver()
-                               .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
-                       if (imageUri != null) {
-                           captureImage.launch(imageUri);
-                       } else {
-                           Log.e("CaptureImage", "Failed to create Image URI.");
-                       }
-                   }
-               });
 
         ivEditIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder.create();
-                builder.show();
+                builder.create().show();
             }
         });
     }
@@ -130,7 +116,6 @@ public class UserFragment extends Fragment {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // Logout the user
                                 FirebaseAuth.getInstance().signOut();
                                 startActivity(new Intent(getContext(), SignInActivity.class));
                                 requireActivity().finish();
@@ -139,18 +124,14 @@ public class UserFragment extends Fragment {
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // Dismiss the dialog
                                 dialogInterface.dismiss();
                             }
                         });
 
-                // Show the dialog
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                builder.create().show();
             }
         });
     }
-
 
     private void fetchUserProfile() {
         String userId = FirebaseAuth.getInstance().getUid();
@@ -168,7 +149,12 @@ public class UserFragment extends Fragment {
                         if (profile != null) {
                             tvName.setText(profile.getName());
                             tvEmail.setText(profile.getEmail());
-                            fetchProfileImage(profile.getProfileimageid());     //yaha image id 2 dfa get krni ha  1 yaha per 0r 1 images ma ja kr
+
+                            // Fetch profile image if it exists
+                            String existingImageId = profile.getProfileimageid();
+                            if (existingImageId != null) {
+                                fetchProfileImage(existingImageId);
+                            }
                         } else {
                             Log.e("Firebase", "Profile data is null.");
                         }
@@ -182,18 +168,13 @@ public class UserFragment extends Fragment {
     }
 
     private void fetchProfileImage(String imageId) {
-        if (imageId == null) {
-            Log.e("Firebase", "Image ID is null.");
-            return;
-        }
-
         FirebaseDatabase.getInstance().getReference("Images")
                 .child(imageId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            String imageString = snapshot.getValue(String.class);     //1 yaha per hm na image ki value get krni ha
+                            String imageString = snapshot.getValue(String.class);
                             ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
                         } else {
                             Log.e("Firebase", "Image not found in database.");
@@ -207,19 +188,14 @@ public class UserFragment extends Fragment {
                 });
     }
 
-    private void saveImage(Uri uri) {
-        if (uri == null) {
-            Log.e("SaveImage", "Image URI is null.");
-            return;
-        }
-
+    private void updateUserProfileAndImage(Uri imageUri) {
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId == null) {
             Log.e("Firebase", "User ID is null.");
             return;
         }
 
-        String imageString = MyUtilClass.imageUriToBase64(uri, requireContext().getContentResolver());
+        String imageString = MyUtilClass.imageUriToBase64(imageUri, requireContext().getContentResolver());
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
                 .child("profileimageid")
@@ -228,62 +204,44 @@ public class UserFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String existingImageId = snapshot.getValue(String.class);
                         if (existingImageId != null) {
-                            updateImage(existingImageId, imageString);
+                            FirebaseDatabase.getInstance().getReference("Images")
+                                    .child(existingImageId)
+                                    .setValue(imageString)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getContext(), "Image updated successfully", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.e("Firebase", "Failed to update image.");
+                                        }
+                                    });
                         } else {
                             String newImageId = UUID.randomUUID().toString();
-                            saveNewImage(newImageId, imageString);
+                            FirebaseDatabase.getInstance().getReference("Images")
+                                    .child(newImageId)
+                                    .setValue(imageString)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            FirebaseDatabase.getInstance().getReference("Users")
+                                                    .child(userId)
+                                                    .child("profileimageid")
+                                                    .setValue(newImageId)
+                                                    .addOnCompleteListener(updateTask -> {
+                                                        if (updateTask.isSuccessful()) {
+                                                            Toast.makeText(getContext(), "Image saved successfully", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Log.e("Firebase", "Failed to update profile image ID.");
+                                                        }
+                                                    });
+                                        } else {
+                                            Log.e("Firebase", "Failed to save new image.");
+                                        }
+                                    });
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e("Firebase", "Error fetching image ID: " + error.getMessage());
-                    }
-                });
-    }
-
-    private void updateImage(String imageId, String imageString) {
-        FirebaseDatabase.getInstance().getReference("Images")
-                .child(imageId)
-                .setValue(imageString)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Firebase", "Image updated successfully.");
-                    } else {
-                        Log.e("Firebase", "Failed to update image.");
-                    }
-                });
-    }
-
-    private void saveNewImage(String imageId, String imageString) {
-        FirebaseDatabase.getInstance().getReference("Images")
-                .child(imageId)
-                .setValue(imageString)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        updateProfileImageId(imageId);
-                    } else {
-                        Log.e("Firebase", "Failed to save new image.");
-                    }
-                });
-    }
-
-    private void updateProfileImageId(String imageId) {
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId == null) {
-            Log.e("Firebase", "User ID is null.");
-            return;
-        }
-
-        FirebaseDatabase.getInstance().getReference("Users")
-                .child(userId)
-                .child("profileimageid")
-                .setValue(imageId)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Firebase", "Profile image ID updated successfully.");
-                    } else {
-                        Log.e("Firebase", "Failed to update profile image ID.");
                     }
                 });
     }
