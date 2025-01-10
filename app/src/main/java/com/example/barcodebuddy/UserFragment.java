@@ -168,7 +168,7 @@ public class UserFragment extends Fragment {
                         if (profile != null) {
                             tvName.setText(profile.getName());
                             tvEmail.setText(profile.getEmail());
-                            fetchProfileImage(profile.getProfileimageid());
+                            fetchProfileImage(profile.getProfileimageid());     //yaha image id 2 dfa get krni ha  1 yaha per 0r 1 images ma ja kr
                         } else {
                             Log.e("Firebase", "Profile data is null.");
                         }
@@ -193,7 +193,7 @@ public class UserFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            String imageString = snapshot.getValue(String.class);
+                            String imageString = snapshot.getValue(String.class);     //1 yaha per hm na image ki value get krni ha
                             ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
                         } else {
                             Log.e("Firebase", "Image not found in database.");

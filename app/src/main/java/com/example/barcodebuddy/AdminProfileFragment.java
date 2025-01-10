@@ -30,11 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AdminProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AdminProfileFragment extends Fragment {
     private TextView tvName, tvEmail;
     private Button btnLogout;
@@ -57,7 +52,6 @@ public class AdminProfileFragment extends Fragment {
                     }
                 }
             });
-
     private final ActivityResultLauncher<String> pickImage =
             registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
                 @Override
@@ -72,47 +66,8 @@ public class AdminProfileFragment extends Fragment {
             });
 
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
-
     public AdminProfileFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AdminProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AdminProfileFragment newInstance(String param1, String param2) {
-        AdminProfileFragment fragment = new AdminProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -198,11 +153,8 @@ public class AdminProfileFragment extends Fragment {
 
 
     private void fetchUserProfile() {
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId == null) {
-            Log.e("Firebase", "User ID is null.");
-            return;
-        }
+        String userId ="LS4P76JGARfEWzVEH3qetSp0sZn1";
+
 
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
@@ -211,11 +163,12 @@ public class AdminProfileFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Profile profile = snapshot.getValue(Profile.class);
                         if (profile != null) {
+                            Log.d("ProfileData", "Name: " + profile.getName() + ", Email: " + profile.getEmail());
                             tvName.setText(profile.getName());
                             tvEmail.setText(profile.getEmail());
                             fetchProfileImage(profile.getProfileimageid());
                         } else {
-                            Log.e("Firebase", "Profile data is null.");
+                            Log.d("AdminInfo", "Profile data is null.");
                         }
                     }
 
