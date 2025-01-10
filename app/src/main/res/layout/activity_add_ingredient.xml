@@ -42,6 +42,7 @@
             android:layout_weight="1"
             android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
+            android:hint="Enter quantity "
             />
 
 
