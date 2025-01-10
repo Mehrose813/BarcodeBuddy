@@ -6,7 +6,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,11 +22,10 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AddProductActivity extends AppCompatActivity {
 
     Spinner selectProduct;
-    ImageView addProduct,addDesc;
-    EditText edDesc;
     LinearLayout detailLayout;
-    Button btn;
-    String[] pName = {"select Product Name","Hico's Ice cream" , "National Juice" ,"Lay's Potato chips" , "Coca Cola" , "Tea Bag", "Shoop Noddles"};
+    Button btnSave, btnAdd;
+    EditText edDes;
+    String[] pName = {"select Product Name", "Hico's Ice cream", "National Juice", "Lay's Potato chips", "Coca Cola", "Tea Bag", "Shoop Noddles"};
 
     // Firebase Database reference
     FirebaseDatabase firebaseDatabase;
@@ -44,14 +42,10 @@ public class AddProductActivity extends AppCompatActivity {
 
         // Initialize Views
         selectProduct = findViewById(R.id.spinner);
-        addProduct = findViewById(R.id.iv_add_p);
-        edDesc = findViewById(R.id.ed_desc);
-        addDesc = findViewById(R.id.iv_desc);
         detailLayout = findViewById(R.id.detail);
-        btn =findViewById(R.id.btn_save_product_and_desc);
-
-        TextView textView = new TextView(this);
-        detailLayout.addView(textView);
+        btnAdd = findViewById(R.id.btn_add);
+        btnSave = findViewById(R.id.btn_save);
+        edDes = findViewById(R.id.ed_desc);
 
         // Set up Adapter for Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pName);
@@ -63,7 +57,7 @@ public class AddProductActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String value = parent.getItemAtPosition(position).toString();
-                textView.setText(value);
+                // You can use this to show selected product name in a TextView or any other logic
             }
 
             @Override
@@ -72,51 +66,58 @@ public class AddProductActivity extends AppCompatActivity {
             }
         });
 
-        // Add Product button click listener
-        addProduct.setOnClickListener(new View.OnClickListener() {
+        // Add button click listener
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedItem = selectProduct.getSelectedItem().toString();
-               textView.setText(selectedItem);
-                if (!selectedItem.equals("select Product Name")) {
-                    //Toast.makeText(AddProductActivity.this, "select item name", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Show a toast if no product is selected
+                String selectedProduct = selectProduct.getSelectedItem().toString();
+                String description = edDes.getText().toString();
+
+                if (selectedProduct.equals("select Product Name")) {
                     Toast.makeText(AddProductActivity.this, "Please select a product", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                if (description.isEmpty()) {
+                    Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Create a new TextView to display selected product and description
+                TextView newTextView = new TextView(AddProductActivity.this);
+                newTextView.setText(selectedProduct + " - " + description);
+                detailLayout.addView(newTextView);  // Add new TextView to the layout
             }
         });
-        addDesc.setOnClickListener(new View.OnClickListener() {
+
+        // Save Product button click listener
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String selectedProduct = selectProduct.getSelectedItem().toString();
+                String description = edDes.getText().toString();
 
-                textView.setText(edDesc.getText().toString());
+                if (selectedProduct.equals("select Product Name")) {
+                    Toast.makeText(AddProductActivity.this, "Please select a product", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (description.isEmpty()) {
+                    Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                saveProductToFirebase(selectedProduct, description);
             }
         });
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveProductToFirebase(selectProduct.getSelectedItem().toString(),edDesc.getText().toString());
-            }
-        });
-
     }
 
     // Method to save product to Firebase
-    public void saveProductToFirebase(String productName,String description) {
+    public void saveProductToFirebase(String productName, String description) {
         // Create a Product object (You can add more fields if needed)
         Product product = new Product();
         product.setName(productName);
         product.setDesc(description);
-        
-
-        if(productName .isEmpty()){
-            Toast.makeText(this, "select product name", Toast.LENGTH_SHORT).show();
-        }
-        if(description.isEmpty()){
-            Toast.makeText(this, "enter any description", Toast.LENGTH_SHORT).show();
-        }
 
         // Save product to Firebase
         String productId = databaseReference.push().getKey(); // Automatically generate a unique ID

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -30,13 +33,13 @@
             android:popupBackground="#94E699"
             android:layout_marginStart="20dp" />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/iv_add_p"
-            android:src="@drawable/baseline_add_circle_24"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"/>
+<!--        <ImageView-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:id="@+id/iv_add_p"-->
+<!--            android:src="@drawable/baseline_add_circle_24"-->
+<!--            android:layout_marginStart="50dp"-->
+<!--            android:layout_marginTop="20dp"/>-->
 
 
     </LinearLayout>
@@ -58,14 +61,25 @@
             />
 
 
-        <ImageView
-            android:id="@+id/iv_desc"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/baseline_add_circle_24"
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="add"
+            android:backgroundTint="@color/dark_green"
+            android:textSize="15dp"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+           />
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_desc"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:src="@drawable/baseline_add_circle_24"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginEnd="10dp"/>-->
     </LinearLayout>
 
     <LinearLayout
@@ -77,14 +91,16 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_save_product_and_desc"
+        android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:text="Save "
+        android:backgroundTint="@color/dark_green"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
 />
 
 
 </LinearLayout>
+</ScrollView>
