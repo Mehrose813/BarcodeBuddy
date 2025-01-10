@@ -94,13 +94,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
                 // Check if admin credentials are entered
-                if (mail.equals("superadmin@gmail.com") && pass.equals("super#123")) {
-                    progressDialog.dismiss();
-                    Intent intent = new Intent(SignInActivity.this, AdminMainActivity.class);
-                    startActivity(intent);
-                    finish();
-                    return;  // Admin credentials matched, no need to proceed with regular sign-in
-                }
+
 
 
                 // Sign-in Logic
@@ -116,17 +110,20 @@ public class SignInActivity extends AppCompatActivity {
 //                        Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
 //                        finish();
 
-                        FirebaseAuth.getInstance().getCurrentUser().reload()
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-                                        startActivity(intent);
-                                        Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    } else {
-                                        Toast.makeText(SignInActivity.this, "Error refreshing user state. Please restart the app.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        if (mail.equals("superadmin@gmail.com")) {
+                            progressDialog.dismiss();
+                            // Admin credentials matched, no need to proceed with regular sign-in
+                            Intent intent = new Intent(SignInActivity.this, AdminMainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                        else{
+                            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
 
 
                     }

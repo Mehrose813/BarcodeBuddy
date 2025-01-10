@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,33 +38,30 @@ public class AdminProfileFragment extends Fragment {
     private Uri imageUri;
 
     private final ActivityResultLauncher<Uri> captureImage =
-            registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
-                @Override
-                public void onActivityResult(Boolean result) {
-                    if (result != null && result) {
-                        if (imageUri != null) {
-                            ivProfile.setImageURI(imageUri);
-                            saveImage(imageUri);
-                        } else {
-                            Log.e("CaptureImage", "Image URI is null.");
-                        }
+            registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
+                if (result != null && result) {
+                    if (imageUri != null) {
+                        ivProfile.setImageURI(imageUri);
+                        updateUserProfileAndImage(imageUri); // Save image and update profile
                     } else {
-                        Log.e("CaptureImage", "Image capture failed.");
+                        Log.e("CaptureImage", "Image URI is null.");
                     }
+                } else {
+                    Log.e("CaptureImage", "Image capture failed.");
                 }
             });
+
+    // For picking an image
     private final ActivityResultLauncher<String> pickImage =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-                @Override
-                public void onActivityResult(Uri result) {
-                    if (result != null) {
-                        ivProfile.setImageURI(result);
-                        saveImage(result);
-                    } else {
-                        Log.e("PickImage", "Image selection failed.");
-                    }
+            registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+                if (result != null) {
+                    ivProfile.setImageURI(result);
+                    updateUserProfileAndImage(result); // Save image and update profile
+                } else {
+                    Log.e("PickImage", "Image selection failed.");
                 }
             });
+
 
 
     public AdminProfileFragment() {
@@ -153,8 +151,11 @@ public class AdminProfileFragment extends Fragment {
 
 
     private void fetchUserProfile() {
-        String userId ="LS4P76JGARfEWzVEH3qetSp0sZn1";
-
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) {
+            Log.e("Firebase", "User ID is null.");
+            return;
+        }
 
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
@@ -163,12 +164,16 @@ public class AdminProfileFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Profile profile = snapshot.getValue(Profile.class);
                         if (profile != null) {
-                            Log.d("ProfileData", "Name: " + profile.getName() + ", Email: " + profile.getEmail());
                             tvName.setText(profile.getName());
                             tvEmail.setText(profile.getEmail());
-                            fetchProfileImage(profile.getProfileimageid());
+
+                            // Fetch profile image if it exists
+                            String existingImageId = profile.getProfileimageid();
+                            if (existingImageId != null) {
+                                fetchProfileImage(existingImageId);
+                            }
                         } else {
-                            Log.d("AdminInfo", "Profile data is null.");
+                            Log.e("Firebase", "Profile data is null.");
                         }
                     }
 
@@ -180,11 +185,6 @@ public class AdminProfileFragment extends Fragment {
     }
 
     private void fetchProfileImage(String imageId) {
-        if (imageId == null) {
-            Log.e("Firebase", "Image ID is null.");
-            return;
-        }
-
         FirebaseDatabase.getInstance().getReference("Images")
                 .child(imageId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -205,19 +205,14 @@ public class AdminProfileFragment extends Fragment {
                 });
     }
 
-    private void saveImage(Uri uri) {
-        if (uri == null) {
-            Log.e("SaveImage", "Image URI is null.");
-            return;
-        }
-
+    private void updateUserProfileAndImage(Uri imageUri) {
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId == null) {
             Log.e("Firebase", "User ID is null.");
             return;
         }
 
-        String imageString = MyUtilClass.imageUriToBase64(uri, requireContext().getContentResolver());
+        String imageString = MyUtilClass.imageUriToBase64(imageUri, requireContext().getContentResolver());
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
                 .child("profileimageid")
@@ -226,10 +221,38 @@ public class AdminProfileFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String existingImageId = snapshot.getValue(String.class);
                         if (existingImageId != null) {
-                            updateImage(existingImageId, imageString);
+                            FirebaseDatabase.getInstance().getReference("Images")
+                                    .child(existingImageId)
+                                    .setValue(imageString)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getContext(), "Image updated successfully", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.e("Firebase", "Failed to update image.");
+                                        }
+                                    });
                         } else {
                             String newImageId = UUID.randomUUID().toString();
-                            saveNewImage(newImageId, imageString);
+                            FirebaseDatabase.getInstance().getReference("Images")
+                                    .child(newImageId)
+                                    .setValue(imageString)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            FirebaseDatabase.getInstance().getReference("Users")
+                                                    .child(userId)
+                                                    .child("profileimageid")
+                                                    .setValue(newImageId)
+                                                    .addOnCompleteListener(updateTask -> {
+                                                        if (updateTask.isSuccessful()) {
+                                                            Toast.makeText(getContext(), "Image saved successfully", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Log.e("Firebase", "Failed to update profile image ID.");
+                                                        }
+                                                    });
+                                        } else {
+                                            Log.e("Firebase", "Failed to save new image.");
+                                        }
+                                    });
                         }
                     }
 
@@ -239,51 +262,4 @@ public class AdminProfileFragment extends Fragment {
                     }
                 });
     }
-
-    private void updateImage(String imageId, String imageString) {
-        FirebaseDatabase.getInstance().getReference("Images")
-                .child(imageId)
-                .setValue(imageString)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Firebase", "Image updated successfully.");
-                    } else {
-                        Log.e("Firebase", "Failed to update image.");
-                    }
-                });
-    }
-
-    private void saveNewImage(String imageId, String imageString) {
-        FirebaseDatabase.getInstance().getReference("Images")
-                .child(imageId)
-                .setValue(imageString)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        updateProfileImageId(imageId);
-                    } else {
-                        Log.e("Firebase", "Failed to save new image.");
-                    }
-                });
-    }
-
-    private void updateProfileImageId(String imageId) {
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId == null) {
-            Log.e("Firebase", "User ID is null.");
-            return;
-        }
-
-        FirebaseDatabase.getInstance().getReference("Users")
-                .child(userId)
-                .child("profileimageid")
-                .setValue(imageId)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Firebase", "Profile image ID updated successfully.");
-                    } else {
-                        Log.e("Firebase", "Failed to update profile image ID.");
-                    }
-                });
-    }
-
 }
