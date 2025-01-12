@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +23,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -33,9 +36,10 @@ import java.util.UUID;
 public class UserFragment extends Fragment {
 
     private TextView tvName, tvEmail;
-    private Button btnLogout;
-    private ImageView ivEditIcon, ivProfile;
+    private Button btnLogout,btnSvae;
+    private ImageView ivEditIcon, ivProfile,editIconName;
     private Uri imageUri;
+    EditText etName;
 
     // For capturing an image
     private final ActivityResultLauncher<Uri> captureImage =
@@ -77,15 +81,18 @@ public class UserFragment extends Fragment {
         ivEditIcon = view.findViewById(R.id.editicon);
         ivProfile = view.findViewById(R.id.profile);
         btnLogout = view.findViewById(R.id.btn_logout);
+        editIconName=view.findViewById(R.id.edit_iconName);
 
         setupEditIcon();
         setupLogoutButton();
         fetchUserProfile();
+      //  updateName();
 
         return view;
     }
 
-    private void setupEditIcon() {
+
+     private void setupEditIcon() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Update Profile")
                 .setPositiveButton("Gallery", (dialogInterface, i) -> pickImage.launch("image/*"))
