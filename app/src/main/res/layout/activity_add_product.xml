@@ -31,7 +31,6 @@
             android:background="@android:drawable/btn_dropdown"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="25dp"
-
             android:popupBackground="#94E699"
             android:layout_marginStart="20dp" />
 
@@ -42,6 +41,25 @@
 <!--            android:src="@drawable/baseline_add_circle_24"-->
 <!--            android:layout_marginStart="50dp"-->
 <!--            android:layout_marginTop="20dp"/>-->
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sp_cat"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="25dp"
+            android:popupBackground="#94E699"
+            android:layout_marginStart="20dp"/>
+
 
 
     </LinearLayout>
@@ -74,6 +92,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
            />
+
+
 <!--        <ImageView-->
 <!--            android:id="@+id/iv_desc"-->
 <!--            android:layout_width="40dp"-->
@@ -83,6 +103,9 @@
 <!--            android:layout_marginStart="20dp"-->
 <!--            android:layout_marginEnd="10dp"/>-->
     </LinearLayout>
+
+
+
 
     <LinearLayout
         android:layout_width="0dp"

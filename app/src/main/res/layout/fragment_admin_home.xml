@@ -11,18 +11,36 @@
         android:layout_height="150dp"
         android:src="@drawable/logo"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="20dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_product"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/btn_add_product"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add product"
+        android:text="Add new Product"
         android:textSize="20dp"
         android:backgroundTint="@color/dark_green"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         />
+
+
+<!--    <Button-->
+<!--        android:id="@+id/btn_add_product"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="See All products"-->
+<!--        android:textSize="20dp"-->
+<!--        android:backgroundTint="@color/dark_green"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        />-->
 
     <Button
         android:id="@+id/btn_add_ingredients"

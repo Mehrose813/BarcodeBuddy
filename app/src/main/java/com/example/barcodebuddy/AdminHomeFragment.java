@@ -3,12 +3,23 @@ package com.example.barcodebuddy;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,7 +27,7 @@ import android.widget.Button;
  * create an instance of this fragment.
  */
 public class AdminHomeFragment extends Fragment {
-Button btnAddProduct,btnAddIngredients;
+    Button btnAddProduct, btnAddIngredients;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,27 +73,58 @@ Button btnAddProduct,btnAddIngredients;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_home, container, false);
+        Button addProduct = view.findViewById(R.id.btn_add_product);
 
-        btnAddProduct = view.findViewById(R.id.btn_add_product);
+        // Initialize RecyclerView
+        RecyclerView rvProduct = view.findViewById(R.id.rv_product);
+
+        // Layout Manager for the RecyclerView
+        rvProduct.setLayoutManager(new LinearLayoutManager(getContext()));  // Adding Layout Manager
+
+        List<Product> productsList = new ArrayList<>();
+
+        // Initialize Adapter with an empty list initially
+        ProductAdapter productAdapter = new ProductAdapter(productsList);
+        rvProduct.setAdapter(productAdapter);  // Set the adapter
+
+        FirebaseDatabase.getInstance().getReference("Products")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        //productsList.clear();  // Clear the list before adding new data
+                        for (DataSnapshot productSnapshot : snapshot.getChildren()) {
+                            Product product = productSnapshot.getValue(Product.class);
+                           // product.setName(productSnapshot.getKey());
+                            productsList.add(product);
+                        }
+
+                        rvProduct.setAdapter(new ProductAdapter(productsList));
+                        // Notify the adapter that the data has changed
+                        //productAdapter.notifyDataSetChanged();  // Notify the adapter to refresh the list
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle database error
+                    }
+                });
+
         btnAddIngredients = view.findViewById(R.id.btn_add_ingredients);
-
-        btnAddProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getContext(),AddProductActivity.class);
-                startActivity(intent);
-            }
-        });
         btnAddIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), IngredientListActivity.class);
                 startActivity(intent);
-
             }
         });
 
+        addProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),AddProductActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

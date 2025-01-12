@@ -21,11 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class AddProductActivity extends AppCompatActivity {
 
-    Spinner selectProduct;
+    Spinner selectProduct,spCat;
     LinearLayout detailLayout;
     Button btnSave, btnAdd;
     EditText edDes;
     String[] pName = {"select Product Name", "Hico's Ice cream", "National Juice", "Lay's Potato chips", "Coca Cola", "Tea Bag", "Shoop Noddles"};
+    String[] categories = {"Nuts" , "Chocolates" , "Cold drinks","Cookies"};
 
     // Firebase Database reference
     //firebase database
@@ -47,11 +48,16 @@ public class AddProductActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btn_add);
         btnSave = findViewById(R.id.btn_save);
         edDes = findViewById(R.id.ed_desc);
+        spCat = findViewById(R.id.sp_cat);
 
         // Set up Adapter for Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pName);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectProduct.setAdapter(adapter);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,categories);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spCat.setAdapter(arrayAdapter);
 
         // Spinner item selection listener
         selectProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -96,6 +102,7 @@ public class AddProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String selectedProduct = selectProduct.getSelectedItem().toString();
+                String selectedCategory = spCat.getSelectedItem().toString();
                 String description = edDes.getText().toString();
 
                 if (selectedProduct.equals("select Product Name")) {
@@ -107,18 +114,25 @@ public class AddProductActivity extends AppCompatActivity {
                     Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                int selectedPosition = spCat.getSelectedItemPosition();
+                if(selectedPosition == Spinner.INVALID_POSITION){
+                    Toast.makeText(AddProductActivity.this, "select a valid category", Toast.LENGTH_SHORT).show();
+                }
 
-                saveProductToFirebase(selectedProduct, description);
+
+
+                saveProductToFirebase(selectedProduct, description,selectedCategory);
             }
         });
     }
 
     // Method to save product to Firebase
-    public void saveProductToFirebase(String productName, String description) {
+    public void saveProductToFirebase(String productName, String description,String category) {
         // Create a Product object (You can add more fields if needed)
         Product product = new Product();
         product.setName(productName);
         product.setDesc(description);
+        product.setCat(category);
 
         // Save product to Firebase
         String productId = databaseReference.push().getKey(); // Automatically generate a unique ID
