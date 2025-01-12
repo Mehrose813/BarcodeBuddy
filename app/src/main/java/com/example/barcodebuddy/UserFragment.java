@@ -86,13 +86,56 @@ public class UserFragment extends Fragment {
         setupEditIcon();
         setupLogoutButton();
         fetchUserProfile();
-      //  updateName();
+       updateName();
 
         return view;
     }
+    private void updateName(){
+        BottomSheetDialog dialog=new BottomSheetDialog(getContext());
+        View views=getLayoutInflater().inflate(R.layout.bottom_sheet,null);
+        dialog.setContentView(views);
+
+        etName=views.findViewById(R.id.edit_name);
+        btnSvae=views.findViewById(R.id.btn_save);
+
+        editIconName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
+        btnSvae.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name=etName.getText().toString();
+                if(!name.isEmpty()){
+                    dialog.dismiss();
+                    saveName(name);
+                }
+
+            }
+        });
+
+    }
+    private void saveName(String name){
+        String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ref.child("name").setValue(name);
+                Toast.makeText(getContext(), "Value update", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
 
-     private void setupEditIcon() {
+    private void setupEditIcon() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Update Profile")
                 .setPositiveButton("Gallery", (dialogInterface, i) -> pickImage.launch("image/*"))
