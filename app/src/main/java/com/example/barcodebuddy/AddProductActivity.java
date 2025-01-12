@@ -30,6 +30,7 @@ public class AddProductActivity extends AppCompatActivity {
     String[] pName = {"select Product Name","Hico's Ice cream" , "National Juice" ,"Lay's Potato chips" , "Coca Cola" , "Tea Bag", "Shoop Noddles"};
 
     // Firebase Database reference
+    //firebase database
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
