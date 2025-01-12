@@ -17,18 +17,17 @@
             android:backgroundTint="#FF428612"
             android:src="@drawable/profile" />
 
-        <!-- Edit Icon -->
+
         <ImageView
             android:id="@+id/editicon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignBottom="@id/profile"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="130dp"
-            android:layout_marginBottom="21dp"
+            android:layout_marginRight="137dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/editicon" />
 
-        <!-- Circle Backgrounds for Profile -->
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -54,8 +53,8 @@
             android:layout_alignBottom="@id/profile"
             android:layout_alignParentRight="true"
             android:layout_marginTop="300dp"
-            android:layout_marginRight="77dp"
-            android:layout_marginBottom="-21dp"
+            android:layout_marginRight="86dp"
+            android:layout_marginBottom="-13dp"
             android:background="@drawable/darkcircle" />
 
         <ImageView
