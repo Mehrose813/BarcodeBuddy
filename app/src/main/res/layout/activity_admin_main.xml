@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#93E699"
     tools:context=".AdminMainActivity">
 
 
@@ -17,7 +16,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_margin="20dp"
-        android:background="@color/white"
         android:orientation="vertical" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

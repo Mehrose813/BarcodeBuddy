@@ -77,7 +77,7 @@ Button btnAddProduct,btnAddIngredients;
         btnAddIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddIngredientActivity.class);
+                Intent intent = new Intent(getContext(), IngredientListActivity.class);
                 startActivity(intent);
 
             }
