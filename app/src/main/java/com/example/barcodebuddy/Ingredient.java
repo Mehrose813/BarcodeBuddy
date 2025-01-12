@@ -1,32 +1,21 @@
 package com.example.barcodebuddy;
 
 public class Ingredient {
-    String name , quantity;
-
-    public Ingredient(String name , String quantity){
-        this.name = name;
-        this.quantity = quantity;
-    }
-
-
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
+    String name , id;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String nameingre) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Ingredient(){
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
     }
 }

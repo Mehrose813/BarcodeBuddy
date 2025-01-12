@@ -43,6 +43,12 @@
         android:layout_marginTop="-10dp"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -130,16 +136,18 @@
         android:id="@+id/con_pass"
         android:inputType="textPassword"
         />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="@string/account_sigup"
             android:layout_marginStart="15dp"
             android:textSize="17dp"
@@ -149,7 +157,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="@string/login"
             android:textSize="20dp"
             android:textColor="@color/dark_green"
@@ -159,17 +167,27 @@
 
     </LinearLayout>
 
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        >
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_signup"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:backgroundTint="@color/dark_green"
         android:text="@string/btn_sigup"
         android:background="@drawable/border_style"
-        />
 
+        />
+    </LinearLayout>
 
 </LinearLayout>
 </ScrollView>
