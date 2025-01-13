@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -118,12 +119,19 @@ public class UserFragment extends Fragment {
 
     }
     private void saveName(String name){
+
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Updating name...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ref.child("name").setValue(name);
+                progressDialog.dismiss();
                 Toast.makeText(getContext(), "Value update", Toast.LENGTH_SHORT).show();
             }
 
