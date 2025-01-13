@@ -23,18 +23,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 
 public class AdminProfileFragment extends Fragment {
-    private TextView tvName, tvEmail;
-    private Button btnLogout;
-    private ImageView ivEditIcon, ivProfile;
+    private TextView tvName, tvEmail,etName;
+    private Button btnLogout,btnSave;
+    private ImageView ivEditIcon, ivProfile,editIconName;
     private Uri imageUri;
 
     private final ActivityResultLauncher<Uri> captureImage =
@@ -81,11 +83,58 @@ public class AdminProfileFragment extends Fragment {
         ivEditIcon = view.findViewById(R.id.editicon);
         ivProfile = view.findViewById(R.id.profile);
         btnLogout = view.findViewById(R.id.btn_logout);
+        btnLogout = view.findViewById(R.id.btn_logout);
+        editIconName=view.findViewById(R.id.edit_iconName);
 
         setupEditIcon();
         setupLogoutButton();
         fetchUserProfile();
+        updateName();
         return view;
+    }
+
+    private void updateName(){
+        BottomSheetDialog dialog=new BottomSheetDialog(getContext());
+        View views=getLayoutInflater().inflate(R.layout.bottom_sheet,null);
+        dialog.setContentView(views);
+
+        etName=views.findViewById(R.id.edit_name);
+        btnSave=views.findViewById(R.id.btn_save);
+
+        editIconName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name=etName.getText().toString();
+                if(!name.isEmpty()){
+                    dialog.dismiss();
+                    saveName(name);
+                }
+
+            }
+        });
+
+    }
+    private void saveName(String name){
+        String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ref.child("name").setValue(name);
+                Toast.makeText(getContext(), "Value update", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void setupEditIcon() {
