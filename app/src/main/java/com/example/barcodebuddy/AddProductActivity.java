@@ -26,7 +26,7 @@ public class AddProductActivity extends AppCompatActivity {
     Button btnSave, btnAdd;
     EditText edDes;
     String[] pName = {"select Product Name", "Hico's Ice cream", "National Juice", "Lay's Potato chips", "Coca Cola", "Tea Bag", "Shoop Noddles"};
-    String[] categories = {"Nuts" , "Chocolates" , "Cold drinks","Cookies"};
+    String[] categories = {"Select category","Nuts" , "Chocolates" , "Cold drinks","Cookies"};
 
     // Firebase Database reference
     //firebase database
@@ -112,6 +112,10 @@ public class AddProductActivity extends AppCompatActivity {
 
                 if (description.isEmpty()) {
                     Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (spCat.equals("Select category")) {
+                    Toast.makeText(AddProductActivity.this, "Please select a category", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int selectedPosition = spCat.getSelectedItemPosition();
