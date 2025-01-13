@@ -68,7 +68,6 @@ public class AdminHomeFragment extends Fragment {
         }
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -81,26 +80,29 @@ public class AdminHomeFragment extends Fragment {
         // Layout Manager for the RecyclerView
         rvProduct.setLayoutManager(new LinearLayoutManager(getContext()));  // Adding Layout Manager
 
+        // Create the adapter outside the Firebase listener to maintain the same instance
         List<Product> productsList = new ArrayList<>();
+        ProductAdapter productAdapter = new ProductAdapter(getContext(), productsList); // Pass the context and the list
+        rvProduct.setAdapter(productAdapter);  // Set the adapter to the RecyclerView
 
-        // Initialize Adapter with an empty list initially
-        ProductAdapter productAdapter = new ProductAdapter(productsList);
-        rvProduct.setAdapter(productAdapter);  // Set the adapter
-
+        // Fetch data from Firebase
         FirebaseDatabase.getInstance().getReference("Products")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //productsList.clear();  // Clear the list before adding new data
+                        // Clear the list before adding new data
+                        productsList.clear();  // Clear old data
+
+                        // Loop through each snapshot and add products to the list
                         for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                             Product product = productSnapshot.getValue(Product.class);
-                           // product.setName(productSnapshot.getKey());
-                            productsList.add(product);
+                            if (product != null) {
+                                productsList.add(product);  // Add the product to the list
+                            }
                         }
 
-                        rvProduct.setAdapter(new ProductAdapter(productsList));
                         // Notify the adapter that the data has changed
-                        //productAdapter.notifyDataSetChanged();  // Notify the adapter to refresh the list
+                        productAdapter.notifyDataSetChanged();  // Refresh the RecyclerView
                     }
 
                     @Override
@@ -109,6 +111,7 @@ public class AdminHomeFragment extends Fragment {
                     }
                 });
 
+        // Add Ingredients button click listener
         btnAddIngredients = view.findViewById(R.id.btn_add_ingredients);
         btnAddIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,10 +121,11 @@ public class AdminHomeFragment extends Fragment {
             }
         });
 
+        // Add Product button click listener
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),AddProductActivity.class);
+                Intent intent = new Intent(getContext(), AddProductActivity.class);
                 startActivity(intent);
             }
         });

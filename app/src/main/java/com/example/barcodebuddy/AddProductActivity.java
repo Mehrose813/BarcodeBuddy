@@ -19,17 +19,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.UUID;
+
 public class AddProductActivity extends AppCompatActivity {
 
-    Spinner selectProduct,spCat;
+    Spinner selectProduct, spCat;
     LinearLayout detailLayout;
     Button btnSave, btnAdd;
     EditText edDes;
     String[] pName = {"select Product Name", "Hico's Ice cream", "National Juice", "Lay's Potato chips", "Coca Cola", "Tea Bag", "Shoop Noddles"};
-    String[] categories = {"Select category","Nuts" , "Chocolates" , "Cold drinks","Cookies"};
+    String[] categories = {"Select category", "Nuts", "Chocolates", "Cold drinks", "Cookies"};
 
     // Firebase Database reference
-    //firebase database
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
@@ -55,7 +56,7 @@ public class AddProductActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectProduct.setAdapter(adapter);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,categories);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spCat.setAdapter(arrayAdapter);
 
@@ -114,44 +115,41 @@ public class AddProductActivity extends AppCompatActivity {
                     Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (spCat.equals("Select category")) {
+
+                if (selectedCategory.equals("Select category")) {
                     Toast.makeText(AddProductActivity.this, "Please select a category", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                int selectedPosition = spCat.getSelectedItemPosition();
-                if(selectedPosition == Spinner.INVALID_POSITION){
-                    Toast.makeText(AddProductActivity.this, "select a valid category", Toast.LENGTH_SHORT).show();
-                }
 
-
-
-                saveProductToFirebase(selectedProduct, description,selectedCategory);
+                // Save the product to Firebase
+                saveProductToFirebase(selectedProduct, description, selectedCategory);
             }
         });
     }
 
     // Method to save product to Firebase
-    public void saveProductToFirebase(String productName, String description,String category) {
+    public void saveProductToFirebase(String productName, String description, String category) {
+        // Generate a unique ID using UUID
+        String productId = UUID.randomUUID().toString();  // Create a unique ID for the product
+
         // Create a Product object (You can add more fields if needed)
         Product product = new Product();
+        product.setId(productId);  // Assign the generated ID to the product
         product.setName(productName);
         product.setDesc(description);
         product.setCat(category);
 
-        // Save product to Firebase
-        String productId = databaseReference.push().getKey(); // Automatically generate a unique ID
-        if (productId != null) {
-            databaseReference.child(productId).setValue(product)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show();
-                            }
+        // Save product to Firebase under the generated ID
+        databaseReference.child(productId).setValue(product)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show();
                         }
-                    });
-        }
+                    }
+                });
     }
 }
