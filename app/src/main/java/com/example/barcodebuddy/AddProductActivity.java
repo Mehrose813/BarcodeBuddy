@@ -23,6 +23,7 @@ import java.util.UUID;
 
 public class AddProductActivity extends AppCompatActivity {
 
+    String id;
     Spinner  spCat;
     LinearLayout detailLayout;
     Button btnSave, btnAdd;
@@ -38,6 +39,9 @@ public class AddProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
+
+
+        id = getIntent().getStringExtra("id");
 
         // Initialize Firebase database
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -60,41 +64,6 @@ public class AddProductActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spCat.setAdapter(arrayAdapter);
-
-        // Spinner item selection listener
-//        selectProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String value = parent.getItemAtPosition(position).toString();
-//                // You can use this to show selected product name in a TextView or any other logic
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // Do nothing if no item is selected
-//            }
-//        });
-
-//        // Add button click listener
-//        btnAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //String selectedProduct = selectProduct.getSelectedItem().toString();
-//                String name = edPName.getText().toString();
-//                String description = edDes.getText().toString();
-//
-//                if(name.isEmpty()){
-//                    Toast.makeText(AddProductActivity.this, "Add a product name", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                if (description.isEmpty()) {
-//                    Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//            }
-//        });
-
         // Save Product button click listener
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,19 +106,33 @@ public class AddProductActivity extends AppCompatActivity {
         product.setCat(category);
 
 
+        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
 
-//        // Save product to Firebase under the generated ID
-//        databaseReference.child(productId).setValue(product)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
+
+        // Check if ID is provided (editing existing product)
+        if (id != null && !id.isEmpty()) {
+            // Update existing product
+            productsRef.child(id).setValue(product)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(AddProductActivity.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                        finish();  // Close activity after update
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(AddProductActivity.this, "Failed to update product", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            // Add new product
+            productsRef.push().setValue(product)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                        finish();  // Close activity after insertion
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
 }
-}
+
+
+
