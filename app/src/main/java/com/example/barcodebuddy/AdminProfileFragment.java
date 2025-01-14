@@ -101,9 +101,9 @@ public class AdminProfileFragment extends Fragment {
     }
 
     private void updateName(){
-        BottomSheetDialog dialog=new BottomSheetDialog(getContext());
+        BottomSheetDialog bottomdialog=new BottomSheetDialog(getContext());
         View views=getLayoutInflater().inflate(R.layout.bottom_sheet,null);
-        dialog.setContentView(views);
+        bottomdialog.setContentView(views);
 
         etName=views.findViewById(R.id.edit_name);
         btnSave=views.findViewById(R.id.btn_save);
@@ -111,16 +111,21 @@ public class AdminProfileFragment extends Fragment {
         editIconName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.show();
+                bottomdialog.show();
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name=etName.getText().toString();
-                if(!name.isEmpty()){
-                    dialog.dismiss();
+                if(name.isEmpty()){
+                    Toast.makeText(getContext(), "Field does not empty ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    bottomdialog.dismiss();
                     saveName(name);
+
                 }
 
             }
@@ -129,19 +134,16 @@ public class AdminProfileFragment extends Fragment {
     }
     private void saveName(String name){
 
-        ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Updating name...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
         String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ref.child("name").setValue(name);
-                progressDialog.dismiss();
-                Toast.makeText(getContext(), "Value update", Toast.LENGTH_SHORT).show();
+                    ref.child("name").setValue(name);
+                Toast.makeText(getContext(), "Value update..", Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
@@ -251,7 +253,7 @@ public class AdminProfileFragment extends Fragment {
         ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Loading image...");
         progressDialog.setCancelable(false);
-        progressDialog.show();
+
 
 
         FirebaseDatabase.getInstance().getReference("Images")
@@ -263,17 +265,16 @@ public class AdminProfileFragment extends Fragment {
                             String imageString = snapshot.getValue(String.class);
                             ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
 
-                            progressDialog.dismiss();
                         } else {
                             Log.e("Firebase", "Image not found in database.");
-                            progressDialog.dismiss();
+
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e("Firebase", "Error fetching image: " + error.getMessage());
-                        progressDialog.dismiss();  // Dismiss the dialog if fetching is cancelled3
+                      // Dismiss the dialog if fetching is cancelled3
                     }
                 });
     }
