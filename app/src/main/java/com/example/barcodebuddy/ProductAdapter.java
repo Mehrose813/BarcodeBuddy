@@ -79,6 +79,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 context.startActivity(intent);
             }
         });
+        
     }
 
     @Override
