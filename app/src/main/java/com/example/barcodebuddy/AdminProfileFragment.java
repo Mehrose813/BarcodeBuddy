@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -90,7 +91,13 @@ public class AdminProfileFragment extends Fragment {
         setupLogoutButton();
         fetchUserProfile();
         updateName();
+
+
+
+
         return view;
+
+
     }
 
     private void updateName(){
@@ -121,12 +128,19 @@ public class AdminProfileFragment extends Fragment {
 
     }
     private void saveName(String name){
+
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Updating name...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ref.child("name").setValue(name);
+                progressDialog.dismiss();
                 Toast.makeText(getContext(), "Value update", Toast.LENGTH_SHORT).show();
             }
 
@@ -208,7 +222,7 @@ public class AdminProfileFragment extends Fragment {
 
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Profile profile = snapshot.getValue(Profile.class);
@@ -234,6 +248,12 @@ public class AdminProfileFragment extends Fragment {
     }
 
     private void fetchProfileImage(String imageId) {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading image...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+
         FirebaseDatabase.getInstance().getReference("Images")
                 .child(imageId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -242,14 +262,18 @@ public class AdminProfileFragment extends Fragment {
                         if (snapshot.exists()) {
                             String imageString = snapshot.getValue(String.class);
                             ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
+
+                            progressDialog.dismiss();
                         } else {
                             Log.e("Firebase", "Image not found in database.");
+                            progressDialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e("Firebase", "Error fetching image: " + error.getMessage());
+                        progressDialog.dismiss();  // Dismiss the dialog if fetching is cancelled3
                     }
                 });
     }
