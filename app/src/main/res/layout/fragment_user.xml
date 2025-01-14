@@ -77,7 +77,7 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:textColor="#9BBA6E"
@@ -85,9 +85,8 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:background="@drawable/border"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="50dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
 
             <ImageView
                 android:id="@+id/edit_iconName"
@@ -125,6 +124,7 @@
             android:layout_below="@id/main2"
             android:layout_marginTop="70dp"
             android:backgroundTint="#FF428612"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 </ScrollView>
