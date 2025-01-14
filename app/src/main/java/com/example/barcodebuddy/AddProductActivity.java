@@ -23,10 +23,10 @@ import java.util.UUID;
 
 public class AddProductActivity extends AppCompatActivity {
 
-    Spinner selectProduct, spCat;
+    Spinner  spCat;
     LinearLayout detailLayout;
     Button btnSave, btnAdd;
-    EditText edDes;
+    EditText edDes,edPName;
     String[] pName = {"select Product Name", "Hico's Ice cream", "National Juice", "Lay's Potato chips", "Coca Cola", "Tea Bag", "Shoop Noddles"};
     String[] categories = {"Select category", "Nuts", "Chocolates", "Cold drinks", "Cookies"};
 
@@ -44,72 +44,69 @@ public class AddProductActivity extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference("Products");
 
         // Initialize Views
-        selectProduct = findViewById(R.id.spinner);
+        edPName = findViewById(R.id.ed_pname);
+       // selectProduct = findViewById(R.id.spinner);
         detailLayout = findViewById(R.id.detail);
-        btnAdd = findViewById(R.id.btn_add);
+
         btnSave = findViewById(R.id.btn_save);
         edDes = findViewById(R.id.ed_desc);
         spCat = findViewById(R.id.sp_cat);
 
         // Set up Adapter for Spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pName);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectProduct.setAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pName);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        selectProduct.setAdapter(adapter);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spCat.setAdapter(arrayAdapter);
 
         // Spinner item selection listener
-        selectProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String value = parent.getItemAtPosition(position).toString();
-                // You can use this to show selected product name in a TextView or any other logic
-            }
+//        selectProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String value = parent.getItemAtPosition(position).toString();
+//                // You can use this to show selected product name in a TextView or any other logic
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // Do nothing if no item is selected
+//            }
+//        });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing if no item is selected
-            }
-        });
-
-        // Add button click listener
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String selectedProduct = selectProduct.getSelectedItem().toString();
-                String description = edDes.getText().toString();
-
-                if (selectedProduct.equals("select Product Name")) {
-                    Toast.makeText(AddProductActivity.this, "Please select a product", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (description.isEmpty()) {
-                    Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Create a new TextView to display selected product and description
-                TextView newTextView = new TextView(AddProductActivity.this);
-                newTextView.setText(selectedProduct + " - " + description);
-                detailLayout.addView(newTextView);  // Add new TextView to the layout
-            }
-        });
+//        // Add button click listener
+//        btnAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //String selectedProduct = selectProduct.getSelectedItem().toString();
+//                String name = edPName.getText().toString();
+//                String description = edDes.getText().toString();
+//
+//                if(name.isEmpty()){
+//                    Toast.makeText(AddProductActivity.this, "Add a product name", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                if (description.isEmpty()) {
+//                    Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//            }
+//        });
 
         // Save Product button click listener
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedProduct = selectProduct.getSelectedItem().toString();
+                String name = edPName.getText().toString();
                 String selectedCategory = spCat.getSelectedItem().toString();
                 String description = edDes.getText().toString();
 
-                if (selectedProduct.equals("select Product Name")) {
-                    Toast.makeText(AddProductActivity.this, "Please select a product", Toast.LENGTH_SHORT).show();
-                    return;
+                if(name.isEmpty()){
+                    Toast.makeText(AddProductActivity.this, "Add a product name", Toast.LENGTH_SHORT).show();
                 }
+
 
                 if (description.isEmpty()) {
                     Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
@@ -122,7 +119,7 @@ public class AddProductActivity extends AppCompatActivity {
                 }
 
                 // Save the product to Firebase
-                saveProductToFirebase(selectedProduct, description, selectedCategory);
+                saveProductToFirebase(name, description, selectedCategory);
             }
         });
     }
@@ -139,17 +136,20 @@ public class AddProductActivity extends AppCompatActivity {
         product.setDesc(description);
         product.setCat(category);
 
-        // Save product to Firebase under the generated ID
-        databaseReference.child(productId).setValue(product)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
+
+
+//        // Save product to Firebase under the generated ID
+//        databaseReference.child(productId).setValue(product)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
+}
 }

@@ -43,15 +43,24 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Spinner
+        <EditText
+            android:id="@+id/ed_pname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:background="@android:drawable/btn_dropdown"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="25dp"
-            android:popupBackground="#94E699"
-            android:layout_marginStart="20dp" />
+            android:hint="enter product name"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="15dp"/>
+
+<!--        <Spinner-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/spinner"-->
+<!--            android:background="@android:drawable/btn_dropdown"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginEnd="25dp"-->
+<!--            android:popupBackground="#94E699"-->
+<!--            android:layout_marginStart="20dp" />-->
 
 <!--        <ImageView-->
 <!--            android:layout_width="40dp"-->
@@ -83,17 +92,7 @@
             />
 
 
-        <Button
-            android:id="@+id/btn_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="add"
-            android:backgroundTint="@color/dark_green"
-            android:textSize="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-           />
+
 
 
 <!--        <ImageView-->
