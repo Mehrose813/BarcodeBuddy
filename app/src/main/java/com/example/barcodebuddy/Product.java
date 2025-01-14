@@ -1,7 +1,7 @@
 package com.example.barcodebuddy;
 
 public class Product {
-    String name,desc,Cat;
+    String name,desc,Cat,id;
 
     public String getName() {
         return name;
@@ -25,5 +25,13 @@ public class Product {
 
     public void setCat(String cat) {
         Cat = cat;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
