@@ -32,6 +32,7 @@ Button btnLogout;
         BottomNavigationView nav = findViewById(R.id.btm_nav);
 
 
+        loadFragment(new HomeFragment());
 
         nav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

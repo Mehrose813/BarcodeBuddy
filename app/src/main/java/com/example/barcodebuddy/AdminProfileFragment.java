@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -90,13 +91,19 @@ public class AdminProfileFragment extends Fragment {
         setupLogoutButton();
         fetchUserProfile();
         updateName();
+
+
+
+
         return view;
+
+
     }
 
     private void updateName(){
-        BottomSheetDialog dialog=new BottomSheetDialog(getContext());
+        BottomSheetDialog bottomdialog=new BottomSheetDialog(getContext());
         View views=getLayoutInflater().inflate(R.layout.bottom_sheet,null);
-        dialog.setContentView(views);
+        bottomdialog.setContentView(views);
 
         etName=views.findViewById(R.id.edit_name);
         btnSave=views.findViewById(R.id.btn_save);
@@ -104,16 +111,21 @@ public class AdminProfileFragment extends Fragment {
         editIconName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.show();
+                bottomdialog.show();
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name=etName.getText().toString();
-                if(!name.isEmpty()){
-                    dialog.dismiss();
+                if(name.isEmpty()){
+                    Toast.makeText(getContext(), "Field does not empty ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    bottomdialog.dismiss();
                     saveName(name);
+
                 }
 
             }
@@ -121,13 +133,17 @@ public class AdminProfileFragment extends Fragment {
 
     }
     private void saveName(String name){
+
+
         String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ref.child("name").setValue(name);
-                Toast.makeText(getContext(), "Value update", Toast.LENGTH_SHORT).show();
+                    ref.child("name").setValue(name);
+                Toast.makeText(getContext(), "Value update..", Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
@@ -208,7 +224,7 @@ public class AdminProfileFragment extends Fragment {
 
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Profile profile = snapshot.getValue(Profile.class);
@@ -234,6 +250,12 @@ public class AdminProfileFragment extends Fragment {
     }
 
     private void fetchProfileImage(String imageId) {
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading image...");
+        progressDialog.setCancelable(false);
+
+
+
         FirebaseDatabase.getInstance().getReference("Images")
                 .child(imageId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -242,14 +264,17 @@ public class AdminProfileFragment extends Fragment {
                         if (snapshot.exists()) {
                             String imageString = snapshot.getValue(String.class);
                             ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
+
                         } else {
                             Log.e("Firebase", "Image not found in database.");
+
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e("Firebase", "Error fetching image: " + error.getMessage());
+                      // Dismiss the dialog if fetching is cancelled3
                     }
                 });
     }
