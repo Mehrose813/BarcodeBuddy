@@ -140,8 +140,18 @@ public class AdminProfileFragment extends Fragment {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    ref.child("name").setValue(name);
-                Toast.makeText(getContext(), "Value update..", Toast.LENGTH_SHORT).show();
+//                    ref.child("name").setValue(name);
+//
+
+
+                ref.child("name").setValue(name).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        getActivity().runOnUiThread(() -> tvName.setText(name));
+                        Toast.makeText(getContext(), "Name updated.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to update name.", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
             }

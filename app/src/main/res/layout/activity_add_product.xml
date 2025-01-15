@@ -10,85 +10,89 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    tools:context=".AddProductActivity">
+    android:layout_gravity="center"
+    tools:context=".AddProductActivity"
+    >
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/logo"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Product"
+        android:textSize="24sp"
         android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/dark_green"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Category:"
+            android:layout_marginStart="20dp"
+            android:textSize="15dp"
+            android:layout_marginTop="30dp"
+            />
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sp_cat"
             android:background="@android:drawable/btn_dropdown"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="25dp"
             android:popupBackground="#94E699"
             android:layout_marginStart="20dp"/>
 
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="Enter Product Name"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        />
+
 
         <EditText
             android:id="@+id/ed_pname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="enter product name"
+            android:hint="Enter Product Name"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="15dp"/>
-
-<!--        <Spinner-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/spinner"-->
-<!--            android:background="@android:drawable/btn_dropdown"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginEnd="25dp"-->
-<!--            android:popupBackground="#94E699"-->
-<!--            android:layout_marginStart="20dp" />-->
-
-<!--        <ImageView-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:id="@+id/iv_add_p"-->
-<!--            android:src="@drawable/baseline_add_circle_24"-->
-<!--            android:layout_marginStart="50dp"-->
-<!--            android:layout_marginTop="20dp"/>-->
-
-
-    </LinearLayout>
-
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:background="@drawable/border_style"/>
 
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter Product Description"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            />
 
         <EditText
             android:id="@+id/ed_desc"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="20dp"
-            android:hint="enter description"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Description"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:background="@drawable/border_style"
             />
 
 

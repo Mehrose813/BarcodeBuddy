@@ -3,6 +3,12 @@ package com.example.barcodebuddy;
 public class Product {
     String name,desc,Cat,id;
 
+    public Product(String productId, String productName, String description, String category) {
+    }
+    public Product(){
+
+    }
+
     public String getName() {
         return name;
     }

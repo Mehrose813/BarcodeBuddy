@@ -8,14 +8,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="40dp"
-    tools:context=".AddIngredientActivity">
+    tools:context=".AddIngredientActivity"
+    android:gravity="center">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/logo"
-        android:layout_gravity="center"
-        />
+
 
     <TextView
         android:layout_width="wrap_content"

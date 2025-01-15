@@ -82,7 +82,7 @@ public class AdminHomeFragment extends Fragment {
 
         // Create the adapter outside the Firebase listener to maintain the same instance
         List<Product> productsList = new ArrayList<>();
-        ProductAdapter productAdapter = new ProductAdapter(getContext(), productsList); // Pass the context and the list
+        ProductAdapter productAdapter = new ProductAdapter(productsList); // Pass the context and the list
         rvProduct.setAdapter(productAdapter);  // Set the adapter to the RecyclerView
 
         // Fetch data from Firebase
@@ -96,13 +96,17 @@ public class AdminHomeFragment extends Fragment {
                         // Loop through each snapshot and add products to the list
                         for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                             Product product = productSnapshot.getValue(Product.class);
-                            if (product != null) {
-                                productsList.add(product);  // Add the product to the list
-                            }
+                            product.setId(productSnapshot.getKey());
+                            productsList.add(product);
+//                            if (product != null) {
+//                                productsList.add(product);  // Add the product to the list
+//                            }
                         }
+                        rvProduct.setAdapter(new ProductAdapter(productsList));
+
 
                         // Notify the adapter that the data has changed
-                        productAdapter.notifyDataSetChanged();  // Refresh the RecyclerView
+                       // productAdapter.notifyDataSetChanged();  // Refresh the RecyclerView
                     }
 
                     @Override

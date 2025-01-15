@@ -21,8 +21,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     private Context context;
 
     // Constructor to initialize products and context
-    public ProductAdapter(Context context, List<Product> products) {
-        this.context = context;
+    public ProductAdapter(List<Product> products) {
         this.products = products;
     }
 
@@ -30,6 +29,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Get context from parent and inflate the view
+        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
         return new ProductViewHolder(view);
     }
