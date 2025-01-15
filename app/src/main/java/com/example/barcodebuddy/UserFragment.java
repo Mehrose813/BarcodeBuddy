@@ -37,7 +37,7 @@ import java.util.UUID;
 public class UserFragment extends Fragment {
 
     private TextView tvName, tvEmail;
-    private Button btnLogout,btnSvae;
+    private Button btnLogout,btnSave;
     private ImageView ivEditIcon, ivProfile,editIconName;
     private Uri imageUri;
     EditText etName;
@@ -84,6 +84,7 @@ public class UserFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btn_logout);
         editIconName=view.findViewById(R.id.edit_iconName);
 
+
         setupEditIcon();
         setupLogoutButton();
         fetchUserProfile();
@@ -92,26 +93,31 @@ public class UserFragment extends Fragment {
         return view;
     }
     private void updateName(){
-        BottomSheetDialog dialog=new BottomSheetDialog(getContext());
+        BottomSheetDialog bottomdialog=new BottomSheetDialog(getContext());
         View views=getLayoutInflater().inflate(R.layout.bottom_sheet,null);
-        dialog.setContentView(views);
+        bottomdialog.setContentView(views);
 
         etName=views.findViewById(R.id.edit_name);
-        btnSvae=views.findViewById(R.id.btn_save);
+        btnSave=views.findViewById(R.id.btn_save);
 
         editIconName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.show();
+                bottomdialog.show();
             }
         });
-        btnSvae.setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name=etName.getText().toString();
-                if(!name.isEmpty()){
-                    dialog.dismiss();
+                if(name.isEmpty()){
+                    Toast.makeText(getContext(), "Field does not empty ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    bottomdialog.dismiss();
                     saveName(name);
+
                 }
 
             }
@@ -120,10 +126,6 @@ public class UserFragment extends Fragment {
     }
     private void saveName(String name){
 
-        ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Updating name...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
         String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
@@ -131,8 +133,9 @@ public class UserFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ref.child("name").setValue(name);
-                progressDialog.dismiss();
-                Toast.makeText(getContext(), "Value update", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Value update..", Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
@@ -200,7 +203,7 @@ public class UserFragment extends Fragment {
 
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Profile profile = snapshot.getValue(Profile.class);
@@ -257,7 +260,7 @@ public class UserFragment extends Fragment {
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
                 .child("profileimageid")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String existingImageId = snapshot.getValue(String.class);
