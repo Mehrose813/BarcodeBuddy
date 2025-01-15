@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/btm_nav_admin"
+        app:itemIconTint="@color/dark_green"
         />
 
 </LinearLayout>
