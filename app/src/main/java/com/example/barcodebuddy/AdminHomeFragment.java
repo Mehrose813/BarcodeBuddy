@@ -73,6 +73,7 @@ public class AdminHomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_home, container, false);
         Button addProduct = view.findViewById(R.id.btn_add_product);
+        Button addCategory=view.findViewById(R.id.btn_add_category);
 
         // Initialize RecyclerView
         RecyclerView rvProduct = view.findViewById(R.id.rv_product);
@@ -131,6 +132,14 @@ public class AdminHomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddProductActivity.class);
+                startActivity(intent);
+            }
+        });
+        //Add category listenr
+        addCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(),CategoryListActivity.class);
                 startActivity(intent);
             }
         });
