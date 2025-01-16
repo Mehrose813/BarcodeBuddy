@@ -3,14 +3,6 @@ package com.example.barcodebuddy;
 public class CategoryClass {
     String id,catname;
 
-    public CategoryClass(String id, String catname) {
-        this.id = id;
-        this.catname = catname;
-    }
-
-    public CategoryClass() {
-        // Required for Firebase
-    }
     public String getId() {
         return id;
     }

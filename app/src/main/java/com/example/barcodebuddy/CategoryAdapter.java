@@ -20,17 +20,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
     private List<CategoryClass> categoryClasses;
     private Context context;
-    public CategoryAdapter(Context context, List<CategoryClass> categoryClasses) {
-        this.context = context;
+
+    // Constructor to initialize the adapter
+    public CategoryAdapter(List<CategoryClass> categoryClasses) {
         this.categoryClasses = categoryClasses;
     }
-
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_category_list, parent, false);
+                .inflate(R.layout.ingredient_list_view, parent, false);
         return new CategoryViewHolder(view);
     }
 
@@ -43,27 +44,35 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
         holder.tvName.setText(categoryClass.getCatname());
 
         // Delete button functionality
-        holder.ivDelete.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Are you sure you want to delete this ingredient?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", (dialogInterface, i) -> {
-                        FirebaseDatabase.getInstance().getReference("Ingredients")
-                                .child(categoryClass.getId())
-                                .removeValue();
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
+        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Are you sure you want to delete the category")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                FirebaseDatabase.getInstance().getReference("Categories")
+                                        .child(categoryClass.getId())
+                                        .removeValue();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
 
-            builder.show();
+                builder.show();
+            }
+
         });
 
         // Edit button functionality
         holder.ivEdit.setOnClickListener(view -> {
-            Intent intent = new Intent(context, AddIngredientActivity.class);
+            Intent intent = new Intent(context, AddCategoryActivity.class);
             intent.putExtra("id", categoryClass.getId());
             context.startActivity(intent);
         });

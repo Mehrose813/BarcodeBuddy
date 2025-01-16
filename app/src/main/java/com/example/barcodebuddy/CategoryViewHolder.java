@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder {
     TextView tvName;
-    ImageView ivEdit,ivDelete;
+    ImageView ivEdit, ivDelete;
     public CategoryViewHolder(@NonNull View itemView) {
         super(itemView);
         tvName = itemView.findViewById(R.id.tv_name);
