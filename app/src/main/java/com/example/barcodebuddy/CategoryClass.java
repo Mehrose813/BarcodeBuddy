@@ -8,6 +8,9 @@ public class CategoryClass {
         this.catname = catname;
     }
 
+    public CategoryClass() {
+        // Required for Firebase
+    }
     public String getId() {
         return id;
     }
