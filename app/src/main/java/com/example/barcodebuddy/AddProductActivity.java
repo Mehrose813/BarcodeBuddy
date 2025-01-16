@@ -22,16 +22,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class AddProductActivity extends AppCompatActivity {
     String id;
     Spinner spCat;
-    LinearLayout detailLayout;
-    Button btnSave, btnAdd;
+    Button btnSave;
     EditText edDes, edPName;
-    String[] pName = {"select Product Name", "Hico's Ice cream", "National Juice", "Lay's Potato chips", "Coca Cola", "Tea Bag", "Shoop Noddles"};
-    String[] categories = {"Select category", "Nuts", "Chocolates", "Cold drinks", "Cookies"};
+    //String[] categories = {"Select category", "Nuts", "Chocolates", "Cold drinks", "Cookies"};
+    ArrayList<String> list;
+    ArrayAdapter<String> adapter;
+
 
     // Firebase Database reference
     FirebaseDatabase firebaseDatabase;
@@ -51,17 +53,34 @@ public class AddProductActivity extends AppCompatActivity {
 
         // Initialize Views
         edPName = findViewById(R.id.ed_pname);
-        // selectProduct = findViewById(R.id.spinner);
-        detailLayout = findViewById(R.id.detail);
-
         btnSave = findViewById(R.id.btn_save);
         edDes = findViewById(R.id.ed_desc);
         spCat = findViewById(R.id.sp_cat);
 
-        // Set up Adapter for Spinner
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spCat.setAdapter(arrayAdapter);
+//        // Set up Adapter for Spinner
+//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+//        spCat.setAdapter(arrayAdapter);
+
+        list = new ArrayList<String>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
+        spCat.setAdapter(adapter);
+
+
+        FirebaseDatabase.getInstance().getReference("Categories").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot mydata : snapshot.getChildren()) {
+                    list.add(mydata.getValue().toString().trim());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(AddProductActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
 
         // If ID is provided, load the product details
@@ -74,7 +93,7 @@ public class AddProductActivity extends AppCompatActivity {
                         // Populate fields with existing data
                         edPName.setText(product.getName());
                         edDes.setText(product.getDesc());
-                        int spinnerPosition = arrayAdapter.getPosition(product.getCat());
+                        int spinnerPosition = adapter.getPosition(product.getCat());
                         spCat.setSelection(spinnerPosition);
                     }
                 }
@@ -115,18 +134,28 @@ public class AddProductActivity extends AppCompatActivity {
         });
     }
 
-    // Method to save product to Firebase
     public void saveProductToFirebase(String productName, String description, String category) {
+        // Validate the input
+        if (productName == null || productName.isEmpty()) {
+            Toast.makeText(AddProductActivity.this, "Please enter a product name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (description == null || description.isEmpty()) {
+            Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (category == null || category.equals("Select category")) {
+            Toast.makeText(AddProductActivity.this, "Please select a valid category", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Create a Product object (You can add more fields if needed)
+        // Create a Product object
         Product product = new Product();
         product.setName(productName);
         product.setDesc(description);
         product.setCat(category);
 
-
         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
-
 
         // Check if ID is provided (editing existing product)
         if (id != null && !id.isEmpty()) {
@@ -137,22 +166,24 @@ public class AddProductActivity extends AppCompatActivity {
                         finish();  // Close activity after update
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(AddProductActivity.this, "Failed to update product", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddProductActivity.this, "Failed to update product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
             // Add new product
-            productsRef.push().setValue(product)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
-                        finish();  // Close activity after insertion
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show();
-                    });
+            String newProductId = productsRef.push().getKey();  // Generate a new unique ID
+            if (newProductId != null) {
+                productsRef.child(newProductId).setValue(product)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                            finish();  // Close activity after insertion
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(AddProductActivity.this, "Failed to add product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                Toast.makeText(AddProductActivity.this, "Failed to generate product ID", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
-
-
-
 

@@ -59,7 +59,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/quantity_ingredient"
+            android:id="@+id/ed_quantity_ingredient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -100,12 +100,14 @@
         android:layout_marginTop="16dp"/>
 
     <Button
-        android:id="@+id/btn_save"
+        android:id="@+id/btn_save_iq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save"
         android:backgroundTint="@color/dark_green"
         android:layout_marginTop="16dp"
         />
+
+
 </LinearLayout>
 
