@@ -105,7 +105,7 @@ public class AdminHomeFragment extends Fragment {
                         rvProduct.setAdapter(new ProductAdapter(productsList));
 
 
-                        // Notify the adapter that the data has changed i comment it 
+                        // Notify the adapter that the data has changed comment it
                        // productAdapter.notifyDataSetChanged();  // Refresh the RecyclerView
                     }
 
