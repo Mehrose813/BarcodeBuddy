@@ -122,9 +122,13 @@ public class AdminProfileFragment extends Fragment {
                     Toast.makeText(getContext(), "Field does not empty ", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (name.trim().isEmpty()) {
+                    Toast.makeText(getContext(), "Name cannot be empty or spaces only", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 else{
                     bottomdialog.dismiss();
-                    saveName(name);
+                    saveName(name, bottomdialog);
 
                 }
 
@@ -132,33 +136,20 @@ public class AdminProfileFragment extends Fragment {
         });
 
     }
-    private void saveName(String name){
 
+    private void saveName(String name, BottomSheetDialog bottomdialog) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
-        String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    ref.child("name").setValue(name);
-//
-
-
-                ref.child("name").setValue(name).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        getActivity().runOnUiThread(() -> tvName.setText(name));
-                        Toast.makeText(getContext(), "Name updated.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Failed to update name.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+        ref.child("name").setValue(name).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // After successfully saving, update the UI
+                getActivity().runOnUiThread(() -> tvName.setText(name));
+                Toast.makeText(getContext(), "Name updated.", Toast.LENGTH_SHORT).show();
+                // Dismiss the BottomSheetDialog only after successful update
+                bottomdialog.dismiss();  // Dismiss dialog here after successful update
+            } else {
+                Toast.makeText(getContext(), "Failed to update name.", Toast.LENGTH_SHORT).show();
             }
         });
     }

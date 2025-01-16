@@ -114,6 +114,10 @@ public class UserFragment extends Fragment {
                     Toast.makeText(getContext(), "Field does not empty ", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (name.trim().isEmpty()) {
+                    Toast.makeText(getContext(), "Name cannot be empty or spaces only", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 else{
                     bottomdialog.dismiss();
                     saveName(name);
