@@ -136,6 +136,5 @@ public class AdminHomeFragment extends Fragment {
         });
 
         return view;
-        
     }
 }
