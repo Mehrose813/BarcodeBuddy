@@ -41,6 +41,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         holder.tvName.setText(product.getName());
         holder.tvCat.setText(product.getCat());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, IngredientQuantityActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
         holder.ivDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

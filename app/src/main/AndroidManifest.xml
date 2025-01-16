@@ -13,6 +13,9 @@
         android:theme="@style/Theme.BarcodeBuddy"
         tools:targetApi="31">
         <activity
+            android:name=".IngredientQuantityActivity"
+            android:exported="false" />
+        <activity
             android:name=".IngredientListActivity"
             android:exported="false" />
         <activity
