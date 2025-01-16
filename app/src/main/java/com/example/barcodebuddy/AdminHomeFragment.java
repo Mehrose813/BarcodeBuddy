@@ -106,7 +106,8 @@ public class AdminHomeFragment extends Fragment {
 
 
                         // Notify the adapter that the data has changed comment it
-                       // productAdapter.notifyDataSetChanged();  // Refresh the RecyclerView
+                       // productAdapter.notifyDataSetChanged();
+                        // Refresh the RecyclerView
                     }
 
                     @Override
