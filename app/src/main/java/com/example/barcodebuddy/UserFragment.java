@@ -261,6 +261,7 @@ public class UserFragment extends Fragment {
         }
 
         String imageString = MyUtilClass.imageUriToBase64(imageUri, requireContext().getContentResolver());
+//        ..
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
                 .child("profileimageid")
