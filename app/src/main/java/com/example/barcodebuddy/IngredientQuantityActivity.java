@@ -159,7 +159,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 textView.setTextSize(15);
                 selected.addView(textView);
                 edQOI.setText("");
-                spIn.setEnabled(false);
+               
 
 
 
