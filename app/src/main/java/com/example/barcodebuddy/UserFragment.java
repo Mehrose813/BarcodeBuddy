@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,8 @@ public class UserFragment extends Fragment {
     private ImageView ivEditIcon, ivProfile,editIconName;
     private Uri imageUri;
     EditText etName;
+    private ProgressBar progressBar;
+
 
     // For capturing an image
     private final ActivityResultLauncher<Uri> captureImage =
@@ -83,6 +86,7 @@ public class UserFragment extends Fragment {
         ivProfile = view.findViewById(R.id.profile);
         btnLogout = view.findViewById(R.id.btn_logout);
         editIconName=view.findViewById(R.id.edit_iconName);
+        progressBar=view.findViewById(R.id.progressBar);
 
 
         setupEditIcon();
@@ -128,26 +132,32 @@ public class UserFragment extends Fragment {
         });
 
     }
-    private void saveName(String name){
+    private void saveName(String name) {
+        progressBar.setVisibility(View.VISIBLE); // Show ProgressBar
 
-
-        String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users").child(userId);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ref.child("name").setValue(name);
-                Toast.makeText(getContext(), "Value update..", Toast.LENGTH_SHORT).show();
-
-
+                ref.child("name").setValue(name).addOnCompleteListener(task -> {
+                    progressBar.setVisibility(View.GONE); // Hide ProgressBar
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Name updated successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to update name", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                progressBar.setVisibility(View.GONE); // Hide ProgressBar
+                Log.e("Firebase", "Error updating name: " + error.getMessage());
             }
         });
     }
+
 
 
     private void setupEditIcon() {
@@ -254,18 +264,20 @@ public class UserFragment extends Fragment {
     }
 
     private void updateUserProfileAndImage(Uri imageUri) {
+        progressBar.setVisibility(View.VISIBLE); // Show ProgressBar
+
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId == null) {
             Log.e("Firebase", "User ID is null.");
+            progressBar.setVisibility(View.GONE); // Hide ProgressBar
             return;
         }
 
         String imageString = MyUtilClass.imageUriToBase64(imageUri, requireContext().getContentResolver());
-//        ..
         FirebaseDatabase.getInstance().getReference("Users")
                 .child(userId)
                 .child("profileimageid")
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String existingImageId = snapshot.getValue(String.class);
@@ -274,6 +286,7 @@ public class UserFragment extends Fragment {
                                     .child(existingImageId)
                                     .setValue(imageString)
                                     .addOnCompleteListener(task -> {
+                                        progressBar.setVisibility(View.GONE); // Hide ProgressBar
                                         if (task.isSuccessful()) {
                                             Toast.makeText(getContext(), "Image updated successfully", Toast.LENGTH_SHORT).show();
                                         } else {
@@ -286,6 +299,7 @@ public class UserFragment extends Fragment {
                                     .child(newImageId)
                                     .setValue(imageString)
                                     .addOnCompleteListener(task -> {
+                                        progressBar.setVisibility(View.GONE); // Hide ProgressBar
                                         if (task.isSuccessful()) {
                                             FirebaseDatabase.getInstance().getReference("Users")
                                                     .child(userId)
@@ -307,10 +321,12 @@ public class UserFragment extends Fragment {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
+                        progressBar.setVisibility(View.GONE); // Hide ProgressBar
                         Log.e("Firebase", "Error fetching image ID: " + error.getMessage());
                     }
                 });
     }
+
 }
 
 

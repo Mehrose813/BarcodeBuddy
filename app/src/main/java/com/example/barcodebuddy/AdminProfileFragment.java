@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class AdminProfileFragment extends Fragment {
     private Button btnLogout,btnSave;
     private ImageView ivEditIcon, ivProfile,editIconName;
     private Uri imageUri;
+    private ProgressBar progressbar;
 
     private final ActivityResultLauncher<Uri> captureImage =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
@@ -86,6 +88,7 @@ public class AdminProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btn_logout);
         btnLogout = view.findViewById(R.id.btn_logout);
         editIconName=view.findViewById(R.id.edit_iconName);
+        progressbar=view.findViewById(R.id.progressBar);
 
         setupEditIcon();
         setupLogoutButton();
@@ -128,7 +131,7 @@ public class AdminProfileFragment extends Fragment {
                 }
                 else{
                     bottomdialog.dismiss();
-                    saveName(name, bottomdialog);
+                    saveName(name);
 
                 }
 
@@ -136,51 +139,52 @@ public class AdminProfileFragment extends Fragment {
         });
 
     }
+    private void saveName(String name) {
+        progressbar.setVisibility(View.VISIBLE); // Show ProgressBar
 
-    private void saveName(String name, BottomSheetDialog bottomdialog) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ref.child("name").setValue(name).addOnCompleteListener(task -> {
+                    progressbar.setVisibility(View.GONE); // Hide ProgressBar
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Name updated successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to update name", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
-        ref.child("name").setValue(name).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // After successfully saving, update the UI
-                getActivity().runOnUiThread(() -> tvName.setText(name));
-                Toast.makeText(getContext(), "Name updated.", Toast.LENGTH_SHORT).show();
-                // Dismiss the BottomSheetDialog only after successful update
-                bottomdialog.dismiss();  // Dismiss dialog here after successful update
-            } else {
-                Toast.makeText(getContext(), "Failed to update name.", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressbar.setVisibility(View.GONE); // Hide ProgressBar
+                Log.e("Firebase", "Error updating name: " + error.getMessage());
             }
         });
     }
+
+
 
     private void setupEditIcon() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Update Profile");
-        builder .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                pickImage.launch("image/*");
-            }
-        });
-        builder .setNegativeButton("Camera", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                imageUri = requireContext().getContentResolver()
-                        .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
-                if (imageUri != null) {
-                    captureImage.launch(imageUri);
-                } else {
-                    Log.e("CaptureImage", "Failed to create Image URI.");
-                }
-            }
-        });
+        builder.setTitle("Update Profile")
+                .setPositiveButton("Gallery", (dialogInterface, i) -> pickImage.launch("image/*"))
+                .setNegativeButton("Camera", (dialogInterface, i) -> {
+                    imageUri = requireContext().getContentResolver()
+                            .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
+                    if (imageUri != null) {
+                        captureImage.launch(imageUri);
+                    } else {
+                        Log.e("CaptureImage", "Failed to create Image URI.");
+                    }
+                });
 
         ivEditIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder.create();
-                builder.show();
+                builder.create().show();
             }
         });
     }
@@ -194,7 +198,6 @@ public class AdminProfileFragment extends Fragment {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // Logout the user
                                 FirebaseAuth.getInstance().signOut();
                                 startActivity(new Intent(getContext(), SignInActivity.class));
                                 requireActivity().finish();
@@ -203,18 +206,14 @@ public class AdminProfileFragment extends Fragment {
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // Dismiss the dialog
                                 dialogInterface.dismiss();
                             }
                         });
 
-                // Show the dialog
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                builder.create().show();
             }
         });
     }
-
 
     private void fetchUserProfile() {
         String userId = FirebaseAuth.getInstance().getUid();
@@ -251,12 +250,6 @@ public class AdminProfileFragment extends Fragment {
     }
 
     private void fetchProfileImage(String imageId) {
-        ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading image...");
-        progressDialog.setCancelable(false);
-
-
-
         FirebaseDatabase.getInstance().getReference("Images")
                 .child(imageId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -265,25 +258,25 @@ public class AdminProfileFragment extends Fragment {
                         if (snapshot.exists()) {
                             String imageString = snapshot.getValue(String.class);
                             ivProfile.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
-
                         } else {
                             Log.e("Firebase", "Image not found in database.");
-
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e("Firebase", "Error fetching image: " + error.getMessage());
-                      // Dismiss the dialog if fetching is cancelled3
                     }
                 });
     }
 
     private void updateUserProfileAndImage(Uri imageUri) {
+        progressbar.setVisibility(View.VISIBLE); // Show ProgressBar
+
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId == null) {
             Log.e("Firebase", "User ID is null.");
+            progressbar.setVisibility(View.GONE); // Hide ProgressBar
             return;
         }
 
@@ -300,6 +293,7 @@ public class AdminProfileFragment extends Fragment {
                                     .child(existingImageId)
                                     .setValue(imageString)
                                     .addOnCompleteListener(task -> {
+                                        progressbar.setVisibility(View.GONE); // Hide ProgressBar
                                         if (task.isSuccessful()) {
                                             Toast.makeText(getContext(), "Image updated successfully", Toast.LENGTH_SHORT).show();
                                         } else {
@@ -312,6 +306,7 @@ public class AdminProfileFragment extends Fragment {
                                     .child(newImageId)
                                     .setValue(imageString)
                                     .addOnCompleteListener(task -> {
+                                        progressbar.setVisibility(View.GONE); // Hide ProgressBar
                                         if (task.isSuccessful()) {
                                             FirebaseDatabase.getInstance().getReference("Users")
                                                     .child(userId)
@@ -333,8 +328,10 @@ public class AdminProfileFragment extends Fragment {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
+                        progressbar.setVisibility(View.GONE); // Hide ProgressBar
                         Log.e("Firebase", "Error fetching image ID: " + error.getMessage());
                     }
                 });
     }
+
 }
