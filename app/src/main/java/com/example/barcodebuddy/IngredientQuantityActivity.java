@@ -119,12 +119,12 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
 
 
-                if(selectedIng.isEmpty()){
-
+                if (selectedIng.isEmpty()) {
                     Toast.makeText(IngredientQuantityActivity.this, "Enter ingredient", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(selectedIng.equals("Select an ingredient")){
+
+                if (selectedIng.equals("Select an ingredient")) {
                     TextView errorText = (TextView) spIn.getSelectedView();
                     errorText.setError("");
                     errorText.setTextColor(Color.RED);
@@ -132,13 +132,50 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     return;
                 }
 
-
                 if (qOI.isEmpty()) {
                     Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Generate a unique ID for the ingredient
+                // Check if the ingredient is already in the list
+                boolean ingredientExists = false;
+                Ingredient existingIngredient = null;
+
+                // Loop through the list of ingredients to check if the ingredient already exists
+                for (Ingredient ingredient : ingredientsList) {
+                    if (ingredient.getName().equals(selectedIng)) {
+                        ingredientExists = true;
+                        existingIngredient = ingredient;
+                        break;
+                    }
+                }
+
+                // If ingredient exists, update its quantity
+                if (ingredientExists) {
+                    existingIngredient.setQty(qOI);  // Update the existing ingredient's quantity
+                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    // If ingredient doesn't exist, add it to the list
+                    Ingredient newIngredient = new Ingredient();
+                    newIngredient.setName(selectedIng);
+                    newIngredient.setQty(qOI);
+                    ingredientsList.add(newIngredient); // Add new ingredient to the list
+                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient added", Toast.LENGTH_SHORT).show();
+                }
+
+                // Update the displayed list of selected ingredients
+                selected.removeAllViews();  // Clear previous views
+                for (Ingredient ingredient : ingredientsList) {
+                    TextView textView = new TextView(IngredientQuantityActivity.this);
+                    textView.setText(ingredient.getName() + " " + ingredient.getQty());
+                    textView.setTextSize(15);
+                    selected.addView(textView);
+                }
+
+                edQOI.setText(""); // Clear the quantity input
+                spIn.setSelection(0); // Reset the spinner selection
+
+                // Generate a unique ID for the ingredient if adding new ingredient
                 String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
                         .child("ingredients").push().getKey();
 
@@ -147,37 +184,16 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     return;
                 }
 
-
-                // Create Ingredient object
-                Ingredient ingredient = new Ingredient();
-                ingredient.setName(selectedIng);
-                ingredient.setQty(qOI);
-
-                ingredientsList.add(ingredient);
-                TextView textView = new TextView(IngredientQuantityActivity.this);
-                textView.setText(selectedIng + " " + qOI);
-                textView.setTextSize(15);
-                selected.addView(textView);
-                edQOI.setText("");
-
-
-
-
-
-
-
-
-
-                // Save Ingredient to Firebase under the product's "ingredients"
+                // Save Ingredient to Firebase (Update or Add)
                 FirebaseDatabase.getInstance().getReference("Products").child(productId)
-                        .child("ingredients").child(ingredientId).setValue(ingredient)
+                        .child("ingredients").child(ingredientId).setValue(existingIngredient != null ? existingIngredient : new Ingredient())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient successfully added", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient successfully saved", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(IngredientQuantityActivity.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(IngredientQuantityActivity.this, "Failed to save ingredient", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

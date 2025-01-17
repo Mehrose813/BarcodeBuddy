@@ -190,6 +190,7 @@ public class AddProductActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(AddProductActivity.this, "Failed to generate product ID", Toast.LENGTH_SHORT).show();
             }
+            spCat.setSelection(0);
         }
     }
 }
