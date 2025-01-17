@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -28,7 +29,8 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
     Spinner spIn;
     EditText edQOI;
-    Button btnSave;
+    Button btnSave,btnAdd;
+    TextView tvProductName,tvCatName;
     ArrayList<String> array;
     ArrayAdapter<String> adapter;
 
@@ -38,7 +40,12 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ingredient_quantity);
 
+        tvProductName =findViewById(R.id.tv_product_name);
+        tvCatName = findViewById(R.id.tv_cat_name);
+
         String productId = getIntent().getStringExtra("id");
+        String productName = getIntent().getStringExtra("name");
+        String productcat = getIntent().getStringExtra("category");
 
         if (productId == null) {
             Toast.makeText(this, "Product ID is missing!", Toast.LENGTH_SHORT).show();
@@ -46,13 +53,25 @@ public class IngredientQuantityActivity extends AppCompatActivity {
             return;
         }
 
+        // Set product name and category to the TextViews
+        if (productName != null) {
+            tvProductName.setText("Product Name : "+productName);
+        }
+        if (productcat != null) {
+            tvCatName.setText("Category Name : "+productcat);
+        }
+
         spIn = findViewById(R.id.spinner_ingredient);
         edQOI = findViewById(R.id.ed_quantity_ingredient);
-        btnSave = findViewById(R.id.btn_save_iq);
+        btnSave = findViewById(R.id.btn_save);
+        btnAdd = findViewById(R.id.btn_add);
         array = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array);
         spIn.setAdapter(adapter);
 
+
+        productName = tvProductName.getText().toString();
+        productcat = tvCatName.getText().toString();
         // Fetch ingredients from Firebase and populate the spinner
         FirebaseDatabase.getInstance().getReference("Ingredients").addValueEventListener(new ValueEventListener() {
             @Override
@@ -76,7 +95,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         });
 
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -125,45 +144,5 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                         });
             }
         });
-
-//        btnSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                // Get the selected ingredient from the spinner
-//                Object selectedItem = spIn.getSelectedItem();
-//
-//                if (selectedItem == null || selectedItem.toString().trim().isEmpty()) {
-//                    Toast.makeText(IngredientQuantityActivity.this, "Select an ingredient", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                String selectedIng = selectedItem.toString().trim(); // Get selected ingredient
-//                String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
-//
-//                if (qOI.isEmpty()) {
-//                    Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                // Create Ingredient object and save to Firebase
-//                Ingredient ingredient = new Ingredient();
-//                ingredient.setName(selectedIng);
-//                ingredient.setQty(qOI);
-//
-//                FirebaseDatabase.getInstance().getReference("Products").child(productId)
-//                        .child("ingredient").push().setValue(ingredient)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient successfully added", Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient not added", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//            }
-//        });
     }
 }
