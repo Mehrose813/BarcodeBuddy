@@ -95,7 +95,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged(); // Notify adapter to update spinner
             }
-
+ 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(IngredientQuantityActivity.this, "Failed to load ingredients", Toast.LENGTH_SHORT).show();
