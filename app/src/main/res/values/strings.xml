@@ -34,7 +34,7 @@
 <!--    </string-array>-->
 
     <string name="select_category">Select category</string>
-    <string-array name="ingredient">Select the ingredients</string-array>
+    <string name="ingredient">Select the ingredients</string>
 
 
 

@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,7 +31,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
     Spinner spIn;
     EditText edQOI;
-    Button btnSave,btnAdd;
+    Button btnAdd;
     TextView tvProductName,tvCatName;
     ArrayList<String> array;
     ArrayAdapter<String> adapter;
@@ -68,7 +69,6 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
         spIn = findViewById(R.id.spinner_ingredient);
         edQOI = findViewById(R.id.ed_quantity_ingredient);
-        btnSave = findViewById(R.id.btn_save);
         btnAdd = findViewById(R.id.btn_add);
         array = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array);
@@ -81,7 +81,10 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("Ingredients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                array.clear(); // Clear old data
+                array.clear();
+                // Clear old data
+
+                array.add("Select an ingredient");
 
                 for (DataSnapshot myData : snapshot.getChildren()) {
                     String ingredientName = myData.child("name").getValue(String.class);
@@ -116,6 +119,20 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
 
 
+                if(selectedIng.isEmpty()){
+
+                    Toast.makeText(IngredientQuantityActivity.this, "Enter ingredient", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(selectedIng.equals("Select an ingredient")){
+                    TextView errorText = (TextView) spIn.getSelectedView();
+                    errorText.setError("");
+                    errorText.setTextColor(Color.RED);
+                    errorText.setText("Please select an ingredient");
+                    return;
+                }
+
+
                 if (qOI.isEmpty()) {
                     Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
                     return;
@@ -130,6 +147,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     return;
                 }
 
+
                 // Create Ingredient object
                 Ingredient ingredient = new Ingredient();
                 ingredient.setName(selectedIng);
@@ -138,7 +156,13 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 ingredientsList.add(ingredient);
                 TextView textView = new TextView(IngredientQuantityActivity.this);
                 textView.setText(selectedIng + " " + qOI);
+                textView.setTextSize(15);
                 selected.addView(textView);
+                edQOI.setText("");
+                spIn.setEnabled(false);
+
+
+
 
 
 

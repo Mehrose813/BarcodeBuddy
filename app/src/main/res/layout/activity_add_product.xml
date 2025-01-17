@@ -44,7 +44,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="25dp"
             android:popupBackground="#94E699"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginStart="20dp"
+            android:entries="@string/select_category"/>
 
     <TextView
         android:layout_width="wrap_content"
