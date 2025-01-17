@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class IngredientQuantityActivity extends AppCompatActivity {
     TextView tvProductName,tvCatName;
     ArrayList<String> array;
     ArrayAdapter<String> adapter;
+    LinearLayout selected;
+    ArrayList<Ingredient> ingredientsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +45,12 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
         tvProductName =findViewById(R.id.tv_product_name);
         tvCatName = findViewById(R.id.tv_cat_name);
+        selected = findViewById(R.id.selected_ingredient_layout);
 
         String productId = getIntent().getStringExtra("id");
         String productName = getIntent().getStringExtra("name");
         String productcat = getIntent().getStringExtra("category");
+        ingredientsList = new ArrayList<>();
 
         if (productId == null) {
             Toast.makeText(this, "Product ID is missing!", Toast.LENGTH_SHORT).show();
@@ -110,6 +115,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 String selectedIng = selectedItem.toString().trim(); // Get selected ingredient
                 String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
 
+
                 if (qOI.isEmpty()) {
                     Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
                     return;
@@ -128,6 +134,15 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 Ingredient ingredient = new Ingredient();
                 ingredient.setName(selectedIng);
                 ingredient.setQty(qOI);
+
+                ingredientsList.add(ingredient);
+                TextView textView = new TextView(IngredientQuantityActivity.this);
+                textView.setText(selectedIng + " " + qOI);
+                selected.addView(textView);
+
+
+
+
 
                 // Save Ingredient to Firebase under the product's "ingredients"
                 FirebaseDatabase.getInstance().getReference("Products").child(productId)
