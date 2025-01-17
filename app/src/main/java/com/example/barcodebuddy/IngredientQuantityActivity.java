@@ -58,8 +58,13 @@ public class IngredientQuantityActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 array.clear(); // Clear old data
+
                 for (DataSnapshot myData : snapshot.getChildren()) {
-                    array.add(myData.getValue().toString().trim()); // Add new ingredients
+                    String ingredientName = myData.child("name").getValue(String.class);
+                    if (ingredientName != null) {
+                        array.add(ingredientName.trim()); // Add new ingredients
+                    }
+                   // array.add(myData.getValue().toString().trim()); // Add new ingredients
                 }
                 adapter.notifyDataSetChanged(); // Notify adapter to update spinner
             }
