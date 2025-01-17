@@ -70,8 +70,15 @@ public class AddProductActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("Categories").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                list.clear(); // Clear the list before adding new items
+                list.add("Select category"); // Add a default value at the top
                 for (DataSnapshot mydata : snapshot.getChildren()) {
-                    list.add(mydata.getValue().toString().trim());
+                    //list.add(mydata.getValue().toString().trim());
+                    String categoryName = mydata.child("catname").getValue(String.class);
+                    if (categoryName != null) {
+                        list.add(categoryName.trim());
+                    }
+                    adapter.notifyDataSetChanged(); // Notify adapter to refresh spinner
                 }
             }
 

@@ -70,6 +70,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
             }
         });
 
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,24 +91,74 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Create Ingredient object and save to Firebase
+                // Generate a unique ID for the ingredient
+                String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
+                        .child("ingredients").push().getKey();
+
+                if (ingredientId == null) {
+                    Toast.makeText(IngredientQuantityActivity.this, "Failed to generate ingredient ID", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Create Ingredient object
                 Ingredient ingredient = new Ingredient();
                 ingredient.setName(selectedIng);
                 ingredient.setQty(qOI);
 
+                // Save Ingredient to Firebase under the product's "ingredients"
                 FirebaseDatabase.getInstance().getReference("Products").child(productId)
-                        .child("ingredient").push().setValue(ingredient)
+                        .child("ingredients").child(ingredientId).setValue(ingredient)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(IngredientQuantityActivity.this, "Ingredient successfully added", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient not added", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(IngredientQuantityActivity.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             }
         });
+
+//        btnSave.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                // Get the selected ingredient from the spinner
+//                Object selectedItem = spIn.getSelectedItem();
+//
+//                if (selectedItem == null || selectedItem.toString().trim().isEmpty()) {
+//                    Toast.makeText(IngredientQuantityActivity.this, "Select an ingredient", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                String selectedIng = selectedItem.toString().trim(); // Get selected ingredient
+//                String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
+//
+//                if (qOI.isEmpty()) {
+//                    Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                // Create Ingredient object and save to Firebase
+//                Ingredient ingredient = new Ingredient();
+//                ingredient.setName(selectedIng);
+//                ingredient.setQty(qOI);
+//
+//                FirebaseDatabase.getInstance().getReference("Products").child(productId)
+//                        .child("ingredient").push().setValue(ingredient)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient successfully added", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient not added", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
+//            }
+//        });
     }
 }

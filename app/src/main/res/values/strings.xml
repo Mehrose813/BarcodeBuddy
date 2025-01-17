@@ -24,14 +24,18 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string-array name="ingredient_name">
-        <item>Select the ingredient</item>
-        <item>Potato</item>
-        <item>Edible VegetableOil</item>
-        <item>Iodised Salt</item>
-        <item>Palmolein Oil</item>
+<!--    <string-array name="ingredient_name">-->
+<!--        <item>Select the ingredient</item>-->
+<!--        <item>Potato</item>-->
+<!--        <item>Edible VegetableOil</item>-->
+<!--        <item>Iodised Salt</item>-->
+<!--        <item>Palmolein Oil</item>-->
 
-    </string-array>
+<!--    </string-array>-->
+
+    <string name="select_category">Select category</string>
+    <string-array name="ingredient">Select the ingredients</string-array>
+
 
 
 </resources>
