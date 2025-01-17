@@ -88,6 +88,13 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/edit_iconName"
                 android:layout_width="50dp"
