@@ -29,12 +29,12 @@ import java.util.ArrayList;
 
 public class IngredientQuantityActivity extends AppCompatActivity {
 
-    Spinner spIn;
+    Spinner spIn, spH;
     EditText edQOI;
     Button btnAdd;
-    TextView tvProductName,tvCatName;
-    ArrayList<String> array;
-    ArrayAdapter<String> adapter;
+    TextView tvProductName, tvCatName;
+    ArrayList<String> array, arrayH;
+    ArrayAdapter<String> adapter, adapterH;
     LinearLayout selected;
     ArrayList<Ingredient> ingredientsList;
 
@@ -44,9 +44,10 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ingredient_quantity);
 
-        tvProductName =findViewById(R.id.tv_product_name);
+        tvProductName = findViewById(R.id.tv_product_name);
         tvCatName = findViewById(R.id.tv_cat_name);
         selected = findViewById(R.id.selected_ingredient_layout);
+        spH = findViewById(R.id.spinner_healthy);
 
         String productId = getIntent().getStringExtra("id");
         String productName = getIntent().getStringExtra("name");
@@ -61,10 +62,10 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
         // Set product name and category to the TextViews
         if (productName != null) {
-            tvProductName.setText("Product Name : "+productName);
+            tvProductName.setText("Product Name : " + productName);
         }
         if (productcat != null) {
-            tvCatName.setText("Category Name : "+productcat);
+            tvCatName.setText("Category Name : " + productcat);
         }
 
         spIn = findViewById(R.id.spinner_ingredient);
@@ -73,17 +74,16 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         array = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array);
         spIn.setAdapter(adapter);
+        arrayH = new ArrayList<>();
+        adapterH = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arrayH);
+        spH.setAdapter(adapterH);
 
-
-        productName = tvProductName.getText().toString();
-        productcat = tvCatName.getText().toString();
         // Fetch ingredients from Firebase and populate the spinner
         FirebaseDatabase.getInstance().getReference("Ingredients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 array.clear();
                 // Clear old data
-
                 array.add("Select an ingredient");
 
                 for (DataSnapshot myData : snapshot.getChildren()) {
@@ -91,17 +91,38 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     if (ingredientName != null) {
                         array.add(ingredientName.trim()); // Add new ingredients
                     }
-                   // array.add(myData.getValue().toString().trim()); // Add new ingredients
                 }
                 adapter.notifyDataSetChanged(); // Notify adapter to update spinner
             }
- 
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(IngredientQuantityActivity.this, "Failed to load ingredients", Toast.LENGTH_SHORT).show();
             }
         });
 
+        // Fetch healthiness from Firebase and populate the spinner
+        FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayH.clear();
+                // Clear old data
+                arrayH.add("Select healthiness");
+
+                for (DataSnapshot myData : snapshot.getChildren()) {
+                    String healthiness = myData.getValue(String.class);
+                    if (healthiness != null) {
+                        arrayH.add(healthiness.trim()); // Add new healthiness values
+                    }
+                }
+                adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(IngredientQuantityActivity.this, "Failed to load Healthiness", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,15 +130,19 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
                 // Get the selected ingredient from the spinner
                 Object selectedItem = spIn.getSelectedItem();
+                String selectedH = (String) spH.getSelectedItem();
 
                 if (selectedItem == null || selectedItem.toString().trim().isEmpty()) {
                     Toast.makeText(IngredientQuantityActivity.this, "Select an ingredient", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
+                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 String selectedIng = selectedItem.toString().trim(); // Get selected ingredient
                 String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
-
 
                 if (selectedIng.isEmpty()) {
                     Toast.makeText(IngredientQuantityActivity.this, "Enter ingredient", Toast.LENGTH_SHORT).show();
@@ -159,6 +184,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     Ingredient newIngredient = new Ingredient();
                     newIngredient.setName(selectedIng);
                     newIngredient.setQty(qOI);
+                    newIngredient.setHealthy(selectedH);
                     ingredientsList.add(newIngredient); // Add new ingredient to the list
                     Toast.makeText(IngredientQuantityActivity.this, "Ingredient added", Toast.LENGTH_SHORT).show();
                 }
@@ -173,7 +199,8 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 }
 
                 edQOI.setText(""); // Clear the quantity input
-                spIn.setSelection(0); // Reset the spinner selection
+                spIn.setSelection(0); // Reset the ingredient spinner selection
+                spH.setSelection(0); // Reset the healthiness spinner selection
 
                 // Generate a unique ID for the ingredient if adding new ingredient
                 String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)

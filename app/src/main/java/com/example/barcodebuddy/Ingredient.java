@@ -1,7 +1,7 @@
 package com.example.barcodebuddy;
 
 public class Ingredient {
-    String name , id,qty;
+    String name , id,qty,healthy;
 
     public String getName() {
         return name;
@@ -25,5 +25,13 @@ public class Ingredient {
 
     public void setQty(String qty) {
         this.qty = qty;
+    }
+
+    public String getHealthy() {
+        return healthy;
+    }
+
+    public void setHealthy(String healthy) {
+        this.healthy = healthy;
     }
 }
