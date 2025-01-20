@@ -25,9 +25,6 @@
             android:name=".IngredientQuantityActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
             android:name=".AddProductActivity"
             android:exported="false" />
         <activity

@@ -105,14 +105,14 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrayH.clear();
-                // Clear old data
-                arrayH.add("Select healthiness");
+                arrayH.clear(); // Clear old data
+                arrayH.add("Select healthiness"); // Add default option
 
                 for (DataSnapshot myData : snapshot.getChildren()) {
-                    String healthiness = myData.getValue(String.class);
-                    if (healthiness != null) {
-                        arrayH.add(healthiness.trim()); // Add new healthiness values
+                    String key = myData.getKey(); // Retrieve the key (e.g., "1")
+                    String value = myData.getValue(String.class); // Retrieve the value (e.g., "Unhealthy")
+                    if (key != null && value != null) {
+                        arrayH.add(key + ": " + value.trim()); // Format as "1: Unhealthy"
                     }
                 }
                 adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
@@ -123,6 +123,30 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 Toast.makeText(IngredientQuantityActivity.this, "Failed to load Healthiness", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        // Fetch healthiness from Firebase and populate the spinner
+//        FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                arrayH.clear();
+//                // Clear old data
+//                arrayH.add("Select healthiness");
+//
+//                for (DataSnapshot myData : snapshot.getChildren()) {
+//                    String healthiness = myData.getValue(String.class);
+//                    if (healthiness != null) {
+//                        arrayH.add(healthiness.trim()); // Add new healthiness values
+//                    }
+//                }
+//                adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(IngredientQuantityActivity.this, "Failed to load Healthiness", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override

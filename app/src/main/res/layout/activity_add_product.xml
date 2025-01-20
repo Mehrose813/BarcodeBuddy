@@ -2,12 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="10dp"
     android:layout_gravity="center"
@@ -23,16 +22,12 @@
         android:textStyle="bold"
         android:textColor="@color/dark_green"
         />
-
-
-
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select Category:"
             android:layout_marginStart="20dp"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:layout_marginTop="30dp"
             />
 
@@ -45,7 +40,7 @@
             android:layout_marginEnd="25dp"
             android:popupBackground="#94E699"
             android:layout_marginStart="20dp"
-            android:entries="@string/select_category"/>
+            android:entries="@array/select_category"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,7 +48,7 @@
         android:text="Enter Product Name"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="15dp"
+        android:textSize="15sp"
         />
 
 
@@ -81,7 +76,7 @@
             android:text="Enter Product Description"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:textSize="15dp"
+            android:textSize="15sp"
             />
 
         <EditText
@@ -99,33 +94,14 @@
 
 
 
-
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_desc"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:src="@drawable/baseline_add_circle_24"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_marginEnd="10dp"/>-->
     </LinearLayout>
 
-
-
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/detail">
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:text="Save "
         android:backgroundTint="@color/dark_green"
         android:layout_gravity="center_horizontal"

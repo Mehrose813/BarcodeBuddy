@@ -58,7 +58,7 @@
         android:layout_marginTop="10dp"
         android:popupBackground="#94E699"
         android:layout_gravity="center"
-        android:entries="@string/ingredient"
+        android:entries="@array/ingredient"
         android:spinnerMode="dropdown"
         />
 
