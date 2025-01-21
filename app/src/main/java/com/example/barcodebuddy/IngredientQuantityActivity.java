@@ -33,7 +33,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
     Spinner spIn;
     EditText edQOI;
     Button btnAdd;
-    TextView tvProductName, tvCatName;
+    TextView tvProductName, tvCatName,tvH;
     ArrayList<String> array, arrayH;
     ArrayAdapter<String> adapter, adapterH;
     LinearLayout selected;
@@ -47,12 +47,14 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
         tvProductName = findViewById(R.id.tv_product_name);
         tvCatName = findViewById(R.id.tv_cat_name);
+        tvH = findViewById(R.id.tv_health);
         selected = findViewById(R.id.selected_ingredient_layout);
 //        spH = findViewById(R.id.spinner_healthy);
 
         String productId = getIntent().getStringExtra("id");
         String productName = getIntent().getStringExtra("name");
         String productcat = getIntent().getStringExtra("category");
+        String productH = getIntent().getStringExtra("healthiness");
         ingredientsList = new ArrayList<>();
 
         if (productId == null) {
@@ -67,6 +69,10 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         }
         if (productcat != null) {
             tvCatName.setText("Category Name : " + productcat);
+        }
+        
+        if(productH != null){
+            tvH.setText("Product Nutri value:" + productH);
         }
 
         spIn = findViewById(R.id.spinner_ingredient);
@@ -149,17 +155,17 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
-                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (selectedH.equals("Select healthiness")) {
-                    TextView errorText = (TextView) spH.getSelectedView();
-                    errorText.setError("");
-                    errorText.setTextColor(Color.RED);
-                    errorText.setText("Please select healthiness");
-                    return;
-                }
+//                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
+//                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (selectedH.equals("Select healthiness")) {
+//                    TextView errorText = (TextView) spH.getSelectedView();
+//                    errorText.setError("");
+//                    errorText.setTextColor(Color.RED);
+//                    errorText.setText("Please select healthiness");
+//                    return;
+//                }
 
 
                 // Generate a unique ID for the ingredient if adding new ingredient

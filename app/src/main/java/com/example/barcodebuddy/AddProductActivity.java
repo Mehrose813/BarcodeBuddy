@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -109,6 +110,7 @@ public class AddProductActivity extends AppCompatActivity {
                     if (key != null && value != null) {
                         arrayH.add(key + ": " + value.trim()); // Format as "1: Unhealthy"
                     }
+
                 }
                 adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
             }
@@ -169,12 +171,20 @@ public class AddProductActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(selectedH==null || selectedH == "Select healthiness"){
-                    Toast.makeText(AddProductActivity.this, "Select healthiness for product", Toast.LENGTH_SHORT).show();
-
+                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
+                    Toast.makeText(AddProductActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (selectedH.equals("Select healthiness")) {
+                    TextView errorText = (TextView) spH.getSelectedView();
+                    errorText.setError("");
+                    errorText.setTextColor(Color.RED);
+                    errorText.setText("Please select healthiness");
+                    return;
                 }
 
-                // Save the product to Firebase
+
+                    // Save the product to Firebase
                 saveProductToFirebase(name, description, selectedCategory,selectedH);
             }
         });
