@@ -190,13 +190,29 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                                     ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
                                     ingredientLayout.setTag(ingredientId); // Store the ingredientId in the tag
 
+
+                                    // Set layout parameters for TextView with weight
+                                    LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
+                                            0, // Width (0 because weight is used)
+                                            LinearLayout.LayoutParams.WRAP_CONTENT, // Height
+                                            1.0f // Weight to occupy remaining space
+                                    );
+
                                     TextView textView = new TextView(IngredientQuantityActivity.this);
                                     textView.setText(newIngredient.getName() + " " + newIngredient.getQty());
                                     textView.setTextSize(15);
+                                    textView.setLayoutParams(textViewParams);
+
+                                    // Set layout parameters for ImageView
+                                    LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.WRAP_CONTENT, // Width
+                                            LinearLayout.LayoutParams.WRAP_CONTENT // Height
+                                    );
+                                    imageViewParams.setMargins(16, 0, 0, 0);
 
                                     ImageView deleteIcon = new ImageView(IngredientQuantityActivity.this);
                                     deleteIcon.setImageResource(android.R.drawable.ic_delete); // Delete icon
-                                    deleteIcon.setPadding(300, 0, 0, 0); // Add padding to the right of the text
+                                    deleteIcon.setLayoutParams(imageViewParams);
 
                                     ingredientLayout.addView(textView);
                                     ingredientLayout.addView(deleteIcon);
