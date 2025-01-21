@@ -5,7 +5,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF">
+        >
 
         <!-- Profile Image -->
         <de.hdodenhof.circleimageview.CircleImageView
@@ -84,7 +84,6 @@
                 android:textSize="17sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:background="@drawable/border"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true" />
 

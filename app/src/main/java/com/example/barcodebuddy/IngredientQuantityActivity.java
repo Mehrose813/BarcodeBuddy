@@ -149,19 +149,6 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
-                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (selectedH.equals("Select healthiness")) {
-                    TextView errorText = (TextView) spH.getSelectedView();
-                    errorText.setError("");
-                    errorText.setTextColor(Color.RED);
-                    errorText.setText("Please select healthiness");
-                    return;
-                }
-
-
                 // Generate a unique ID for the ingredient if adding new ingredient
                 String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
                         .child("ingredients").push().getKey();

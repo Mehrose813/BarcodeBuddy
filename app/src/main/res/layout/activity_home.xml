@@ -15,8 +15,6 @@
         android:layout_height="0sp"
         android:layout_weight="1"
         android:layout_margin="10sp"
-        android:backgroundTint="@color/white"
-        android:background="@drawable/border_style"
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
