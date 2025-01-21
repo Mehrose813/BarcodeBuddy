@@ -29,7 +29,7 @@ import java.util.UUID;
 public class AddProductActivity extends AppCompatActivity {
     String id;
     Spinner spCat, spH;
-    Button btnSave;
+    Button btnSave,btnImg;
     EditText edDes, edPName;
     //String[] categories = {"Select category", "Nuts", "Chocolates", "Cold drinks", "Cookies"};
     ArrayList<String> list;
@@ -60,6 +60,7 @@ public class AddProductActivity extends AppCompatActivity {
         edDes = findViewById(R.id.ed_desc);
         spCat = findViewById(R.id.sp_cat);
         spH = findViewById(R.id.spinner_healthy);
+        btnImg = findViewById(R.id.btn_add_img);
 
 //        // Set up Adapter for Spinner
 //        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
@@ -250,6 +251,8 @@ public class AddProductActivity extends AppCompatActivity {
             }
             spCat.setSelection(0);
         }
+
+
     }
 }
 
