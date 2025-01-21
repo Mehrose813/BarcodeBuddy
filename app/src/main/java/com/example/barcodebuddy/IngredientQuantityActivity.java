@@ -129,130 +129,14 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Get the selected ingredient from the spinner
-                Object selectedItem = spIn.getSelectedItem();
-                String selectedH = (String) spH.getSelectedItem();
-
-                if (selectedItem == null || selectedItem.toString().trim().isEmpty()) {
-                    Toast.makeText(IngredientQuantityActivity.this, "Select an ingredient", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
-                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String selectedIng = selectedItem.toString().trim(); // Get selected ingredient
+                String selectedIng = spIn.getSelectedItem().toString().trim(); // Get selected ingredient
                 String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
+                String selectedH = spH.getSelectedItem().toString().trim(); // Get healthiness
 
-                if (selectedIng.isEmpty()) {
-                    Toast.makeText(IngredientQuantityActivity.this, "Enter ingredient", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                // Validation and checks here...
 
-                if (selectedIng.equals("Select an ingredient")) {
-                    TextView errorText = (TextView) spIn.getSelectedView();
-                    errorText.setError("");
-                    errorText.setTextColor(Color.RED);
-                    errorText.setText("Please select an ingredient");
-                    return;
-                }
-
-                if (qOI.isEmpty()) {
-                    Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Check if the ingredient is already in the list
-                boolean ingredientExists = false;
-                Ingredient existingIngredient = null;
-
-                // Loop through the list of ingredients to check if the ingredient already exists
-                for (Ingredient ingredient : ingredientsList) {
-                    if (ingredient.getName().equals(selectedIng)) {
-                        ingredientExists = true;
-                        existingIngredient = ingredient;
-                        break;
-                    }
-                }
-
-                // If ingredient exists, update its quantity
-                if (ingredientExists) {
-                    existingIngredient.setQty(qOI);  // Update the existing ingredient's quantity
-                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient updated", Toast.LENGTH_SHORT).show();
-                } else {
-                    // If ingredient doesn't exist, add it to the list
-                    Ingredient newIngredient = new Ingredient();
-                    newIngredient.setName(selectedIng);
-                    newIngredient.setQty(qOI);
-                    newIngredient.setHealthy(selectedH);
-                    ingredientsList.add(newIngredient); // Add new ingredient to the list
-                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient added", Toast.LENGTH_SHORT).show();
-                }
-
-                // Update the displayed list of selected ingredients
-                selected.removeAllViews();  // Clear previous views
-                for (Ingredient ingredient : ingredientsList) {
-                    // Create a LinearLayout for each ingredient and its delete button
-                    LinearLayout ingredientLayout = new LinearLayout(IngredientQuantityActivity.this);
-                    ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-                    TextView textView = new TextView(IngredientQuantityActivity.this);
-                    textView.setText(ingredient.getName() + " " + ingredient.getQty());
-                    textView.setTextSize(15);
-
-                    // Create the delete icon
-                    ImageView deleteIcon = new ImageView(IngredientQuantityActivity.this);
-                    deleteIcon.setImageResource(android.R.drawable.ic_delete); // Use the default delete icon
-                    deleteIcon.setPadding(10, 0, 0, 0); // Add padding to the right of the text
-
-                    // Add TextView and ImageView to the LinearLayout
-                    ingredientLayout.addView(textView);
-                    ingredientLayout.addView(deleteIcon);
-
-                    // Set OnClickListener on the delete icon to remove the ingredient
-                    deleteIcon.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Remove from the list
-                            ingredientsList.remove(ingredient);
-
-                            // Remove from the Firebase database using the correct path
-                            String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
-                                    .child("ingredients").getKey(); // Use the key of the ingredient from Firebase
-
-                            if (ingredientId != null) {
-                                FirebaseDatabase.getInstance().getReference("Products").child(productId)
-                                        .child("ingredients").child(ingredientId).removeValue()
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient deleted from Firebase", Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    Toast.makeText(IngredientQuantityActivity.this, "Failed to delete ingredient from Firebase", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                            }
-
-                            // Remove the ingredient from the layout
-                            selected.removeView(ingredientLayout);
-                        }
-                    });
-
-
-
-                    // Add the ingredient layout to the selected ingredients layout
-                    selected.addView(ingredientLayout);
-                }
-
-                edQOI.setText(""); // Clear the quantity input
-                spIn.setSelection(0); // Reset the ingredient spinner selection
-                spH.setSelection(0); // Reset the healthiness spinner selection
-
-                // Save the ingredient to Firebase under the correct product ID
+                // Generate a unique ID for the ingredient if adding new ingredient
                 String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
                         .child("ingredients").push().getKey();
 
@@ -261,31 +145,78 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Prepare the ingredient to be saved in Firebase
-                Ingredient ingredientToSave = existingIngredient != null ? existingIngredient : new Ingredient();
-                ingredientToSave.setName(selectedIng);
-                ingredientToSave.setQty(qOI);
-                ingredientToSave.setHealthy(selectedH);
+                Ingredient newIngredient = new Ingredient();
+                newIngredient.setName(selectedIng);
+                newIngredient.setQty(qOI);
+                newIngredient.setHealthy(selectedH);
 
-                // Save the ingredient in Firebase
+                // Save Ingredient to Firebase
                 FirebaseDatabase.getInstance().getReference("Products").child(productId)
-                        .child("ingredients").child(ingredientId).setValue(ingredientToSave)
+                        .child("ingredients").child(ingredientId).setValue(newIngredient)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(IngredientQuantityActivity.this, "Ingredient successfully saved", Toast.LENGTH_SHORT).show();
+
+                                    // Add to the displayed list and add the ingredientId as a tag to the layout
+                                    LinearLayout ingredientLayout = new LinearLayout(IngredientQuantityActivity.this);
+                                    ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+                                    ingredientLayout.setTag(ingredientId); // Store the ingredientId in the tag
+
+                                    TextView textView = new TextView(IngredientQuantityActivity.this);
+                                    textView.setText(newIngredient.getName() + " " + newIngredient.getQty());
+                                    textView.setTextSize(15);
+
+                                    ImageView deleteIcon = new ImageView(IngredientQuantityActivity.this);
+                                    deleteIcon.setImageResource(android.R.drawable.ic_delete); // Delete icon
+                                    deleteIcon.setPadding(10, 0, 0, 0); // Add padding to the right of the text
+
+                                    ingredientLayout.addView(textView);
+                                    ingredientLayout.addView(deleteIcon);
+
+                                    // Set OnClickListener for delete icon
+                                    deleteIcon.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            String ingredientIdToDelete = (String) ingredientLayout.getTag(); // Get the ingredientId from the layout tag
+
+                                            // Delete from Firebase
+                                            FirebaseDatabase.getInstance().getReference("Products").child(productId)
+                                                    .child("ingredients").child(ingredientIdToDelete).removeValue()
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Toast.makeText(IngredientQuantityActivity.this, "Ingredient deleted from Firebase", Toast.LENGTH_SHORT).show();
+                                                                // Remove the ingredient from the UI
+                                                                selected.removeView(ingredientLayout);
+                                                            } else {
+                                                                Toast.makeText(IngredientQuantityActivity.this, "Failed to delete ingredient from Firebase", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    });
+
+                                    // Add the ingredient layout to the selected ingredients layout
+                                    selected.addView(ingredientLayout);
                                 } else {
                                     Toast.makeText(IngredientQuantityActivity.this, "Failed to save ingredient", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
+
+                // Reset fields after adding ingredient
+                edQOI.setText(""); // Clear the quantity input
+                spIn.setSelection(0); // Reset the ingredient spinner selection
+                spH.setSelection(0); // Reset the healthiness spinner selection
             }
         });
+    }
+}
 
-
-
-
+        //
 //        btnAdd.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -300,6 +231,13 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 //                }
 //                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
 //                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (selectedH.equals("Select healthiness")) {
+//                    TextView errorText = (TextView) spH.getSelectedView();
+//                    errorText.setError("");
+//                    errorText.setTextColor(Color.RED);
+//                    errorText.setText("Please select healthiness");
 //                    return;
 //                }
 //
@@ -354,17 +292,66 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 //                // Update the displayed list of selected ingredients
 //                selected.removeAllViews();  // Clear previous views
 //                for (Ingredient ingredient : ingredientsList) {
+//                    // Create a LinearLayout for each ingredient and its delete button
+//                    LinearLayout ingredientLayout = new LinearLayout(IngredientQuantityActivity.this);
+//                    ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+//
 //                    TextView textView = new TextView(IngredientQuantityActivity.this);
 //                    textView.setText(ingredient.getName() + " " + ingredient.getQty());
 //                    textView.setTextSize(15);
-//                    selected.addView(textView);
+//
+//                    // Create the delete icon
+//                    ImageView deleteIcon = new ImageView(IngredientQuantityActivity.this);
+//                    deleteIcon.setImageResource(android.R.drawable.ic_delete); // Use the default delete icon
+//                    deleteIcon.setPadding(10, 0, 0, 0); // Add padding to the right of the text
+//
+//                    // Add TextView and ImageView to the LinearLayout
+//                    ingredientLayout.addView(textView);
+//                    ingredientLayout.addView(deleteIcon);
+//
+//                    // Set OnClickListener on the delete icon to remove the ingredient
+//                    deleteIcon.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//
+//                            // Remove from the Firebase database using the correct path
+//                            String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
+//                                    .child("ingredients").getKey(); // Use the key of the ingredient from Firebase
+//
+//                            if (ingredientId != null) {
+//                                FirebaseDatabase.getInstance().getReference("Products").child(productId)
+//                                        .child("ingredients").child(ingredientId).removeValue()
+//                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<Void> task) {
+//                                                if (task.isSuccessful()) {
+//                                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient deleted from Firebase", Toast.LENGTH_SHORT).show();
+//                                                    // Remove from the list
+//                                                    ingredientsList.remove(ingredient);
+//                                                } else {
+//                                                    Toast.makeText(IngredientQuantityActivity.this, "Failed to delete ingredient from Firebase", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            }
+//                                        });
+//                            }
+//
+//                            // Remove the ingredient from the layout
+//                            selected.removeView(ingredientLayout);
+//                        }
+//                    });
+//
+//
+//
+//                    // Add the ingredient layout to the selected ingredients layout
+//                    selected.addView(ingredientLayout);
 //                }
 //
 //                edQOI.setText(""); // Clear the quantity input
 //                spIn.setSelection(0); // Reset the ingredient spinner selection
 //                spH.setSelection(0); // Reset the healthiness spinner selection
 //
-//                // Generate a unique ID for the ingredient if adding new ingredient
+//                // Save the ingredient to Firebase under the correct product ID
 //                String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
 //                        .child("ingredients").push().getKey();
 //
@@ -373,9 +360,15 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 //                    return;
 //                }
 //
-//                // Save Ingredient to Firebase (Update or Add)
+//                // Prepare the ingredient to be saved in Firebase
+//                Ingredient ingredientToSave = existingIngredient != null ? existingIngredient : new Ingredient();
+//                ingredientToSave.setName(selectedIng);
+//                ingredientToSave.setQty(qOI);
+//                ingredientToSave.setHealthy(selectedH);
+//
+//                // Save the ingredient in Firebase
 //                FirebaseDatabase.getInstance().getReference("Products").child(productId)
-//                        .child("ingredients").child(ingredientId).setValue(existingIngredient != null ? existingIngredient : new Ingredient())
+//                        .child("ingredients").child(ingredientId).setValue(ingredientToSave)
 //                        .addOnCompleteListener(new OnCompleteListener<Void>() {
 //                            @Override
 //                            public void onComplete(@NonNull Task<Void> task) {
@@ -388,5 +381,111 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 //                        });
 //            }
 //        });
-    }
-}
+//
+//
+//
+//
+////        btnAdd.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////
+////                // Get the selected ingredient from the spinner
+////                Object selectedItem = spIn.getSelectedItem();
+////                String selectedH = (String) spH.getSelectedItem();
+////
+////                if (selectedItem == null || selectedItem.toString().trim().isEmpty()) {
+////                    Toast.makeText(IngredientQuantityActivity.this, "Select an ingredient", Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+////                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
+////                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+////
+////                String selectedIng = selectedItem.toString().trim(); // Get selected ingredient
+////                String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
+////
+////                if (selectedIng.isEmpty()) {
+////                    Toast.makeText(IngredientQuantityActivity.this, "Enter ingredient", Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+////
+////                if (selectedIng.equals("Select an ingredient")) {
+////                    TextView errorText = (TextView) spIn.getSelectedView();
+////                    errorText.setError("");
+////                    errorText.setTextColor(Color.RED);
+////                    errorText.setText("Please select an ingredient");
+////                    return;
+////                }
+////
+////                if (qOI.isEmpty()) {
+////                    Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+////
+////                // Check if the ingredient is already in the list
+////                boolean ingredientExists = false;
+////                Ingredient existingIngredient = null;
+////
+////                // Loop through the list of ingredients to check if the ingredient already exists
+////                for (Ingredient ingredient : ingredientsList) {
+////                    if (ingredient.getName().equals(selectedIng)) {
+////                        ingredientExists = true;
+////                        existingIngredient = ingredient;
+////                        break;
+////                    }
+////                }
+////
+////                // If ingredient exists, update its quantity
+////                if (ingredientExists) {
+////                    existingIngredient.setQty(qOI);  // Update the existing ingredient's quantity
+////                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient updated", Toast.LENGTH_SHORT).show();
+////                } else {
+////                    // If ingredient doesn't exist, add it to the list
+////                    Ingredient newIngredient = new Ingredient();
+////                    newIngredient.setName(selectedIng);
+////                    newIngredient.setQty(qOI);
+////                    newIngredient.setHealthy(selectedH);
+////                    ingredientsList.add(newIngredient); // Add new ingredient to the list
+////                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient added", Toast.LENGTH_SHORT).show();
+////                }
+////
+////                // Update the displayed list of selected ingredients
+////                selected.removeAllViews();  // Clear previous views
+////                for (Ingredient ingredient : ingredientsList) {
+////                    TextView textView = new TextView(IngredientQuantityActivity.this);
+////                    textView.setText(ingredient.getName() + " " + ingredient.getQty());
+////                    textView.setTextSize(15);
+////                    selected.addView(textView);
+////                }
+////
+////                edQOI.setText(""); // Clear the quantity input
+////                spIn.setSelection(0); // Reset the ingredient spinner selection
+////                spH.setSelection(0); // Reset the healthiness spinner selection
+////
+////                // Generate a unique ID for the ingredient if adding new ingredient
+////                String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
+////                        .child("ingredients").push().getKey();
+////
+////                if (ingredientId == null) {
+////                    Toast.makeText(IngredientQuantityActivity.this, "Failed to generate ingredient ID", Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+////
+////                // Save Ingredient to Firebase (Update or Add)
+////                FirebaseDatabase.getInstance().getReference("Products").child(productId)
+////                        .child("ingredients").child(ingredientId).setValue(existingIngredient != null ? existingIngredient : new Ingredient())
+////                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+////                            @Override
+////                            public void onComplete(@NonNull Task<Void> task) {
+////                                if (task.isSuccessful()) {
+////                                    Toast.makeText(IngredientQuantityActivity.this, "Ingredient successfully saved", Toast.LENGTH_SHORT).show();
+////                                } else {
+////                                    Toast.makeText(IngredientQuantityActivity.this, "Failed to save ingredient", Toast.LENGTH_SHORT).show();
+////                                }
+////                            }
+////                        });
+////            }
+////        });
+//    }
+//}
