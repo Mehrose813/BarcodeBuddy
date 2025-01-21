@@ -3,6 +3,16 @@
     <style name="Base.Theme.BarcodeBuddy" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/dark_green</item>
+        <!-- Navigation bar color -->
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <!-- Light icons on navigation bar -->
+
+        <item name="android:windowLightStatusBar">true</item> <!-- Black icons on status bar -->
+
+
     </style>
 
     <style name="Theme.BarcodeBuddy" parent="Base.Theme.BarcodeBuddy" />
