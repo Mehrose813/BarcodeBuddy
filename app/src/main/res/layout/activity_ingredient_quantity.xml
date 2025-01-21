@@ -101,15 +101,15 @@
         android:orientation="horizontal"
         android:layout_marginTop="20dp">
 
-        <Spinner
-            android:id="@+id/spinner_healthy"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:background="@android:drawable/btn_dropdown"
-            android:popupBackground="#94E699"
-            android:spinnerMode="dropdown" />
+<!--        <Spinner-->
+<!--            android:id="@+id/spinner_healthy"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:background="@android:drawable/btn_dropdown"-->
+<!--            android:popupBackground="#94E699"-->
+<!--            android:spinnerMode="dropdown" />-->
 
         <Button
             android:id="@+id/btn_add"

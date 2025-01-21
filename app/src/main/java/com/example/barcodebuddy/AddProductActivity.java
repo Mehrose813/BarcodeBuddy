@@ -27,12 +27,14 @@ import java.util.UUID;
 
 public class AddProductActivity extends AppCompatActivity {
     String id;
-    Spinner spCat;
+    Spinner spCat, spH;
     Button btnSave;
     EditText edDes, edPName;
     //String[] categories = {"Select category", "Nuts", "Chocolates", "Cold drinks", "Cookies"};
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
+    ArrayList<String> arrayH;
+    ArrayAdapter<String> adapterH;
 
 
     // Firebase Database reference
@@ -56,6 +58,7 @@ public class AddProductActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save);
         edDes = findViewById(R.id.ed_desc);
         spCat = findViewById(R.id.sp_cat);
+        spH = findViewById(R.id.spinner_healthy);
 
 //        // Set up Adapter for Spinner
 //        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
@@ -65,6 +68,10 @@ public class AddProductActivity extends AppCompatActivity {
         list = new ArrayList<String>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
         spCat.setAdapter(adapter);
+
+        arrayH = new ArrayList<>();
+        adapterH = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arrayH);
+        spH.setAdapter(adapterH);
 
 
         FirebaseDatabase.getInstance().getReference("Categories").addValueEventListener(new ValueEventListener() {
@@ -88,6 +95,31 @@ public class AddProductActivity extends AppCompatActivity {
 
             }
         });
+
+        // Fetch healthiness from Firebase and populate the spinner
+        FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayH.clear(); // Clear old data
+                arrayH.add("Select healthiness"); // Add default option
+
+                for (DataSnapshot myData : snapshot.getChildren()) {
+                    String key = myData.getKey(); // Retrieve the key (e.g., "1")
+                    String value = myData.getValue(String.class); // Retrieve the value (e.g., "Unhealthy")
+                    if (key != null && value != null) {
+                        arrayH.add(key + ": " + value.trim()); // Format as "1: Unhealthy"
+                    }
+                }
+                adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(AddProductActivity.this, "Failed to load Healthiness", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
 
         // If ID is provided, load the product details
@@ -118,6 +150,8 @@ public class AddProductActivity extends AppCompatActivity {
                 String name = edPName.getText().toString();
                 String selectedCategory = spCat.getSelectedItem().toString();
                 String description = edDes.getText().toString();
+                String selectedH = spH.getSelectedItem().toString().trim(); // Get healthiness
+
 
                 if (name.isEmpty()) {
                     Toast.makeText(AddProductActivity.this, "Add a product name", Toast.LENGTH_SHORT).show();
@@ -135,13 +169,18 @@ public class AddProductActivity extends AppCompatActivity {
                     return;
                 }
 
+                if(selectedH==null || selectedH == "Select healthiness"){
+                    Toast.makeText(AddProductActivity.this, "Select healthiness for product", Toast.LENGTH_SHORT).show();
+
+                }
+
                 // Save the product to Firebase
-                saveProductToFirebase(name, description, selectedCategory);
+                saveProductToFirebase(name, description, selectedCategory,selectedH);
             }
         });
     }
 
-    public void saveProductToFirebase(String productName, String description, String category) {
+    public void saveProductToFirebase(String productName, String description, String category,String selectedH) {
         // Validate the input
         if (productName == null || productName.isEmpty()) {
             Toast.makeText(AddProductActivity.this, "Please enter a product name", Toast.LENGTH_SHORT).show();
@@ -156,11 +195,20 @@ public class AddProductActivity extends AppCompatActivity {
             return;
         }
 
+        if(selectedH==null || selectedH == "Select healthiness"){
+            Toast.makeText(AddProductActivity.this, "Select healthiness for product", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+
+
         // Create a Product object
         Product product = new Product();
         product.setName(productName);
         product.setDesc(description);
         product.setCat(category);
+        product.setHealthy(selectedH);
 
         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
 

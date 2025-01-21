@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class IngredientQuantityActivity extends AppCompatActivity {
 
-    Spinner spIn, spH;
+    Spinner spIn;
     EditText edQOI;
     Button btnAdd;
     TextView tvProductName, tvCatName;
@@ -48,7 +48,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         tvProductName = findViewById(R.id.tv_product_name);
         tvCatName = findViewById(R.id.tv_cat_name);
         selected = findViewById(R.id.selected_ingredient_layout);
-        spH = findViewById(R.id.spinner_healthy);
+//        spH = findViewById(R.id.spinner_healthy);
 
         String productId = getIntent().getStringExtra("id");
         String productName = getIntent().getStringExtra("name");
@@ -75,9 +75,9 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         array = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array);
         spIn.setAdapter(adapter);
-        arrayH = new ArrayList<>();
-        adapterH = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arrayH);
-        spH.setAdapter(adapterH);
+//        arrayH = new ArrayList<>();
+//        adapterH = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arrayH);
+//        spH.setAdapter(adapterH);
 
         // Fetch ingredients from Firebase and populate the spinner
         FirebaseDatabase.getInstance().getReference("Ingredients").addValueEventListener(new ValueEventListener() {
@@ -102,29 +102,29 @@ public class IngredientQuantityActivity extends AppCompatActivity {
             }
         });
 
-        // Fetch healthiness from Firebase and populate the spinner
-        FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrayH.clear(); // Clear old data
-                arrayH.add("Select healthiness"); // Add default option
-
-                for (DataSnapshot myData : snapshot.getChildren()) {
-                    String key = myData.getKey(); // Retrieve the key (e.g., "1")
-                    String value = myData.getValue(String.class); // Retrieve the value (e.g., "Unhealthy")
-                    if (key != null && value != null) {
-                        arrayH.add(key + ": " + value.trim()); // Format as "1: Unhealthy"
-                    }
-                }
-                adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(IngredientQuantityActivity.this, "Failed to load Healthiness", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+//        // Fetch healthiness from Firebase and populate the spinner
+//        FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                arrayH.clear(); // Clear old data
+//                arrayH.add("Select healthiness"); // Add default option
+//
+//                for (DataSnapshot myData : snapshot.getChildren()) {
+//                    String key = myData.getKey(); // Retrieve the key (e.g., "1")
+//                    String value = myData.getValue(String.class); // Retrieve the value (e.g., "Unhealthy")
+//                    if (key != null && value != null) {
+//                        arrayH.add(key + ": " + value.trim()); // Format as "1: Unhealthy"
+//                    }
+//                }
+//                adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(IngredientQuantityActivity.this, "Failed to load Healthiness", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +132,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 // Get the selected ingredient from the spinner
                 String selectedIng = spIn.getSelectedItem().toString().trim(); // Get selected ingredient
                 String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
-                String selectedH = spH.getSelectedItem().toString().trim(); // Get healthiness
+//                String selectedH = spH.getSelectedItem().toString().trim(); // Get healthiness
 
                 // Validation and checks here...
 
@@ -148,7 +148,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 Ingredient newIngredient = new Ingredient();
                 newIngredient.setName(selectedIng);
                 newIngredient.setQty(qOI);
-                newIngredient.setHealthy(selectedH);
+//                newIngredient.setHealthy(selectedH);
 
                 // Save Ingredient to Firebase
                 FirebaseDatabase.getInstance().getReference("Products").child(productId)
@@ -210,7 +210,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 // Reset fields after adding ingredient
                 edQOI.setText(""); // Clear the quantity input
                 spIn.setSelection(0); // Reset the ingredient spinner selection
-                spH.setSelection(0); // Reset the healthiness spinner selection
+//                spH.setSelection(0); // Reset the healthiness spinner selection
             }
         });
     }
