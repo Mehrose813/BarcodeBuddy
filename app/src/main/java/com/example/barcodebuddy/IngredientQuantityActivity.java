@@ -134,7 +134,33 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 String qOI = edQOI.getText().toString().trim(); // Get quantity from EditText
                 String selectedH = spH.getSelectedItem().toString().trim(); // Get healthiness
 
-                // Validation and checks here...
+                if (selectedIng == null || selectedIng.toString().trim().isEmpty()) {
+                    Toast.makeText(IngredientQuantityActivity.this, "Select an ingredient", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (selectedIng.equals("Select an ingredient")) {
+                    TextView errorText = (TextView) spIn.getSelectedView();
+                    errorText.setError("");
+                    errorText.setTextColor(Color.RED);
+                    errorText.setText("Please select ingredient");
+                    return;
+                }
+                if (qOI.isEmpty()) {
+                    Toast.makeText(IngredientQuantityActivity.this, "Enter quantity of ingredient", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
+                    Toast.makeText(IngredientQuantityActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (selectedH.equals("Select healthiness")) {
+                    TextView errorText = (TextView) spH.getSelectedView();
+                    errorText.setError("");
+                    errorText.setTextColor(Color.RED);
+                    errorText.setText("Please select healthiness");
+                    return;
+                }
+
 
                 // Generate a unique ID for the ingredient if adding new ingredient
                 String ingredientId = FirebaseDatabase.getInstance().getReference("Products").child(productId)
@@ -170,7 +196,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
                                     ImageView deleteIcon = new ImageView(IngredientQuantityActivity.this);
                                     deleteIcon.setImageResource(android.R.drawable.ic_delete); // Delete icon
-                                    deleteIcon.setPadding(10, 0, 0, 0); // Add padding to the right of the text
+                                    deleteIcon.setPadding(300, 0, 0, 0); // Add padding to the right of the text
 
                                     ingredientLayout.addView(textView);
                                     ingredientLayout.addView(deleteIcon);
