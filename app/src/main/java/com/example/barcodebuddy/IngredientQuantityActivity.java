@@ -71,10 +71,23 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         if (productcat != null) {
             tvCatName.setText("Category Name : " + productcat);
         }
-        
-        if(productH != null){
+
+        if (productH != null) {
             tvH.setText("Product Nutri value:" + productH);
+
+            // Use .toString() and .equals() for string comparison
+            if (tvH.getText().toString().equals("Un-healthy")) {
+                int red = getResources().getColor(R.color.red);
+                tvH.setTextColor(red);
+            } else if (tvH.getText().toString().equals("Moderate")) {
+                int orange = getResources().getColor(R.color.orange);
+                tvH.setTextColor(orange);
+            } else if (tvH.getText().toString().equals("Healthy") || tvH.getText().toString().equals("Very healthy")) {
+                int green = getResources().getColor(R.color.dark_green);
+                tvH.setTextColor(green);
+            }
         }
+
 
         spIn = findViewById(R.id.spinner_ingredient);
         edQOI = findViewById(R.id.ed_quantity_ingredient);
