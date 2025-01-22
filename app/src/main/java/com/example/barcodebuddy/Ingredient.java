@@ -3,6 +3,10 @@ package com.example.barcodebuddy;
 public class Ingredient {
     String name , id,qty,healthy;
 
+    public Ingredient() {
+
+    }
+
     public String getName() {
         return name;
     }
