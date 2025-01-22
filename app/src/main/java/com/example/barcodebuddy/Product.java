@@ -1,7 +1,7 @@
 package com.example.barcodebuddy;
 
 public class Product {
-    String name,desc,Cat,id,healthy;
+    String name,desc,Cat,id,healthy,img;
 
     public Product(String productId, String productName, String description, String category) {
     }
@@ -47,5 +47,13 @@ public class Product {
 
     public void setHealthy(String healthy) {
         this.healthy = healthy;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }

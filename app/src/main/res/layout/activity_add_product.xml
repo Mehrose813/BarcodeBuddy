@@ -1,27 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
 <LinearLayout
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="10dp"
     android:layout_gravity="center"
     tools:context=".AddProductActivity"
     >
 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/products"
+        android:layout_marginTop="20dp"/>
+
+    <ImageView
+        android:id="@+id/iv_pimg"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/baseline_camera_alt_24"
+        android:layout_gravity="end"
+        android:layout_marginTop="-70dp"
+        android:padding="20dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Product"
-        android:textSize="24sp"
         android:layout_gravity="center"
-        android:textStyle="bold"
+        android:text="Add Product"
         android:textColor="@color/dark_green"
-        />
+        android:textSize="24sp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,17 +129,6 @@
             android:popupBackground="#94E699"
             android:spinnerMode="dropdown" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_add_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center_horizontal"
-        android:backgroundTint="@color/dark_green"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        android:text="Add Image"/>
 
 
 

@@ -1,5 +1,7 @@
 package com.example.barcodebuddy;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class IngredientQuantityActivity extends AppCompatActivity {
 
@@ -39,6 +42,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter, adapterH;
     LinearLayout selected;
     ArrayList<Ingredient> ingredientsList;
+    ImageView ivImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +54,33 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         tvCatName = findViewById(R.id.tv_cat_name);
         tvH = findViewById(R.id.tv_health);
         selected = findViewById(R.id.selected_ingredient_layout);
+        ivImg = findViewById(R.id.iv_show_img);
 //        spH = findViewById(R.id.spinner_healthy);
 
         String productId = getIntent().getStringExtra("id");
         String productName = getIntent().getStringExtra("name");
         String productcat = getIntent().getStringExtra("category");
         String productH = getIntent().getStringExtra("healthiness");
+        String keyOfImg = FirebaseDatabase.getInstance().getReference("Products").child(productId).child("img").getKey();
         ingredientsList = new ArrayList<>();
+
+        FirebaseDatabase.getInstance().getReference("Product Images").child(keyOfImg).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String imageString = snapshot.getValue(String.class); // Safely cast to String
+                if (imageString != null) {
+                    ivImg.setImageBitmap(base64ToBitmap(imageString));
+                } else {
+                    Toast.makeText(IngredientQuantityActivity.this, "Image not found!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(IngredientQuantityActivity.this, "Failed to load image: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         if (productId == null) {
             Toast.makeText(this, "Product ID is missing!", Toast.LENGTH_SHORT).show();
@@ -279,6 +303,16 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         });
 
     }
+    public static Bitmap base64ToBitmap(String base64String) {
+        try {
+            byte[] imageBytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
 
         //
