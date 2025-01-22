@@ -9,12 +9,15 @@
     tools:context=".ProductDisplayActivity">
 
     <TextView
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Product Detail"
         android:layout_marginTop="10dp"
         android:textSize="15dp"
-        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/dark_green"
         android:textStyle="bold" />
 
     <ImageView
@@ -34,12 +37,27 @@
         android:layout_margin="10dp"
         android:textSize="20sp" />
 
+
+    <TextView
+        android:id="@+id/tv_proCat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:hint="Product Category"
+        android:layout_margin="10dp" />
     <TextView
         android:id="@+id/tv_proDes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:hint="Product description"
+        android:layout_margin="10dp" />
+    <TextView
+        android:id="@+id/tv_prohealthy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:hint="Product Product healthy"
         android:layout_margin="10dp" />
 
     <LinearLayout

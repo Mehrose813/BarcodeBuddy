@@ -24,7 +24,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
 
-    private TextView tvProdName, tvProdCat;
+    private TextView tvProdName, tvProdCat,tvProDes,tvProHealth;
 
     private DatabaseReference ref;
 
@@ -35,7 +35,9 @@ public class ProductDisplayActivity extends AppCompatActivity {
 
         // Initialize Views
         tvProdName = findViewById(R.id.tv_proname);
-        tvProdCat = findViewById(R.id.tv_proDes);
+        tvProdCat = findViewById(R.id.tv_proCat);
+        tvProDes = findViewById(R.id.tv_proDes);
+        tvProHealth = findViewById(R.id.tv_prohealthy);
         recyclerView = findViewById(R.id.recyclerview); // Initialize recyclerView
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -50,15 +52,19 @@ public class ProductDisplayActivity extends AppCompatActivity {
         // Get product name, category and product key from intent
         String productName = getIntent().getStringExtra("name");
         String productCategory = getIntent().getStringExtra("cat");
+        String productDes = getIntent().getStringExtra("desc");
+        String productHealthy= getIntent().getStringExtra("healthy");
         String productKey = getIntent().getStringExtra("productKey");
 
         tvProdName.setText(productName);
         tvProdCat.setText(productCategory);
+        tvProDes.setText(productDes);
+        tvProHealth.setText(productHealthy);
 
         ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
 
 
-        // Fetch ingredients based on productKey
+
         fetchIngredientsForProduct(productKey);
     }
 
@@ -66,16 +72,15 @@ public class ProductDisplayActivity extends AppCompatActivity {
         ref.child(productKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ingredientList.clear();  // Clear old data
-
+                ingredientList.clear();
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                         Ingredient ingredient = ingredientSnapshot.getValue(Ingredient.class);
                         if (ingredient != null) {
-                            ingredientList.add(ingredient);  // Add ingredient to list
+                            ingredientList.add(ingredient);
                         }
                     }
-                    adapter.notifyDataSetChanged();  // Notify adapter of data changes
+                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(ProductDisplayActivity.this, "No ingredients found for this product", Toast.LENGTH_SHORT).show();
                 }

@@ -56,10 +56,15 @@ public class SearchActivity extends AppCompatActivity {
                     for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                         String productName = productSnapshot.child("name").getValue(String.class);
                         String productCategory = productSnapshot.child("cat").getValue(String.class);
+                        String producDes = productSnapshot.child("desc").getValue(String.class);
+                        String productHealth = productSnapshot.child("healthy").getValue(String.class);
 
                         Intent intent = new Intent(SearchActivity.this, ProductDisplayActivity.class);
                         intent.putExtra("name", productName);
                         intent.putExtra("cat", productCategory);
+                        intent.putExtra("desc",producDes);
+                        intent.putExtra("healthy",productHealth);
+
                         intent.putExtra("productKey", productSnapshot.getKey());
                         startActivity(intent);
                         break;
