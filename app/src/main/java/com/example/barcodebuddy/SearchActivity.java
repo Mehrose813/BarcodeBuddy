@@ -54,15 +54,13 @@ public class SearchActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                        // Fetch basic details
                         String productName = productSnapshot.child("name").getValue(String.class);
                         String productCategory = productSnapshot.child("cat").getValue(String.class);
 
-                        // Pass basic details to next activity
                         Intent intent = new Intent(SearchActivity.this, ProductDisplayActivity.class);
                         intent.putExtra("name", productName);
                         intent.putExtra("cat", productCategory);
-                        intent.putExtra("productKey", productSnapshot.getKey()); // Pass product key for fetching ingredients
+                        intent.putExtra("productKey", productSnapshot.getKey());
                         startActivity(intent);
                         break;
                     }

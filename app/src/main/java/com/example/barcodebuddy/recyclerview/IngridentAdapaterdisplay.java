@@ -30,9 +30,9 @@ public class IngridentAdapaterdisplay extends RecyclerView.Adapter<IngridentView
 
     @Override
     public void onBindViewHolder(@NonNull IngridentViewHolderdisplay holder, int position) {
-        Ingredient ingredient = ingredientList.get(position);  // Get the Ingredient at the current position
-        holder.tvName.setText(ingredient.getName());  // Set the name
-        holder.tvQuantity.setText(ingredient.getQty());  // Set the quantity
+        Ingredient ingredient = ingredientList.get(position);
+        holder.tvName.setText(ingredient.getName());
+        holder.tvQuantity.setText(ingredient.getQty());
     }
 
     @Override
