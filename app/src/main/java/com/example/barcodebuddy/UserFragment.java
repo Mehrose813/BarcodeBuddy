@@ -242,6 +242,7 @@ public class UserFragment extends Fragment {
                 });
     }
 
+
     private void fetchProfileImage(String imageId) {
         FirebaseDatabase.getInstance().getReference("Images")
                 .child(imageId)

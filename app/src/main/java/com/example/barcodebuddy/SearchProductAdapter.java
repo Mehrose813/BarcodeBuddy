@@ -1,6 +1,7 @@
 package com.example.barcodebuddy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -22,24 +23,28 @@ import java.util.List;
 public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductViewHolder> {
     private List<Product> products;
     private Context context;
-    // Updated constructor to include context
+
     public SearchProductAdapter(Context context, List<Product> products) {
         this.context = context;
         this.products = products;
     }
+
     @NonNull
     @Override
     public SearchProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_search, parent, false);
         return new SearchProductViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull SearchProductViewHolder holder, int position) {
         Product product = products.get(position);
         setAnimation(holder.itemView, position);
+
         // Bind product data to views
         holder.tvName.setText(product.getName());
         holder.tvCat.setText(product.getCat());
+
         // Decode and display image
         String img = product.getImg();
         if (img != null && !img.isEmpty()) {
@@ -48,17 +53,50 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductView
                 holder.ivImg.setImageBitmap(bitmap);
                 holder.ivImg.setVisibility(View.VISIBLE);
             } else {
-                holder.ivImg.setImageResource(R.drawable.product); // Hide if decoding fails
+                holder.ivImg.setImageResource(R.drawable.product); // Default image if decoding fails
             }
         } else {
-            holder.ivImg.setImageResource(R.drawable.product); // Default image
-            holder.ivImg.setVisibility(View.GONE); // Optionally hide if no image is available
+            holder.ivImg.setImageResource(R.drawable.product);
+            holder.ivImg.setVisibility(View.GONE);
         }
+
+        // Set OnClickListener for the item
+        holder.itemView.setOnClickListener(v -> {
+            FirebaseDatabase.getInstance().getReference("Products")
+                    .orderByChild("name")
+                    .equalTo(product.getName()) // Assuming product names are unique
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                                String productKey = dataSnapshot.getKey(); // Get unique key
+
+                                // Send product details to the ProductDisplayActivity
+                                Intent intent = new Intent(context, ProductDisplayActivity.class);
+                                intent.putExtra("name", product.getName());
+                                intent.putExtra("cat", product.getCat());
+                                intent.putExtra("desc", product.getDesc());
+                                intent.putExtra("healthy", product.getHealthy());
+                                intent.putExtra("productKey", dataSnapshot.getKey());
+                                context.startActivity(intent);
+                                break;
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle error
+                        }
+                    });
+        });
     }
+
+
     @Override
     public int getItemCount() {
         return products.size();
     }
+
     // Helper method to convert Base64 string to Bitmap
     public static Bitmap base64ToBitmap(String base64String) {
         try {
@@ -69,7 +107,8 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductView
             return null;
         }
     }
-    // Updated setAnimation method to use the provided context
+
+    // Method to set animation for RecyclerView items
     private void setAnimation(View viewToAnimate, int position) {
         Animation slideIn = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
         viewToAnimate.startAnimation(slideIn);

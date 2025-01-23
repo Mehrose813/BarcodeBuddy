@@ -23,13 +23,13 @@ import java.util.List;
 
 public class ProductDisplayActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    ImageView ivProductImage;
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
 
-    private TextView tvProdName, tvProdCat,tvProDes,tvProHealth;
+    private TextView tvProdName, tvProdCat, tvProDes, tvProHealth;
+    private ImageView ivProductImage;
 
-    private DatabaseReference ref;
+    private DatabaseReference ref, Picturref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,35 +42,54 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProDes = findViewById(R.id.tv_proDes);
         tvProHealth = findViewById(R.id.tv_prohealthy);
         recyclerView = findViewById(R.id.recyclerview);
-        ivProductImage=findViewById(R.id.img_product);
+        ivProductImage = findViewById(R.id.img_product);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-
         ingredientList = new ArrayList<>();
 
-        // Set adapter
+        // Set adapter for ingredients RecyclerView
         adapter = new IngridentAdapaterdisplay(ingredientList);
         recyclerView.setAdapter(adapter);
 
-        // Get product name, category and product key from intent
+        // Get product details passed from the previous activity
         String productName = getIntent().getStringExtra("name");
         String productCategory = getIntent().getStringExtra("cat");
-        String productDes = getIntent().getStringExtra("desc");
-        String productHealthy= getIntent().getStringExtra("healthy");
+        String productDesc = getIntent().getStringExtra("desc");
+        String productHealthy = getIntent().getStringExtra("healthy");
         String productKey = getIntent().getStringExtra("productKey");
-//      String productImage=getIntent().getStringExtra("imageid");
 
+        // Fetch imageId from the "Products" node
+        Picturref = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
+        Picturref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String ImageId = snapshot.child("img").getValue(String.class);
+                    if (ImageId != null) {
+                        fetchProfileImage(ImageId); // Fetch image using the imageId
+                    } else {
+                        Log.e("Firebase", "Image ID not found in database.");
+                    }
+                } else {
+                    Log.e("Firebase", "Product not found in database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Error: " + error.getMessage());
+            }
+        });
+
+        // Set product details to TextViews
         tvProdName.setText(productName);
         tvProdCat.setText(productCategory);
-        tvProDes.setText(productDes);
+        tvProDes.setText(productDesc);
         tvProHealth.setText(productHealthy);
-//        ivProductImage.setImageBitmap(productImage);
 
+        // Fetch ingredients for this product from Firebase
         ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
-
-
-
         fetchIngredientsForProduct(productKey);
     }
 
@@ -78,16 +97,15 @@ public class ProductDisplayActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ingredientList.clear();
+                ingredientList.clear(); // Clear the list before adding new data
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                         Ingredient ingredient = ingredientSnapshot.getValue(Ingredient.class);
                         if (ingredient != null) {
                             ingredientList.add(ingredient);
-                            Log.d("FirebaseData", "Ingredient: " + ingredient.getName() + ", " + ingredient.getQty());
                         }
                     }
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged(); // Notify the adapter that data has changed
                 } else {
                     Toast.makeText(ProductDisplayActivity.this, "No ingredients found for this product", Toast.LENGTH_SHORT).show();
                 }
@@ -96,8 +114,32 @@ public class ProductDisplayActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(ProductDisplayActivity.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("FirebaseError", databaseError.getMessage());
             }
         });
+    }
+
+    private void fetchProfileImage(String imageId) {
+        FirebaseDatabase.getInstance().getReference("Product Images")
+                .child(imageId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String imageString = snapshot.getValue(String.class);
+                            if (imageString != null && !imageString.isEmpty()) {
+                                ivProductImage.setImageBitmap(MyUtilClass.base64ToBitmap(imageString)); // Convert base64 string to Bitmap
+                            } else {
+                                Log.e("Firebase", "Image string is empty.");
+                            }
+                        } else {
+                            Log.e("Firebase", "Image not found in Product Images.");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Firebase", "Error fetching image: " + error.getMessage());
+                    }
+                });
     }
 }
