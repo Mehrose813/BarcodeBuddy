@@ -8,8 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="40dp"
-    tools:context=".AddIngredientActivity"
-    android:gravity="center">
+    tools:context=".AddIngredientActivity">
 
 
 
@@ -24,6 +23,7 @@
         />
 
 
+
     <EditText
         android:id="@+id/et_ingredient_name"
         android:layout_width="match_parent"
@@ -33,6 +33,15 @@
         android:textSize="20sp"
         android:padding="10dp"
         android:layout_marginTop="30dp"
+        />
+
+    <Spinner
+        android:id="@+id/spin_safe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:entries="@array/spin_safe"
         />
     <Button
         android:id="@+id/btn_save_ingredients"

@@ -3,12 +3,24 @@ package com.example.barcodebuddy;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +29,7 @@ import android.view.ViewGroup;
  */
 public class HomeFragment extends Fragment {
 CardView searchCard;
+TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDanger,nameDangerIng,categoryDangerIng;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -57,6 +70,7 @@ CardView searchCard;
         }
     }
 
+    DatabaseReference dbRef;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,6 +78,18 @@ CardView searchCard;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         searchCard = view.findViewById(R.id.search_card);
+        nameSafeIng = view.findViewById(R.id.name_safe_ing);
+        categorySafeIng = view.findViewById(R.id.category_safe_ing);
+        nameSafe = view.findViewById(R.id.name_safe);
+        categorySafe = view.findViewById(R.id.category_safe);
+        nameDanger = view.findViewById(R.id.name_danger);
+        categoryDanger = view.findViewById(R.id.category_danger);
+        nameDangerIng = view.findViewById(R.id.name_danger_ing);
+        categoryDangerIng = view.findViewById(R.id.category_danger_ing);
+
+         dbRef = FirebaseDatabase.getInstance().getReference("Ingredients");
+
+
 
         searchCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +98,63 @@ CardView searchCard;
                 startActivity(intent);
             }
         });
+
+
+        fetchIngredients();
+
         return view;
+    }
+
+    private void fetchIngredients() {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String[]> safeIngredients = new ArrayList<>();
+                List<String[]> dangerousIngredients = new ArrayList<>();
+
+                // Iterate over all ingredients in the database
+                for (DataSnapshot ingredientSnapshot : snapshot.getChildren()) {
+                    String name = ingredientSnapshot.child("name").getValue(String.class);
+                    String category = ingredientSnapshot.child("category").getValue(String.class);
+
+                    if (category != null && name != null) {
+                        if (category.equalsIgnoreCase("safe")) {
+                            safeIngredients.add(new String[]{name, category});
+                        } else if (category.equalsIgnoreCase("dangerous")) {
+                            dangerousIngredients.add(new String[]{name, category});
+                        }
+                    }
+                }
+
+                // Randomize and select ingredients for display
+                Collections.shuffle(safeIngredients);
+                Collections.shuffle(dangerousIngredients);
+
+                // Display Safe Ingredients
+                if (safeIngredients.size() > 0) {
+                    nameSafe.setText(safeIngredients.get(0)[0]); // Name
+                    categorySafe.setText(safeIngredients.get(0)[1]); // Category
+                }
+                if (safeIngredients.size() > 1) {
+                    nameSafeIng.setText(safeIngredients.get(1)[0]); // Name
+                    categorySafeIng.setText(safeIngredients.get(1)[1]); // Category
+                }
+
+                // Display Dangerous Ingredients
+                if (dangerousIngredients.size() > 0) {
+                    nameDanger.setText(dangerousIngredients.get(0)[0]); // Name
+                    categoryDanger.setText(dangerousIngredients.get(0)[1]); // Category
+                }
+                if (dangerousIngredients.size() > 1) {
+                    nameDangerIng.setText(dangerousIngredients.get(1)[0]); // Name
+                    categoryDangerIng.setText(dangerousIngredients.get(1)[1]); // Category
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle database error
+            }
+        });
     }
 }
