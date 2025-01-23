@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:orientation="vertical"
     android:layout_height="wrap_content"
-    android:padding="10dp">
-
+    android:paddingTop="10dp"
+    android:paddingStart="5dp"
+    android:paddingBottom="10dp"
+     >
     <TextView
         android:id="@+id/tv_ingridentquantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:padding="5dp"
+        android:padding="10dp"
         android:layout_marginStart="5dp"
         android:background="@drawable/box"/>
 
@@ -20,8 +22,7 @@
         android:id="@+id/tv_ingrident_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_marginStart="5dp"
         android:hint="Ingredient Name" />
 </LinearLayout>
