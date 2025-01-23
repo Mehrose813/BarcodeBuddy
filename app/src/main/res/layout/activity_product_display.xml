@@ -21,7 +21,7 @@
         android:textStyle="italic" />
 
     <ImageView
-        android:id="@+id/fullWidthImage"
+        android:id="@+id/img_product"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
