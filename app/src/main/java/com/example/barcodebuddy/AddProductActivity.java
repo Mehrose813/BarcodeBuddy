@@ -74,6 +74,30 @@ public class AddProductActivity extends AppCompatActivity {
         spH = findViewById(R.id.spinner_healthy);
         ivImg = findViewById(R.id.iv_pimg);
 
+        String name = getIntent().getStringExtra("name");
+        String desc = getIntent().getStringExtra("desc");
+        String cat = getIntent().getStringExtra("cat");
+        String health = getIntent().getStringExtra("health");
+
+// Set the EditText values
+        edPName.setText(name);
+        edDes.setText(desc);
+
+// Find the position of 'cat' in the spinner adapter
+        ArrayAdapter<String> catAdapter = (ArrayAdapter<String>) spCat.getAdapter();
+        if (catAdapter != null) {
+            int catPosition = catAdapter.getPosition(cat);
+            spCat.setSelection(catPosition); // Set the spinner selection
+        }
+
+// Find the position of 'health' in the spinner adapter
+        ArrayAdapter<String> healthAdapter = (ArrayAdapter<String>) spH.getAdapter();
+        if (healthAdapter != null) {
+            int healthPosition = healthAdapter.getPosition(health);
+            spH.setSelection(healthPosition); // Set the spinner selection
+        }
+
+
         list = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
         spCat.setAdapter(adapter);
@@ -125,14 +149,27 @@ public class AddProductActivity extends AppCompatActivity {
         });
 
         btnSave.setOnClickListener(v -> {
-            String name = edPName.getText().toString();
+            String pname = edPName.getText().toString();
             String selectedCategory = spCat.getSelectedItem().toString();
             String description = edDes.getText().toString();
             String selectedH = spH.getSelectedItem().toString().trim();
 
-            if (name.isEmpty() || description.isEmpty() || selectedCategory.equals("Select category") || selectedH.equals("Select healthiness")) {
-                Toast.makeText(AddProductActivity.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
-                return;
+
+            if(pname.isEmpty()){
+                Toast.makeText(this, "Please enter name of product", Toast.LENGTH_SHORT).show();
+                 return;
+            }
+            if(description.isEmpty()){
+                Toast.makeText(this, "Please enter description", Toast.LENGTH_SHORT).show();
+                 return;
+            }
+            if(selectedCategory.equals("Select category")||selectedCategory==null){
+                Toast.makeText(this, "Select a valid category", Toast.LENGTH_SHORT).show();
+            return;
+            }
+            if(selectedH.equals("Select healthiness")){
+                Toast.makeText(this, "Select a valid healthiness value", Toast.LENGTH_SHORT).show();
+           return;
             }
 
 

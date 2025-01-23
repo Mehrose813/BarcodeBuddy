@@ -48,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // Initialize the product list and adapter
         productList = new ArrayList<>();
-        productAdapter = new SearchProductAdapter(productList); // Pass the list to the adapter
+        productAdapter = new SearchProductAdapter(SearchActivity.this,productList); // Pass the list to the adapter
         rvProducts.setAdapter(productAdapter);
 
         // Initialize Firebase Database reference
