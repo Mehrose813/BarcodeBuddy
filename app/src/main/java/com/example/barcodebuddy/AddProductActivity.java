@@ -173,7 +173,7 @@ public class AddProductActivity extends AppCompatActivity {
             }
 
 
-            saveProductToFirebase(name, description, selectedCategory, selectedH, uuid);
+            saveProductToFirebase(pname, description, selectedCategory, selectedH, uuid);
         });
 
         ivImg.setOnClickListener(v -> {
