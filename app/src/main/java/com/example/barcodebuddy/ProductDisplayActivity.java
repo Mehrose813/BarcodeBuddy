@@ -1,6 +1,7 @@
 package com.example.barcodebuddy;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,7 +70,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
     }
 
     private void fetchIngredientsForProduct(String productKey) {
-        ref.child(productKey).addValueEventListener(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ingredientList.clear();
@@ -78,6 +79,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
                         Ingredient ingredient = ingredientSnapshot.getValue(Ingredient.class);
                         if (ingredient != null) {
                             ingredientList.add(ingredient);
+                            Log.d("FirebaseData", "Ingredient: " + ingredient.getName() + ", " + ingredient.getQty());
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -89,6 +91,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(ProductDisplayActivity.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("FirebaseError", databaseError.getMessage());
             }
         });
     }
