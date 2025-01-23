@@ -2,6 +2,7 @@ package com.example.barcodebuddy;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import java.util.List;
 
 public class ProductDisplayActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
+    ImageView ivProductImage;
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
 
@@ -39,11 +41,12 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProdCat = findViewById(R.id.tv_proCat);
         tvProDes = findViewById(R.id.tv_proDes);
         tvProHealth = findViewById(R.id.tv_prohealthy);
-        recyclerView = findViewById(R.id.recyclerview); // Initialize recyclerView
+        recyclerView = findViewById(R.id.recyclerview);
+        ivProductImage=findViewById(R.id.img_product);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Initialize ingredient list
+
         ingredientList = new ArrayList<>();
 
         // Set adapter
@@ -56,11 +59,13 @@ public class ProductDisplayActivity extends AppCompatActivity {
         String productDes = getIntent().getStringExtra("desc");
         String productHealthy= getIntent().getStringExtra("healthy");
         String productKey = getIntent().getStringExtra("productKey");
+//      String productImage=getIntent().getStringExtra("imageid");
 
         tvProdName.setText(productName);
         tvProdCat.setText(productCategory);
         tvProDes.setText(productDes);
         tvProHealth.setText(productHealthy);
+//        ivProductImage.setImageBitmap(productImage);
 
         ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
 
