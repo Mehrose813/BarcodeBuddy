@@ -27,5 +27,10 @@
     <string-array name="select_category">Select category</string-array>>
     <string-array name="ingredient">Select the ingredients</string-array>
 
+    <string-array name="spin_safe">
+        <item>Safe</item>
+        <item>Dangerous</item>
+    </string-array>
+
 
 </resources>

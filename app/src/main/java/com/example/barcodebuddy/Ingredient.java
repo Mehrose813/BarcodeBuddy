@@ -1,7 +1,19 @@
 package com.example.barcodebuddy;
 
 public class Ingredient {
-    String name , id,qty,healthy;
+    String name;
+    String id;
+    String qty;
+    String healthy;
+    String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public Ingredient() {
 

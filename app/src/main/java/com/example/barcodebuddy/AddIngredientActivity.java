@@ -27,6 +27,7 @@ import java.util.ArrayList;
 public class AddIngredientActivity extends AppCompatActivity {
 EditText etIngredientName;
 Button btnSaveIngredients;
+Spinner spinSafe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ Button btnSaveIngredients;
         String id = getIntent().getStringExtra("id");
         btnSaveIngredients = findViewById(R.id.btn_save_ingredients);
         etIngredientName = findViewById(R.id.et_ingredient_name);
+        spinSafe = findViewById(R.id.spin_safe);
 
         if(id != null && ! id.isEmpty()){
             FirebaseDatabase.getInstance().getReference("Ingredients")
@@ -60,6 +62,7 @@ Button btnSaveIngredients;
             @Override
             public void onClick(View view) {
                 String name = etIngredientName.getText().toString();
+                String zone = spinSafe.getSelectedItem().toString();
 
                 if (name.isEmpty()) {
                     Toast.makeText(AddIngredientActivity.this, "Enter the name", Toast.LENGTH_SHORT).show();
@@ -68,6 +71,7 @@ Button btnSaveIngredients;
 
                 Ingredient ingredient = new Ingredient();
                 ingredient.setName(name);
+                ingredient.setCategory(zone);
 
                 DatabaseReference ingredientsRef = FirebaseDatabase.getInstance().getReference("Ingredients");
 
