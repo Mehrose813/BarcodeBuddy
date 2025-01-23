@@ -1,18 +1,27 @@
 package com.example.barcodebuddy;
 
-import android.graphics.Color;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,51 +32,49 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.UUID;
+
+// Inside AddProductActivity.java
 
 public class AddProductActivity extends AppCompatActivity {
     String id;
     Spinner spCat, spH;
-    Button btnSave,btnImg;
+    Button btnSave;
     EditText edDes, edPName;
-    //String[] categories = {"Select category", "Nuts", "Chocolates", "Cold drinks", "Cookies"};
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
     ArrayList<String> arrayH;
     ArrayAdapter<String> adapterH;
+    ImageView ivImg;
+    private Uri imageUri;
 
-
-    // Firebase Database reference
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+
+    //iss id py image save ha
+    String uuid = UUID.randomUUID().toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
-
         id = getIntent().getStringExtra("id");
-
-        // Initialize Firebase database
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Products");
 
-        // Initialize Views
+
         edPName = findViewById(R.id.ed_pname);
         btnSave = findViewById(R.id.btn_save);
         edDes = findViewById(R.id.ed_desc);
         spCat = findViewById(R.id.sp_cat);
         spH = findViewById(R.id.spinner_healthy);
-        btnImg = findViewById(R.id.btn_add_img);
+        ivImg = findViewById(R.id.iv_pimg);
 
-//        // Set up Adapter for Spinner
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-//        spCat.setAdapter(arrayAdapter);
-
-        list = new ArrayList<String>();
+        list = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
         spCat.setAdapter(adapter);
 
@@ -75,45 +82,40 @@ public class AddProductActivity extends AppCompatActivity {
         adapterH = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arrayH);
         spH.setAdapter(adapterH);
 
-
         FirebaseDatabase.getInstance().getReference("Categories").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                list.clear(); // Clear the list before adding new items
-                list.add("Select category"); // Add a default value at the top
+                list.clear();
+                list.add("Select category");
                 for (DataSnapshot mydata : snapshot.getChildren()) {
-                    //list.add(mydata.getValue().toString().trim());
                     String categoryName = mydata.child("catname").getValue(String.class);
                     if (categoryName != null) {
                         list.add(categoryName.trim());
                     }
-                    adapter.notifyDataSetChanged(); // Notify adapter to refresh spinner
+                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(AddProductActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
-
             }
         });
 
-        // Fetch healthiness from Firebase and populate the spinner
         FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrayH.clear(); // Clear old data
-                arrayH.add("Select healthiness"); // Add default option
+                arrayH.clear();
+                arrayH.add("Select healthiness");
 
                 for (DataSnapshot myData : snapshot.getChildren()) {
-                    String key = myData.getKey(); // Retrieve the key (e.g., "1")
-                    String value = myData.getValue(String.class); // Retrieve the value (e.g., "Unhealthy")
+                    String key = myData.getKey();
+                    String value = myData.getValue(String.class);
                     if (key != null && value != null) {
-                        arrayH.add(key + ": " + value.trim()); // Format as "1: Unhealthy"
+                        arrayH.add(key + ": " + value.trim());
                     }
-
                 }
-                adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
+                adapterH.notifyDataSetChanged();
             }
 
             @Override
@@ -122,137 +124,118 @@ public class AddProductActivity extends AppCompatActivity {
             }
         });
 
+        btnSave.setOnClickListener(v -> {
+            String name = edPName.getText().toString();
+            String selectedCategory = spCat.getSelectedItem().toString();
+            String description = edDes.getText().toString();
+            String selectedH = spH.getSelectedItem().toString().trim();
 
-
-
-        // If ID is provided, load the product details
-        if (id != null && !id.isEmpty()) {
-            databaseReference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Product product = snapshot.getValue(Product.class);
-                    if (product != null) {
-                        // Populate fields with existing data
-                        edPName.setText(product.getName());
-                        edDes.setText(product.getDesc());
-                        int spinnerPosition = adapter.getPosition(product.getCat());
-                        spCat.setSelection(spinnerPosition);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(AddProductActivity.this, "Failed to load product details", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        // Save Product button click listener
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = edPName.getText().toString();
-                String selectedCategory = spCat.getSelectedItem().toString();
-                String description = edDes.getText().toString();
-                String selectedH = spH.getSelectedItem().toString().trim(); // Get healthiness
-
-
-                if (name.isEmpty()) {
-                    Toast.makeText(AddProductActivity.this, "Add a product name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-
-                if (description.isEmpty()) {
-                    Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (selectedCategory.equals("Select category")) {
-                    Toast.makeText(AddProductActivity.this, "Please select a category", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (selectedH == null || selectedH.toString().trim().isEmpty()) {
-                    Toast.makeText(AddProductActivity.this, "Select healthiness of ingredient", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (selectedH.equals("Select healthiness")) {
-                    TextView errorText = (TextView) spH.getSelectedView();
-                    errorText.setError("");
-                    errorText.setTextColor(Color.RED);
-                    errorText.setText("Please select healthiness");
-                    return;
-                }
-
-
-                    // Save the product to Firebase
-                saveProductToFirebase(name, description, selectedCategory,selectedH);
+            if (name.isEmpty() || description.isEmpty() || selectedCategory.equals("Select category") || selectedH.equals("Select healthiness")) {
+                Toast.makeText(AddProductActivity.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+
+            saveProductToFirebase(name, description, selectedCategory, selectedH, uuid);
+        });
+
+        ivImg.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddProductActivity.this);
+            builder.setTitle("Choose Image Source")
+                    .setItems(new CharSequence[]{"Camera", "Gallery"}, (dialog, which) -> {
+                        if (which == 0) {
+                            imageUri = createImageUri();
+                            if (imageUri != null) {
+                                captureImageLauncher.launch(imageUri);
+                            } else {
+                                Toast.makeText(this, "Failed to create image URI", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (which == 1) {
+                            pickImageLauncher.launch("image/*");
+                        }
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .show();
         });
     }
 
-    public void saveProductToFirebase(String productName, String description, String category,String selectedH) {
-        // Validate the input
-        if (productName == null || productName.isEmpty()) {
-            Toast.makeText(AddProductActivity.this, "Please enter a product name", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (description == null || description.isEmpty()) {
-            Toast.makeText(AddProductActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (category == null || category.equals("Select category")) {
-            Toast.makeText(AddProductActivity.this, "Please select a valid category", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private final ActivityResultLauncher<Uri> captureImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
+                if (result) {
+                    if (imageUri != null) {
+                        ivImg.setImageURI(imageUri);
+                        saveImage(imageUri);
+                    }
+                }
+            });
 
-        if(selectedH==null || selectedH == "Select healthiness"){
-            Toast.makeText(AddProductActivity.this, "Select healthiness for product", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private final ActivityResultLauncher<String> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+                if (result != null) {
+                    ivImg.setImageURI(result);
+                    saveImage(result);
+                }
+            });
 
+    private Uri createImageUri() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, "new_image_" + System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        ContentResolver resolver = getContentResolver();
+        return resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
 
-
-
-        // Create a Product object
+    private void saveProductToFirebase(String productName, String description, String category, String selectedH, String img) {
         Product product = new Product();
         product.setName(productName);
         product.setDesc(description);
         product.setCat(category);
         product.setHealthy(selectedH);
+        product.setImg(uuid);
 
-        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
 
-        // Check if ID is provided (editing existing product)
+         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
+
         if (id != null && !id.isEmpty()) {
-            // Update existing product
-            productsRef.child(id).setValue(product)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(AddProductActivity.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
-                        finish();  // Close activity after update
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(AddProductActivity.this, "Failed to update product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+            // Update an existing product
+            productsRef.child(id).setValue(product).addOnSuccessListener(aVoid -> {
+                Toast.makeText(AddProductActivity.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                finish();
+            }).addOnFailureListener(e -> Toast.makeText(AddProductActivity.this, "Failed to update product", Toast.LENGTH_SHORT).show());
         } else {
-            // Add new product
-            String newProductId = productsRef.push().getKey();  // Generate a new unique ID
+            // Add a new product
+            String newProductId = productsRef.push().getKey();
             if (newProductId != null) {
-                productsRef.child(newProductId).setValue(product)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
-                            finish();  // Close activity after insertion
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(AddProductActivity.this, "Failed to add product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
-            } else {
-                Toast.makeText(AddProductActivity.this, "Failed to generate product ID", Toast.LENGTH_SHORT).show();
+                productsRef.child(newProductId).setValue(product).addOnSuccessListener(aVoid -> {
+                    Toast.makeText(AddProductActivity.this, "Product added successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                }).addOnFailureListener(e -> Toast.makeText(AddProductActivity.this, "Failed to add product", Toast.LENGTH_SHORT).show());
             }
-            spCat.setSelection(0);
         }
+    }
 
+    private void saveImage(Uri imageUri) {
+        String imageString = imageUriToBase64(imageUri, getContentResolver());
 
+        FirebaseDatabase.getInstance().getReference("Product Images")
+                .child(uuid)
+                .setValue(imageString)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(AddProductActivity.this, "Image saved", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private static String imageUriToBase64(Uri imageUri, ContentResolver contentResolver) {
+        try (InputStream inputStream = contentResolver.openInputStream(imageUri)) {
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 68, outputStream);
+            return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
-
