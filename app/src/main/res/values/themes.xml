@@ -5,9 +5,9 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
         <!-- Status bar color -->
-        <item name="android:statusBarColor">@color/dark_green</item>
+        <item name="android:statusBarColor">#4CBC31</item>
         <!-- Navigation bar color -->
-        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:navigationBarColor">#4CBC31</item>
         <!-- Light icons on navigation bar -->
 
         <item name="android:windowLightStatusBar">true</item> <!-- Black icons on status bar -->
