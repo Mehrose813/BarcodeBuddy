@@ -4,15 +4,29 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <!-- Profile Image -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_green">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Profile"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="100dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="#FF428612"
             android:src="@drawable/profile" />
@@ -20,21 +34,22 @@
         <!-- Edit Icon -->
 
         <!-- Circle Backgrounds for Profile -->
+
         <ImageView
             android:id="@+id/editicon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignBottom="@id/profile"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="100dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginRight="138dp"
+            android:layout_marginBottom="38dp"
             android:background="@drawable/editicon" />
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignLeft="@id/profile"
-            android:layout_marginLeft="-42dp"
+            android:layout_marginLeft="-19dp"
             android:layout_marginTop="120dp"
             android:background="@drawable/circle" />
 
@@ -49,25 +64,26 @@
             android:layout_marginBottom="-12dp"
             android:background="@drawable/darkcircle" />
 
+        <!-- EditText for Name -->
+
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignBottom="@id/profile"
             android:layout_alignParentRight="true"
             android:layout_marginTop="300dp"
-            android:layout_marginRight="77dp"
-            android:layout_marginBottom="-21dp"
+            android:layout_marginRight="108dp"
+            android:layout_marginBottom="-14dp"
             android:background="@drawable/darkcircle" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignLeft="@id/profile"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="80dp"
             android:background="@drawable/lightcircle" />
 
-        <!-- EditText for Name -->
         <RelativeLayout
             android:id="@+id/main2"
             android:layout_width="match_parent"
@@ -80,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:text="Your Name"
                 android:textColor="#9BBA6E"
                 android:textSize="17sp"
                 android:textStyle="bold"
@@ -102,9 +119,8 @@
                 android:padding="12dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="10dp" />
         </RelativeLayout>
-
 
         <TextView
             android:id="@+id/tv_email"
@@ -112,12 +128,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/main2"
             android:padding="10dp"
+            android:text="example@example.com"
             android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="#9BBA6E"
             android:gravity="center"
             android:layout_marginTop="5dp" />
-
 
         <!-- Logout Button -->
         <Button
@@ -131,6 +147,6 @@
             android:layout_marginTop="70dp"
             android:backgroundTint="#FF428612"
             android:padding="10dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </ScrollView>
