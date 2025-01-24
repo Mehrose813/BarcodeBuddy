@@ -14,7 +14,6 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:padding="10dp"
-
         android:background="@drawable/box"/>
 
 
@@ -24,6 +23,6 @@
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_marginStart="5dp"
+        android:paddingStart="5dp"
         android:hint="Ingredient Name" />
 </LinearLayout>

@@ -74,86 +74,80 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     // Method to search products
+
     private void searchProducts(String query) {
-        Query searchQuery = databaseReference.orderByChild("name").startAt(query).endAt(query + "\uf8ff");
-        searchQuery.addValueEventListener(new ValueEventListener() {
+        // Only trigger search if the query length is 3 or more characters
+        if (query == null || query.trim().isEmpty() || query.length() < 2) {
+            productList.clear(); // Clear the list to avoid showing irrelevant results
+            productAdapter.notifyDataSetChanged();
+            rvProducts.setVisibility(View.GONE);
+            return; // Exit if query is too short
+        }
+
+        final String lowercaseQuery = query.toLowerCase().trim(); // Normalize query input
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                productList.clear(); // Clear existing data to avoid duplicates
+                productList.clear();
+                boolean productFound = false;
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Product product = dataSnapshot.getValue(Product.class);
-                    if (product != null) {
-                        productList.add(product); // Add product to the list
+                    String productName = dataSnapshot.child("name").getValue(String.class);
+
+                    if (productName != null && productName.toLowerCase().contains(lowercaseQuery)) {
+                        Product product = dataSnapshot.getValue(Product.class);
+                        if (product != null) {
+                            productList.add(product);
+                            productFound = true;
+                        }
                     }
                 }
-                productAdapter.notifyDataSetChanged(); // Notify adapter about data changes
 
-                // Show or hide RecyclerView based on data
-                if (productList.isEmpty()) {
+                productAdapter.notifyDataSetChanged();
+
+                if (productFound) {
+                    rvProducts.setVisibility(View.VISIBLE);
+                } else {
                     rvProducts.setVisibility(View.GONE);
                     Toast.makeText(SearchActivity.this, "No products found", Toast.LENGTH_SHORT).show();
-                } else {
-                    rvProducts.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(SearchActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-}
+    }}
 
-//        edSearch = findViewById(R.id.ed_searchname);
-//        btnSearch = findViewById(R.id.btn_search);
-//        ref = FirebaseDatabase.getInstance().getReference("Products");
-//
-//        btnSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String productName = edSearch.getText().toString().trim();
-//
-//                if (productName.isEmpty()) {
-//                    Toast.makeText(SearchActivity.this, "Field is empty", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    searchProduct(productName);
-//                }
-//            }
-//        });
-
-//    public void searchProduct(String name) {
-//        ref.orderByChild("name").equalTo(name).addListenerForSingleValueEvent(new ValueEventListener() {
+//    private void searchProducts(String query) {
+//        Query searchQuery = databaseReference.orderByChild("name").startAt(query).endAt(query + "\uf8ff");
+//        searchQuery.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()) {
-//                    for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-//                        String productName = productSnapshot.child("name").getValue(String.class);
-//                        String productCategory = productSnapshot.child("cat").getValue(String.class);
-//                        String producDes = productSnapshot.child("desc").getValue(String.class);
-//                        String productHealth = productSnapshot.child("healthy").getValue(String.class);
-//
-//                        Intent intent = new Intent(SearchActivity.this, ProductDisplayActivity.class);
-//                        intent.putExtra("name", productName);
-//                        intent.putExtra("cat", productCategory);
-//                        intent.putExtra("desc",producDes);
-//                        intent.putExtra("healthy",productHealth);
-//
-//                        intent.putExtra("productKey", productSnapshot.getKey());
-//                        startActivity(intent);
-//                        break;
+//                productList.clear(); // Clear existing data to avoid duplicates
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    Product product = dataSnapshot.getValue(Product.class);
+//                    if (product != null) {
+//                        productList.add(product); // Add product to the list
 //                    }
+//                }
+//                productAdapter.notifyDataSetChanged(); // Notify adapter about data changes
+//
+//                // Show or hide RecyclerView based on data
+//                if (productList.isEmpty()) {
+//                    rvProducts.setVisibility(View.GONE);
+//                    Toast.makeText(SearchActivity.this, "No products found", Toast.LENGTH_SHORT).show();
 //                } else {
-//                    Toast.makeText(SearchActivity.this, "Product not found", Toast.LENGTH_SHORT).show();
+//                    rvProducts.setVisibility(View.VISIBLE);
 //                }
 //            }
 //
 //            @Override
 //            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(SearchActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
 //            }
 //        });
 //    }
-
-
-
+//}

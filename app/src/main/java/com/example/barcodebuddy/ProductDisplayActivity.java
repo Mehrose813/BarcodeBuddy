@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.barcodebuddy.recyclerview.IngridentAdapaterdisplay;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -118,6 +119,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
         });
     }
 
+
     private void fetchProfileImage(String imageId) {
         FirebaseDatabase.getInstance().getReference("Product Images")
                 .child(imageId)
@@ -127,12 +129,13 @@ public class ProductDisplayActivity extends AppCompatActivity {
                         if (snapshot.exists()) {
                             String imageString = snapshot.getValue(String.class);
                             if (imageString != null && !imageString.isEmpty()) {
-                                ivProductImage.setImageBitmap(MyUtilClass.base64ToBitmap(imageString)); // Convert base64 string to Bitmap
+                                // Base64 string ko Bitmap mein convert karein
+                                ivProductImage.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
                             } else {
-                                Log.e("Firebase", "Image string is empty.");
+                                Log.e("Firebase", "Image string is empty or null.");
                             }
                         } else {
-                            Log.e("Firebase", "Image not found in Product Images.");
+                            Log.e("Firebase", "Image node not found for imageId: " + imageId);
                         }
                     }
 
@@ -142,4 +145,30 @@ public class ProductDisplayActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+//    private void fetchProfileImage(String imageId) {
+//        FirebaseDatabase.getInstance().getReference("Product Images")
+//                .child(imageId)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (snapshot.exists()) {
+//                            String imageString = snapshot.getValue(String.class);
+//                            if (imageString != null && !imageString.isEmpty()) {
+//                                ivProductImage.setImageBitmap(MyUtilClass.base64ToBitmap(imageString)); // Convert base64 string to Bitmap
+//                            } else {
+//                                Log.e("Firebase", "Image string is empty.");
+//                            }
+//                        } else {
+//                            Log.e("Firebase", "Image not found in Product Images.");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                        Log.e("Firebase", "Error fetching image: " + error.getMessage());
+//                    }
+//                });
+//    }
 }
