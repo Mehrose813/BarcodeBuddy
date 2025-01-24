@@ -252,7 +252,7 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
     private void saveImage(Uri imageUri) {
-        String imageString = imageUriToBase64(imageUri, getContentResolver());
+        String imageString = MyUtilClass.imageUriToBase64(imageUri, getContentResolver());
 
         FirebaseDatabase.getInstance().getReference("Product Images")
                 .child(uuid)
@@ -264,15 +264,5 @@ public class AddProductActivity extends AppCompatActivity {
                 });
     }
 
-    private static String imageUriToBase64(Uri imageUri, ContentResolver contentResolver) {
-        try (InputStream inputStream = contentResolver.openInputStream(imageUri)) {
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 68, outputStream);
-            return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 }

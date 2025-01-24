@@ -9,34 +9,59 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-public class MyUtilClass {
-    public static String imageUriToBase64(Uri imageuri, ContentResolver contentResolver) {
 
+//    public static String imageUriToBase64(Uri imageuri, ContentResolver contentResolver) {
+//
+//        try {
+//            InputStream inputStream = contentResolver.openInputStream(imageuri);
+//            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream);
+//            byte[] imageBytes = outputStream.toByteArray();
+//            return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//    }
+//
+//    public static Bitmap base64ToBitmap(String base64String)
+//    {
+//        try {
+//            byte[] imagBytes=Base64.decode(base64String,Base64.DEFAULT);
+//            return BitmapFactory.decodeByteArray(imagBytes,0,imagBytes.length);
+//        }
+//        catch(Exception e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+public class MyUtilClass {
+    public static String imageUriToBase64(Uri uri, ContentResolver contentResolver) {
         try {
-            InputStream inputStream = contentResolver.openInputStream(imageuri);
+            InputStream inputStream = contentResolver.openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream);
-            byte[] imageBytes = outputStream.toByteArray();
-            return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            byte[] bytes = outputStream.toByteArray();
+            return Base64.encodeToString(bytes, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
     }
 
-    public static Bitmap base64ToBitmap(String base64String)
-    {
+    public static Bitmap base64ToBitmap(String base64String) {
         try {
-            byte[] imagBytes=Base64.decode(base64String,Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(imagBytes,0,imagBytes.length);
-        }
-        catch(Exception e){
+            byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
 }
+
+
 
