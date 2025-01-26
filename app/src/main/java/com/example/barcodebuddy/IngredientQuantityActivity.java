@@ -1,7 +1,6 @@
 package com.example.barcodebuddy;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,12 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,16 +26,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Base64;
 
 public class IngredientQuantityActivity extends AppCompatActivity {
 
     Spinner spIn;
     EditText edQOI;
     Button btnAdd;
-    TextView tvProductName, tvCatName,tvH;
-    ArrayList<String> array, arrayH;
-    ArrayAdapter<String> adapter, adapterH;
+    TextView tvProductName, tvCatName, tvH;
+    ArrayList<String> array;
+    ArrayAdapter<String> adapter;
     LinearLayout selected;
     ArrayList<Ingredient> ingredientsList;
     ImageView ivImg;
@@ -48,7 +42,6 @@ public class IngredientQuantityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ingredient_quantity);
 
         tvProductName = findViewById(R.id.tv_product_name);
@@ -56,77 +49,70 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         tvH = findViewById(R.id.tv_health);
         selected = findViewById(R.id.selected_ingredient_layout);
         ivImg = findViewById(R.id.iv_show_img);
-//        spH = findViewById(R.id.spinner_healthy);
 
         String productId = getIntent().getStringExtra("id");
         String productName = getIntent().getStringExtra("name");
         String productcat = getIntent().getStringExtra("category");
         String productH = getIntent().getStringExtra("healthiness");
-        String keyOfImg = FirebaseDatabase.getInstance().getReference("Products").child(productId).child("img").getKey();
+        String keyOfImg = getIntent().getStringExtra("img");
         ingredientsList = new ArrayList<>();
+        Log.e("imgKey: ", keyOfImg + "");
 
-        FirebaseDatabase.getInstance().getReference("Product Images").child(keyOfImg)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            String imageString = snapshot.getValue(String.class);
-                            Log.d("Debug", "Image String Retrieved: " + imageString);
-
-                            if (imageString != null) {
-                                Bitmap bitmap = MyUtilClass.base64ToBitmap(imageString);
-                                if (bitmap != null) {
-                                    ivImg.setImageBitmap(bitmap);
-                                } else {
-                                    Toast.makeText(IngredientQuantityActivity.this, "Failed to decode image!", Toast.LENGTH_SHORT).show();
+        // Fetch image from Firebase
+        if (keyOfImg != null) {
+            FirebaseDatabase.getInstance().getReference("Product Images").child(keyOfImg)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                String imageString = snapshot.getValue(String.class);
+                                try {
+                                    Bitmap bitmap = MyUtilClass.base64ToBitmap(imageString);
+                                    if (bitmap != null) {
+                                        ivImg.setImageBitmap(bitmap);
+                                    } else {
+                                        Toast.makeText(IngredientQuantityActivity.this, "Failed to decode image!", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("Error", "Error decoding image: " + e.getMessage());
+                                    Toast.makeText(IngredientQuantityActivity.this, "Error decoding image", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(IngredientQuantityActivity.this, "Image not found!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(IngredientQuantityActivity.this, "Snapshot does not exist!", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(IngredientQuantityActivity.this, "Snapshot does not exist!", Toast.LENGTH_SHORT).show();
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("Debug", "Error: " + error.getMessage());
-                        Toast.makeText(IngredientQuantityActivity.this, "Failed to load image: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e("Debug", "Error: " + error.getMessage());
+                            Toast.makeText(IngredientQuantityActivity.this, "Failed to load image: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
 
-
-
-        if (productId == null) {
-            Toast.makeText(this, "Product ID is missing!", Toast.LENGTH_SHORT).show();
+        if (productId == null || productName == null || productcat == null || productH == null) {
+            Toast.makeText(this, "Product details are missing!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // Set product name and category to the TextViews
-        if (productName != null) {
-            tvProductName.setText("Product Name : " + productName);
-        }
-        if (productcat != null) {
-            tvCatName.setText("Category Name : " + productcat);
-        }
+        // Set product name and category
+        tvProductName.setText("Product Name : " + productName);
+        tvCatName.setText("Category Name : " + productcat);
 
         if (productH != null) {
             tvH.setText("Product Nutri value:" + productH);
-
-            // Use .toString() and .equals() for string comparison
-            if (tvH.getText().toString().equals("Un-healthy")) {
-                int red = getResources().getColor(R.color.red);
-                tvH.setTextColor(red);
-            } else if (tvH.getText().toString().equals("Moderate")) {
-                int orange = getResources().getColor(R.color.orange);
-                tvH.setTextColor(orange);
-            } else if (tvH.getText().toString().equals("Healthy") || tvH.getText().toString().equals("Very healthy")) {
-                int green = getResources().getColor(R.color.dark_green);
-                tvH.setTextColor(green);
+            // Set color based on healthiness value
+            int color = Color.BLACK;
+            if (productH.equals("Un-healthy")) {
+                color = getResources().getColor(R.color.red);
+            } else if (productH.equals("Moderate")) {
+                color = getResources().getColor(R.color.orange);
+            } else if (productH.equals("Healthy") || productH.equals("Very healthy")) {
+                color = getResources().getColor(R.color.dark_green);
             }
+            tvH.setTextColor(color);
         }
-
 
         spIn = findViewById(R.id.spinner_ingredient);
         edQOI = findViewById(R.id.ed_quantity_ingredient);
@@ -134,25 +120,21 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         array = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array);
         spIn.setAdapter(adapter);
-//        arrayH = new ArrayList<>();
-//        adapterH = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arrayH);
-//        spH.setAdapter(adapterH);
 
-        // Fetch ingredients from Firebase and populate the spinner
+        // Fetch ingredients from Firebase
         FirebaseDatabase.getInstance().getReference("Ingredients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 array.clear();
-                // Clear old data
                 array.add("Select an ingredient");
 
                 for (DataSnapshot myData : snapshot.getChildren()) {
                     String ingredientName = myData.child("name").getValue(String.class);
                     if (ingredientName != null) {
-                        array.add(ingredientName.trim()); // Add new ingredients
+                        array.add(ingredientName.trim());
                     }
                 }
-                adapter.notifyDataSetChanged(); // Notify adapter to update spinner
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -161,39 +143,15 @@ public class IngredientQuantityActivity extends AppCompatActivity {
             }
         });
 
-//        // Fetch healthiness from Firebase and populate the spinner
-//        FirebaseDatabase.getInstance().getReference("Healthiness").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                arrayH.clear(); // Clear old data
-//                arrayH.add("Select healthiness"); // Add default option
-//
-//                for (DataSnapshot myData : snapshot.getChildren()) {
-//                    String key = myData.getKey(); // Retrieve the key (e.g., "1")
-//                    String value = myData.getValue(String.class); // Retrieve the value (e.g., "Unhealthy")
-//                    if (key != null && value != null) {
-//                        arrayH.add(key + ": " + value.trim()); // Format as "1: Unhealthy"
-//                    }
-//                }
-//                adapterH.notifyDataSetChanged(); // Notify adapter to update spinner
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(IngredientQuantityActivity.this, "Failed to load Healthiness", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-
+        // Add button click listener
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the selected ingredient and quantity
-                String selectedIng = spIn.getSelectedItem().toString().trim();
+                String selectedIng = spIn.getSelectedItem() != null ? spIn.getSelectedItem().toString().trim() : "";
                 String qOI = edQOI.getText().toString().trim();
 
                 // Validate ingredient selection
-                if (selectedIng == null || selectedIng.isEmpty() || selectedIng.equals("Select an ingredient")) {
+                if (selectedIng.isEmpty() || selectedIng.equals("Select an ingredient")) {
                     TextView errorText = (TextView) spIn.getSelectedView();
                     errorText.setError("");
                     errorText.setTextColor(Color.RED);
@@ -223,14 +181,13 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(IngredientQuantityActivity.this, "Ingredient updated", Toast.LENGTH_SHORT).show();
-
                                             // Update UI list dynamically
                                             for (int i = 0; i < selected.getChildCount(); i++) {
                                                 LinearLayout childLayout = (LinearLayout) selected.getChildAt(i);
                                                 String tag = (String) childLayout.getTag();
                                                 if (tag != null && tag.equals(child.getKey())) {
                                                     TextView textView = (TextView) childLayout.getChildAt(0);
-                                                    textView.setText(selectedIng + " " + qOI); // Update the displayed quantity
+                                                    textView.setText(selectedIng + " " + qOI); // Update displayed quantity
                                                     break;
                                                 }
                                             }
@@ -316,7 +273,5 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
-
 }

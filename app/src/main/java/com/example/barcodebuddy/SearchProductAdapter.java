@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,24 +43,38 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductView
         Product product = products.get(position);
         setAnimation(holder.itemView, position);
 
+        Log.e("pro_img: ", product.getImg() + "");
+
         // Bind product data to views
         holder.tvName.setText(product.getName());
         holder.tvCat.setText(product.getCat());
 
         // Decode and display image
         String img = product.getImg();
-        if (img != null && !img.isEmpty()) {
-            Bitmap bitmap = base64ToBitmap(img);
-            if (bitmap != null) {
-                holder.ivImg.setImageBitmap(bitmap);
-                holder.ivImg.setVisibility(View.VISIBLE);
-            } else {
-                holder.ivImg.setImageResource(R.drawable.product); // Default image if decoding fails
-            }
-        } else {
-            holder.ivImg.setImageResource(R.drawable.product);
-            holder.ivImg.setVisibility(View.GONE);
-        }
+        FirebaseDatabase.getInstance().getReference("Product Images").child(img)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Bitmap bitmap = MyUtilClass.base64ToBitmap(snapshot.getValue().toString());
+                            if (bitmap != null) {
+                                holder.ivImg.setImageBitmap(bitmap);
+                            }
+                            else{
+                                holder.ivImg.setImageResource(R.drawable.product);
+                            }
+                        }
+                        else{
+                            holder.ivImg.setImageResource(R.drawable.product);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Debug", "Error: " + error.getMessage());
+//                        Toast.makeText(IngredientQuantityActivity.this, "Failed to load image: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         // Set OnClickListener for the item
         holder.itemView.setOnClickListener(v -> {

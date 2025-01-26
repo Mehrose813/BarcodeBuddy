@@ -49,6 +49,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 intent.putExtra("name",product.getName());
                 intent.putExtra("category",product.getCat());
                 intent.putExtra("healthiness",product.getHealthy());
+                intent.putExtra("img",product.getImg());
 
                 context.startActivity(intent);
             }
@@ -93,6 +94,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 intent.putExtra("desc",product.getDesc());
                 intent.putExtra("cat",product.getCat());
                 intent.putExtra("health",product.getHealthy());
+                intent.putExtra("img",product.getImg());
                 context.startActivity(intent);
             }
         });

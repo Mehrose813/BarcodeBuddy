@@ -112,6 +112,7 @@ public class SearchActivity extends AppCompatActivity {
                     rvProducts.setVisibility(View.GONE);
                     Toast.makeText(SearchActivity.this, "No products found", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
             @Override
@@ -119,8 +120,11 @@ public class SearchActivity extends AppCompatActivity {
                 Toast.makeText(SearchActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }}
+        rvProducts.setVisibility(View.VISIBLE);
+    }
 
+}
+//
 //    private void searchProducts(String query) {
 //        Query searchQuery = databaseReference.orderByChild("name").startAt(query).endAt(query + "\uf8ff");
 //        searchQuery.addValueEventListener(new ValueEventListener() {
