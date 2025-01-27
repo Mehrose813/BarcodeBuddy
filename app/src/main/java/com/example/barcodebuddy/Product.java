@@ -3,6 +3,10 @@ package com.example.barcodebuddy;
 public class Product {
     String name,desc,Cat,id,healthy,img;
 
+
+
+    String barcode;
+
     public Product(String productId, String productName, String description, String category) {
     }
     public Product(){
@@ -55,5 +59,12 @@ public class Product {
 
     public void setImg(String img) {
         this.img = img;
+    }
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getBarcode() {
+        return barcode;
     }
 }

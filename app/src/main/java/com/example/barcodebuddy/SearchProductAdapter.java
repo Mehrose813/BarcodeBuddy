@@ -94,6 +94,7 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductView
                                 intent.putExtra("desc", product.getDesc());
                                 intent.putExtra("healthy", product.getHealthy());
                                 intent.putExtra("productKey", dataSnapshot.getKey());
+                                intent.putExtra("barcode",product.getBarcode());
                                 context.startActivity(intent);
                                 break;
                             }

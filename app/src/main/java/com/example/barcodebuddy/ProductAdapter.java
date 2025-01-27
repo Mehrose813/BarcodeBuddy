@@ -50,6 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
                 intent.putExtra("category",product.getCat());
                 intent.putExtra("healthiness",product.getHealthy());
                 intent.putExtra("img",product.getImg());
+                intent.putExtra("barcode",product.getBarcode());
 
                 context.startActivity(intent);
             }

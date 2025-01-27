@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.barcodebuddy.recyclerview.IngridentAdapaterdisplay;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +26,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
 
-    private TextView tvProdName, tvProdCat, tvProDes, tvProHealth;
+    private TextView tvProdName, tvProdCat, tvProDes, tvProHealth,tvBar;
     private ImageView ivProductImage;
 
     private DatabaseReference ref, Picturref;
@@ -44,6 +43,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProHealth = findViewById(R.id.tv_prohealthy);
         recyclerView = findViewById(R.id.recyclerview);
         ivProductImage = findViewById(R.id.img_product);
+        tvBar=findViewById(R.id.tv_pro_bar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -59,6 +59,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
         String productDesc = getIntent().getStringExtra("desc");
         String productHealthy = getIntent().getStringExtra("healthy");
         String productKey = getIntent().getStringExtra("productKey");
+        String barcode = getIntent().getStringExtra("barcode");
 
         // Fetch imageId from the "Products" node
         Picturref = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
@@ -88,6 +89,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProdCat.setText(productCategory);
         tvProDes.setText(productDesc);
         tvProHealth.setText(productHealthy);
+        tvBar.setText(barcode);
 
         // Fetch ingredients for this product from Firebase
         ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
