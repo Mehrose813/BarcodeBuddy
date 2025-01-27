@@ -32,7 +32,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
     Spinner spIn;
     EditText edQOI;
     Button btnAdd;
-    TextView tvProductName, tvCatName, tvH;
+    TextView tvProductName, tvCatName, tvH,tvBarcode;
     ArrayList<String> array;
     ArrayAdapter<String> adapter;
     LinearLayout selected;
@@ -49,12 +49,14 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         tvH = findViewById(R.id.tv_health);
         selected = findViewById(R.id.selected_ingredient_layout);
         ivImg = findViewById(R.id.iv_show_img);
+        tvBarcode = findViewById(R.id.tv_barcode);
 
         String productId = getIntent().getStringExtra("id");
         String productName = getIntent().getStringExtra("name");
         String productcat = getIntent().getStringExtra("category");
         String productH = getIntent().getStringExtra("healthiness");
         String keyOfImg = getIntent().getStringExtra("img");
+        String barcode = getIntent().getStringExtra("barcode");
         ingredientsList = new ArrayList<>();
         Log.e("imgKey: ", keyOfImg + "");
 
@@ -90,7 +92,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     });
         }
 
-        if (productId == null || productName == null || productcat == null || productH == null) {
+        if (productId == null || productName == null || productcat == null || productH == null||barcode==null) {
             Toast.makeText(this, "Product details are missing!", Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -99,6 +101,8 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         // Set product name and category
         tvProductName.setText("Product Name : " + productName);
         tvCatName.setText("Category Name : " + productcat);
+        tvBarcode.setText("Product Barcode Number: " + barcode);
+
 
         if (productH != null) {
             tvH.setText("Product Nutri value:" + productH);

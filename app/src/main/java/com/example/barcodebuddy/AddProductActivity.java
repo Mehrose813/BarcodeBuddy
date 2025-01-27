@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -43,7 +44,7 @@ public class AddProductActivity extends AppCompatActivity {
     String id;
     Spinner spCat, spH;
     Button btnSave;
-    EditText edDes, edPName;
+    EditText edDes, edPName,edBar;
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
     ArrayList<String> arrayH;
@@ -73,6 +74,7 @@ public class AddProductActivity extends AppCompatActivity {
         spCat = findViewById(R.id.sp_cat);
         spH = findViewById(R.id.spinner_healthy);
         ivImg = findViewById(R.id.iv_pimg);
+        edBar = findViewById(R.id.ed_pbar);
 
         String name = getIntent().getStringExtra("name");
         String desc = getIntent().getStringExtra("desc");
@@ -153,6 +155,7 @@ public class AddProductActivity extends AppCompatActivity {
             String selectedCategory = spCat.getSelectedItem().toString();
             String description = edDes.getText().toString();
             String selectedH = spH.getSelectedItem().toString().trim();
+            String no = edBar.getText().toString();
 
 
             if(pname.isEmpty()){
@@ -171,9 +174,13 @@ public class AddProductActivity extends AppCompatActivity {
                 Toast.makeText(this, "Select a valid healthiness value", Toast.LENGTH_SHORT).show();
            return;
             }
+            if(edBar == null){
+                Toast.makeText(this, "Please enter barcode for this product", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
 
-            saveProductToFirebase(pname, description, selectedCategory, selectedH, uuid);
+            saveProductToFirebase(pname, description, selectedCategory, selectedH, uuid, no);
         });
 
         ivImg.setOnClickListener(v -> {
@@ -222,13 +229,14 @@ public class AddProductActivity extends AppCompatActivity {
         return resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
-    private void saveProductToFirebase(String productName, String description, String category, String selectedH, String img) {
+    private void saveProductToFirebase(String productName, String description, String category, String selectedH, String img,String barcode) {
         Product product = new Product();
         product.setName(productName);
         product.setDesc(description);
         product.setCat(category);
         product.setHealthy(selectedH);
         product.setImg(uuid);
+        product.setBarcode(barcode);
 
 
          DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("Products");
