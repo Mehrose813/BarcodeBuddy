@@ -143,6 +143,16 @@ public class AdminHomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        //Listner for Add blogs
+        Button btnAddBlog=view.findViewById(R.id.btn_add_blogs);
+        btnAddBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(),AddBlogsActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
         return view;
     }

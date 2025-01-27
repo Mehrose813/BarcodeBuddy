@@ -87,6 +87,7 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
         nameDangerIng = view.findViewById(R.id.name_danger_ing);
         categoryDangerIng = view.findViewById(R.id.category_danger_ing);
 
+
          dbRef = FirebaseDatabase.getInstance().getReference("Ingredients");
 
 
