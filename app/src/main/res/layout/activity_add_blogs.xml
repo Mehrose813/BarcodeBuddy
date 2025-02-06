@@ -1,43 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
-    tools:context=".AddBlogsActivity">
+    android:padding="16dp">
 
     <TextView
-        android:layout_marginTop="40dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:padding="10dp"
-        android:textColor="@color/light_green"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter Blogs and news here:"
-        />
+        android:layout_marginTop="20dp"
+        android:text="Enter Title:"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Enter Content:"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <EditText
-        android:id="@+id/et_blogs"
+        android:id="@+id/etContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/border_style"
+        android:hint="Enter Content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Enter Author Name:"
         android:textSize="20sp"
-        />
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/etAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Author Name"/>
 
     <Button
-        android:id="@+id/btn_save_blog"
+        android:id="@+id/btnSaveBlog"
+        android:textSize="18dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:textSize="20dp"
-        android:layout_marginTop="7dp"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/dark_green"/>
+        android:backgroundTint="@color/dark_green"
+        android:layout_marginTop="20dp"
+        android:text="Save Blog"/>
+
 </LinearLayout>

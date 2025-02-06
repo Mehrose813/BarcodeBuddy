@@ -1,63 +1,70 @@
 package com.example.barcodebuddy;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.example.barcodebuddy.recyclerview.BlogClass;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class AddBlogsActivity extends AppCompatActivity {
-EditText etBlogs;
-Button btnSave;
-DatabaseReference ref;
+
+    EditText etBlogsAuthor, etBlogContent, etTitle;
+    Button btnSave;
+    DatabaseReference ref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_blogs);
-        etBlogs=findViewById(R.id.et_blogs);
-        btnSave=findViewById(R.id.btn_save_blog);
-        ref= FirebaseDatabase.getInstance().getReference("Blogs");
+
+        etTitle = findViewById(R.id.etTitle);
+        etBlogsAuthor = findViewById(R.id.etAuthor);
+        etBlogContent = findViewById(R.id.etContent);
+        btnSave = findViewById(R.id.btnSaveBlog);
+
+        ref = FirebaseDatabase.getInstance().getReference("Blogs");
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String blogs=etBlogs.getText().toString();
-                if (blogs.isEmpty()){
-                    Toast.makeText(AddBlogsActivity.this, "Field is empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else{
-                    saveBlogs(blogs);
-                }
-            }
-        });
-
-
-
-    }
-    private void saveBlogs(String blogs) {
-        // Generating a unique key for each blog entry
-        ref.push().setValue(blogs).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(AddBlogsActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(AddBlogsActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                saveBlog();
             }
         });
     }
 
+    private void saveBlog() {
+        String id = ref.push().getKey(); // Generate Unique ID
+        String content = etBlogContent.getText().toString().trim();
+        String title = etTitle.getText().toString().trim();
+        String author = etBlogsAuthor.getText().toString().trim();
 
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(author)) {
+            Toast.makeText(this, "All fields are required!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        BlogClass blog = new BlogClass(id, content, title, author);
+
+        ref.child(id).setValue(blog).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(AddBlogsActivity.this, "Blog Saved!", Toast.LENGTH_SHORT).show();
+                    finish(); // Close activity after saving
+                } else {
+                    Toast.makeText(AddBlogsActivity.this, "Failed to save blog!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }

@@ -10,32 +10,41 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DatabaseReference;
+
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.barcodebuddy.recyclerview.BlogAdapter;
+import com.example.barcodebuddy.recyclerview.BlogClass;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingFragment extends Fragment {
 
-    // These parameters are not used, so we can remove them if not needed
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    RecyclerView rv_blog;
+    BlogAdapter adapter;
+    List<BlogClass> blogList;
+    DatabaseReference ref;
 
     public SettingFragment() {
         // Required empty public constructor
-    }
-
-    // Simplify the newInstance method if parameters aren't needed
-    public static SettingFragment newInstance() {
-        return new SettingFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -43,7 +52,40 @@ public class SettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
+        // Initialize RecyclerView
+        rv_blog = view.findViewById(R.id.recyclerViewBlogs);
+        rv_blog.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        // Initialize Firebase Reference
+        ref = FirebaseDatabase.getInstance().getReference("Blogs");
+
+        // Initialize List and Adapter
+        blogList = new ArrayList<>();
+        adapter = new BlogAdapter(blogList, getContext());
+        rv_blog.setAdapter(adapter);
+
+        // Fetch Blogs from Firebase
+        fetchBlogsFromFirebase();
 
         return view;
+    }
+
+    private void fetchBlogsFromFirebase() {
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                blogList.clear(); // Clear old data
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    BlogClass blog = dataSnapshot.getValue(BlogClass.class);
+                    blogList.add(blog);
+                }
+                adapter.notifyDataSetChanged(); // Update RecyclerView
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle possible errors
+            }
+        });
     }
 }
