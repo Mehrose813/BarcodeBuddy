@@ -19,9 +19,9 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
     private List<BlogClass> blogList;
     private Context context;
 
-    public BlogAdapter(List<BlogClass> blogList, Context context) {
-        this.blogList = blogList;
+    public BlogAdapter(Context context, List<BlogClass> blogList) {
         this.context = context;
+        this.blogList = blogList;
     }
 
     @NonNull
@@ -46,17 +46,16 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvContent, tvAuthor;
-        ImageView ivDelete, ivedit;
+        ImageView ivDelete, ivEdit;
 
         public BlogViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            // Correcting the variable names
             tvTitle = itemView.findViewById(R.id.tv_Title);
             tvContent = itemView.findViewById(R.id.tv_Content);
             tvAuthor = itemView.findViewById(R.id.tv_Author);
             ivDelete = itemView.findViewById(R.id.iv_delete);
-            ivedit = itemView.findViewById(R.id.iv_edit);
+            ivEdit = itemView.findViewById(R.id.iv_edit);
         }
     }
 }

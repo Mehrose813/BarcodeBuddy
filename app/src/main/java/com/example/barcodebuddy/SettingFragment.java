@@ -61,7 +61,7 @@ public class SettingFragment extends Fragment {
 
         // Initialize List and Adapter
         blogList = new ArrayList<>();
-        adapter = new BlogAdapter(blogList, getContext());
+//        adapter = new BlogAdapter(blogList);
         rv_blog.setAdapter(adapter);
 
         // Fetch Blogs from Firebase

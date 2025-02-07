@@ -16,4 +16,11 @@
     </style>
 
     <style name="Theme.BarcodeBuddy" parent="Base.Theme.BarcodeBuddy" />
+    <style name="Base.Theme.BarcodeBuddy.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Base.Theme.BarcodeBuddy.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Base.Theme.BarcodeBuddy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

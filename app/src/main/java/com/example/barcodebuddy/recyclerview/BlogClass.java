@@ -2,18 +2,24 @@ package com.example.barcodebuddy.recyclerview;
 
 public class BlogClass {
 
-    String blogName, blogAuthor, BlogContent, blogId;
+    private String blogName;
+    private String blogAuthor;
+    private String blogContent; // Changed 'BlogContent' to 'blogContent' (consistent naming)
+//    private String blogId;
 
-    public BlogClass(String blogName, String blogAuthor, String BlogContent, String blogId) {
+    // Default constructor for Firebase deserialization
+    public BlogClass() {
+    }
+
+    // Parameterized constructor
+    public BlogClass(String blogName, String blogAuthor, String blogContent) {
         this.blogName = blogName;
         this.blogAuthor = blogAuthor;
-        this.BlogContent = BlogContent;
-        this.blogId = blogId;
+        this.blogContent = blogContent; // Changed 'BlogContent' to 'blogContent'
+//        this.blogId = blogId;
     }
 
-    public BlogClass() { // Default constructor for Firebase deserialization
-    }
-
+    // Getters and Setters
     public String getBlogName() {
         return blogName;
     }
@@ -31,18 +37,18 @@ public class BlogClass {
     }
 
     public String getBlogContent() {
-        return BlogContent;
+        return blogContent;
     }
 
     public void setBlogContent(String blogContent) {
-        BlogContent = blogContent;
+        this.blogContent = blogContent;
     }
 
-    public String getBlogId() {
-        return blogId;
-    }
-
-    public void setBlogId(String blogId) {
-        this.blogId = blogId;
-    }
+//    public String getBlogId() {
+//        return blogId;
+//    }
+//
+//    public void setBlogId(String blogId) {
+//        this.blogId = blogId;
+//    }
 }

@@ -53,7 +53,7 @@ public class AddBlogsActivity extends AppCompatActivity {
             return;
         }
 
-        BlogClass blog = new BlogClass(id, content, title, author);
+        BlogClass blog = new BlogClass( content, title, author);
 
         ref.child(id).setValue(blog).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
