@@ -1,6 +1,7 @@
 package com.example.barcodebuddy.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.barcodebuddy.AddBlogsActivity;
+import com.example.barcodebuddy.BlogListActivity;
 import com.example.barcodebuddy.R;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.List;
 
@@ -33,6 +38,23 @@ public class BlogListAdapter extends RecyclerView.Adapter<BlogListViewHolder> {
           holder.tvTitle.setText(blogClass.getBlogName());
         holder.tvContent.setText(blogClass.getBlogContent());
         holder.tvAuthor.setText(blogClass.getBlogAuthor());
+
+        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseDatabase.getInstance().getReference("Blogs")
+                        .child(blogClass.getBlogId()).removeValue();
+            }
+        });
+        holder.ivEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, AddBlogsActivity.class);
+                intent.putExtra("id",blogClass.getBlogId());
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 

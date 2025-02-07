@@ -5,18 +5,18 @@ public class BlogClass {
     private String blogName;
     private String blogAuthor;
     private String blogContent; // Changed 'BlogContent' to 'blogContent' (consistent naming)
-//    private String blogId;
+    private String blogId;
 
     // Default constructor for Firebase deserialization
     public BlogClass() {
     }
 
     // Parameterized constructor
-    public BlogClass(String blogName, String blogAuthor, String blogContent) {
+    public BlogClass(String blogName, String blogAuthor, String blogContent,String blogId) {
         this.blogName = blogName;
         this.blogAuthor = blogAuthor;
         this.blogContent = blogContent; // Changed 'BlogContent' to 'blogContent'
-//        this.blogId = blogId;
+        this.blogId = blogId;
     }
 
     // Getters and Setters
@@ -44,11 +44,11 @@ public class BlogClass {
         this.blogContent = blogContent;
     }
 
-//    public String getBlogId() {
-//        return blogId;
-//    }
-//
-//    public void setBlogId(String blogId) {
-//        this.blogId = blogId;
-//    }
+    public String getBlogId() {
+        return blogId;
+    }
+
+    public void setBlogId(String blogId) {
+        this.blogId = blogId;
+    }
 }

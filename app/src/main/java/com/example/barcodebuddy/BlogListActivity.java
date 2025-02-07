@@ -64,8 +64,10 @@ public class BlogListActivity extends AppCompatActivity {
                         if (snapshot.exists()) {  // Check if data exists
                             for (DataSnapshot blogsnap : snapshot.getChildren()) {
                                 try {
+
                                     BlogClass blogClass = blogsnap.getValue(BlogClass.class);
                                     if (blogClass != null) {
+                                        blogClass.setBlogId(blogsnap.getKey());
                                         blogList.add(blogClass);
                                     } else {
                                         Log.e("FirebaseError", "Blog data is null");
