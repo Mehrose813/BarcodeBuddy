@@ -49,9 +49,9 @@ public class BlogListAdapter extends RecyclerView.Adapter<BlogListViewHolder> {
         holder.ivEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(context, AddBlogsActivity.class);
+                Intent intent=new Intent(view.getContext(), AddBlogsActivity.class);
                 intent.putExtra("id",blogClass.getBlogId());
-                context.startActivity(intent);
+                view.getContext().startActivity(intent);
 
             }
         });
