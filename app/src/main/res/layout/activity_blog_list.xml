@@ -8,6 +8,15 @@
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".BlogListActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Blogs List "
+        android:textSize="20sp"
+        android:textColor="@color/dark_green"
+        android:layout_marginTop="14dp"
+        android:textStyle="bold"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_blog_list_add"
@@ -23,5 +32,7 @@
         android:layout_gravity="center"
         android:padding="10dp"
         android:text="ADD BLOG"
+
+        android:textSize="20sp"       android:backgroundTint="@color/dark_green"
         android:layout_marginTop="10dp"/>
 </LinearLayout>

@@ -7,19 +7,21 @@
 
     <!-- Title for Blog List -->
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Blogs List"
-        android:textSize="22sp"
+        android:textSize="20sp"
+        android:text="Blogs"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/dark_green"
         android:textStyle="bold"
-        android:layout_gravity="center"
-        android:paddingBottom="10dp" />
+        />
+
 
     <!-- RecyclerView to show Blogs -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBlogs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="vertical"/>
 
     <!-- Button to Add New Blog -->

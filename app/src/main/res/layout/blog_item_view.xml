@@ -1,66 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    android:background="@color/white">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@drawable/box">
 
-        <TextView
-            android:id="@+id/tv_Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Title"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
-
-        <TextView
-            android:id="@+id/tv_Content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Content"
-            android:textSize="18sp"
-            android:textColor="#555555"
-            android:paddingTop="4dp" />
-
-        <TextView
-            android:id="@+id/tv_Author"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Author"
-            android:textSize="16sp"
-            android:textColor="#777777"
-            android:paddingTop="4dp" />
-
+        <!-- Title and Image Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="end"
-            android:paddingTop="8dp">
+            android:gravity="center_vertical"
+            android:paddingBottom="10dp">
 
-            <ImageView
-                android:id="@+id/iv_edit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_edit"
-                android:contentDescription="Edit" />
+            <!-- Blog Image -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_BlogImage"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile"
+                android:contentDescription="Blog Image" />
 
-            <ImageView
-                android:id="@+id/iv_delete"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:src="@android:drawable/ic_menu_delete"
-                android:contentDescription="Delete" />
+            <!-- Title and Author -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:id="@+id/tv_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blog Title"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222" />
+
+                <TextView
+                    android:id="@+id/tv_Author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="by Author Name"
+                    android:textSize="14sp"
+                    android:textColor="#777777" />
+            </LinearLayout>
         </LinearLayout>
+
+        <!-- Blog Content -->
+        <TextView
+            android:id="@+id/tv_Content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This is the blog content preview..."
+            android:textSize="16sp"
+            android:textColor="#444444"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <!-- Edit & Delete Icons -->
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>
