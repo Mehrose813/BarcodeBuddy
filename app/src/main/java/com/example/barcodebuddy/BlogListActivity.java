@@ -61,22 +61,39 @@ public class BlogListActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         blogList.clear();
-                        if (snapshot.exists()) {  // Check if data exists
+                        if (snapshot.exists()) {
                             for (DataSnapshot blogsnap : snapshot.getChildren()) {
                                 try {
-
                                     BlogClass blogClass = blogsnap.getValue(BlogClass.class);
                                     if (blogClass != null) {
                                         blogClass.setBlogId(blogsnap.getKey());
-                                        blogList.add(blogClass);
-                                    } else {
-                                        Log.e("FirebaseError", "Blog data is null");
+
+
+                                        String imageId = blogClass.getBlogImage();
+                                        FirebaseDatabase.getInstance().getReference("imagesString")
+                                                .child(imageId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot imgSnapshot) {
+                                                        if (imgSnapshot.exists()) {
+                                                            String base64Image = imgSnapshot.getValue(String.class);
+                                                            blogClass.setBlogImage(base64Image);
+                                                        } else {
+                                                            blogClass.setBlogImage(null);
+                                                        }
+                                                        blogList.add(blogClass);
+                                                        adapter.notifyDataSetChanged();
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                        Log.e("FirebaseError", "Image fetch error: " + error.getMessage());
+                                                    }
+                                                });
                                     }
                                 } catch (Exception e) {
                                     Log.e("FirebaseError", "Data format issue: " + e.getMessage());
                                 }
                             }
-                            adapter.notifyDataSetChanged(); // Notify adapter after data update
                         } else {
                             Log.e("FirebaseError", "No Blogs found in database.");
                         }
@@ -88,4 +105,5 @@ public class BlogListActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

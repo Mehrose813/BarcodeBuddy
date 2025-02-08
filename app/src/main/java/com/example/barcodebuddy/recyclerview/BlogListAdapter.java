@@ -36,16 +36,19 @@ public class BlogListAdapter extends RecyclerView.Adapter<BlogListViewHolder> {
         return new BlogListViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull BlogListViewHolder holder, int position) {
-          BlogClass blogClass=bloglist.get(position);
-          holder.tvTitle.setText(blogClass.getBlogName());
+        BlogClass blogClass = bloglist.get(position);
+        holder.tvTitle.setText(blogClass.getBlogName());
         holder.tvContent.setText(blogClass.getBlogContent());
         holder.tvAuthor.setText(blogClass.getBlogAuthor());
 
         if (blogClass.getBlogImage() != null && !blogClass.getBlogImage().isEmpty()) {
             Bitmap bitmap = MyUtilClass.base64ToBitmap(blogClass.getBlogImage());
             holder.iv_BlogImage.setImageBitmap(bitmap);
+        } else {
+            holder.iv_BlogImage.setImageResource(R.drawable.profile);
         }
 
 
