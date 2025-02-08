@@ -19,7 +19,7 @@ public class BlogListViewHolder extends RecyclerView.ViewHolder {
         tvContent= itemView.findViewById(R.id.tv_Content);
         ivEdit=itemView.findViewById(R.id.iv_edit);
         ivDelete=itemView.findViewById(R.id.iv_delete);
-        iv_BlogImage=itemView.findViewById(R.id.iv_blog_image);
+        iv_BlogImage=itemView.findViewById(R.id.iv_BlogImage);
 
     }
 }
