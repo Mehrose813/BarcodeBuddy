@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,28 +25,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.InputStream;
 import java.util.UUID;
 
 public class AddBlogsActivity extends AppCompatActivity {
 
-    EditText etBlogsAuthor, etBlogContent, etTitle;
+    EditText etBlogsAuthor, etBlogContent, etTitle, etLink;
     ImageView ivBlogCamera, ivBlogImage;
     Button btnSave;
     DatabaseReference ref;
     private Uri imageUri;
     private String blogId, oldImageId;
 
+    // Activity result launchers for capturing and selecting images
     private final ActivityResultLauncher<Uri> captureImage =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
                 if (result != null && result) {
                     if (imageUri != null) {
-                        ivBlogImage.setImageURI(imageUri);
-                    } else {
-                        Log.e("CaptureImage", "Image URI is null.");
+                        ivBlogImage.setImageURI(imageUri); // 📌 Display the captured image
                     }
-                } else {
-                    Log.e("CaptureImage", "Image capture failed.");
                 }
             });
 
@@ -55,9 +50,7 @@ public class AddBlogsActivity extends AppCompatActivity {
             registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
                 if (result != null) {
                     imageUri = result;
-                    ivBlogImage.setImageURI(result);
-                } else {
-                    Log.e("PickImage", "Image selection failed.");
+                    ivBlogImage.setImageURI(result); // 📌 Display the selected image
                 }
             });
 
@@ -70,8 +63,9 @@ public class AddBlogsActivity extends AppCompatActivity {
         etBlogsAuthor = findViewById(R.id.etAuthor);
         etBlogContent = findViewById(R.id.etContent);
         btnSave = findViewById(R.id.btnSaveBlog);
-        ivBlogCamera = findViewById(R.id.iv_blog_imageicon);
-        ivBlogImage = findViewById(R.id.iv_blog_image);
+//        ivBlogCamera = findViewById(R.id.iv_blog_imageicon);
+//        ivBlogImage = findViewById(R.id.iv_blog_image);
+        etLink = findViewById(R.id.etLink);
 
         ref = FirebaseDatabase.getInstance().getReference("Blogs");
 
@@ -101,8 +95,10 @@ public class AddBlogsActivity extends AppCompatActivity {
                         etTitle.setText(blog.getBlogName());
                         etBlogsAuthor.setText(blog.getBlogAuthor());
                         etBlogContent.setText(blog.getBlogContent());
-                        oldImageId = blog.getBlogImage();
+                        oldImageId = blog.getBlogImage(); // 📌 Store old image ID for updates
 
+                        /*
+                        // Load old image from Firebase if exists
                         if (oldImageId != null && !oldImageId.isEmpty()) {
                             FirebaseDatabase.getInstance().getReference("imagesString")
                                     .child(oldImageId)
@@ -113,6 +109,7 @@ public class AddBlogsActivity extends AppCompatActivity {
                                         }
                                     });
                         }
+                        */
                     }
                 }
             }
@@ -128,14 +125,17 @@ public class AddBlogsActivity extends AppCompatActivity {
         String content = etBlogContent.getText().toString().trim();
         String title = etTitle.getText().toString().trim();
         String author = etBlogsAuthor.getText().toString().trim();
+        String link = etLink.getText().toString().trim();
 
-        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(author)) {
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(author) || TextUtils.isEmpty(link)) {
             Toast.makeText(this, "All fields are required!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        BlogClass blog = new BlogClass(title, author, content, null, null);
+        BlogClass blog = new BlogClass(title, author, content, null, null, link);
 
+        /*
+        // If an image is selected, convert it to Base64 and save in Firebase
         if (imageUri != null) {
             String imageString = MyUtilClass.imageUriToBase64(imageUri, getContentResolver());
             String imageId = UUID.randomUUID().toString();
@@ -154,26 +154,30 @@ public class AddBlogsActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            ref.push().setValue(blog).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(this, "Blog Saved Successfully", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            */
+        ref.push().setValue(blog).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, "Blog Saved Successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+        // }
     }
 
     private void updateBlog() {
         String content = etBlogContent.getText().toString().trim();
         String title = etTitle.getText().toString().trim();
         String author = etBlogsAuthor.getText().toString().trim();
+        String link = etLink.getText().toString().trim();
 
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || TextUtils.isEmpty(author)) {
             Toast.makeText(this, "All fields are required!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        BlogClass blog = new BlogClass(title, author, content, blogId, oldImageId);
+        BlogClass blog = new BlogClass(title, author, content, blogId, oldImageId, link);
 
+        /*
+        // If a new image is selected, replace the old one in Firebase
         if (imageUri != null) {
             String imageString = MyUtilClass.imageUriToBase64(imageUri, getContentResolver());
             String imageId = UUID.randomUUID().toString();
@@ -196,12 +200,13 @@ public class AddBlogsActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            ref.child(blogId).setValue(blog).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(this, "Blog Updated Successfully", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+        */
+        ref.child(blogId).setValue(blog).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, "Blog Updated Successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+        // }
     }
 
     private void setupEditIcon() {

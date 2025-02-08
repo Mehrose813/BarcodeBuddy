@@ -1,21 +1,23 @@
 package com.example.barcodebuddy.recyclerview;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.barcodebuddy.AddBlogsActivity;
 import com.example.barcodebuddy.MyUtilClass;
 import com.example.barcodebuddy.R;
-import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder> {
@@ -42,7 +44,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
         holder.tvContent.setText(blog.getBlogContent());
         holder.tvAuthor.setText("By: " + blog.getBlogAuthor());
 
-        // اگر Image موجود ہے تو Display کریں
+        // If Image exists, display it
         if (blog.getBlogImage() != null && !blog.getBlogImage().isEmpty()) {
             Bitmap bitmap = MyUtilClass.base64ToBitmap(blog.getBlogImage());
             holder.ivBlogImage.setImageBitmap(bitmap);
@@ -50,7 +52,16 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
             holder.ivBlogImage.setImageResource(R.drawable.profile); // Default Image
         }
 
-        // Delete Button پر Confirmation Dialog
+        // **Added functionality**: Open link on item click
+        holder.itemView.setOnClickListener(view -> {
+            String blogLink = blog.getBlogLink(); // Assuming you have a method `getBlogLink()` in `BlogClass`
+            if (blogLink != null && !blogLink.isEmpty()) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(blogLink));
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, "No link available for this blog", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

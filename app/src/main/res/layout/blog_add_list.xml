@@ -28,13 +28,13 @@
             android:paddingBottom="10dp">
 
             <!-- Blog Image -->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_BlogImage"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/profile"
-                android:contentDescription="Blog Image" />
+<!--            <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                android:id="@+id/iv_BlogImage"-->
+<!--                android:layout_width="70dp"-->
+<!--                android:layout_height="70dp"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/baseline_image_24"-->
+<!--                android:contentDescription="Blog Image" />-->
 
             <!-- Title and Author -->
             <LinearLayout

@@ -7,16 +7,35 @@ public class BlogClass {
     private String blogContent;
     private String blogId;
     private String blogImage; // Added for storing the image in Base64
+    private String blogLink;
+    private String blogTitle;
+
+    public String getBlogTitle() {
+        return blogTitle;
+    }
+
+    public void setBlogTitle(String blogTitle) {
+        this.blogTitle = blogTitle;
+    }
 
     public BlogClass() {
     }
 
-    public BlogClass(String blogName, String blogAuthor, String blogContent, String blogId, String blogImage) {
+    public String getBlogLink() {
+        return blogLink;
+    }
+
+    public void setBlogLink(String blogLink) {
+        this.blogLink = blogLink;
+    }
+
+    public BlogClass(String blogName, String blogAuthor, String blogContent, String blogId, String blogImage, String blogLink) {
         this.blogName = blogName;
         this.blogAuthor = blogAuthor;
         this.blogContent = blogContent;
         this.blogId = blogId;
         this.blogImage = blogImage;
+        this.blogLink = blogLink;
     }
 
     public String getBlogName() {

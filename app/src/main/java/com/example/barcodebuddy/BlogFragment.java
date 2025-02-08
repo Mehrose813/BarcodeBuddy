@@ -1,6 +1,7 @@
 package com.example.barcodebuddy;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +19,18 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingFragment extends Fragment {
-
+public class BlogFragment extends Fragment {
     RecyclerView rv_blog;
     BlogAdapter adapter;
     List<BlogClass> blogList;
     DatabaseReference ref;
 
-    public SettingFragment() {
+    public BlogFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
         // Initialize RecyclerView
@@ -43,7 +42,7 @@ public class SettingFragment extends Fragment {
 
         // Initialize List and Adapter
         blogList = new ArrayList<>();
-        adapter = new BlogAdapter(getContext(), blogList); // ✅ Fix: Initialize Adapter
+        adapter = new BlogAdapter(getContext(), blogList);
         rv_blog.setAdapter(adapter);
 
         // Fetch Blogs from Firebase
@@ -56,17 +55,20 @@ public class SettingFragment extends Fragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                blogList.clear(); // Clear old data
+                blogList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     BlogClass blog = dataSnapshot.getValue(BlogClass.class);
-                    blogList.add(blog);
+                    if (blog != null) {
+                        blogList.add(blog);
+                        Log.d("FirebaseData", "Blog Title: " + blog.getBlogTitle());
+                    }
                 }
-                adapter.notifyDataSetChanged(); // ✅ Fix: Adapter is now initialized
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle possible errors
+                Log.e("FirebaseError", "Error: " + error.getMessage());
             }
         });
     }
