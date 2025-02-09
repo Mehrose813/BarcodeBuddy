@@ -1,9 +1,12 @@
 package com.example.barcodebuddy;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -12,11 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +34,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-CardView searchCard;
+CardView searchCard,scanCard;
 TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDanger,nameDangerIng,categoryDangerIng;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,6 +84,7 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         searchCard = view.findViewById(R.id.search_card);
+        scanCard = view.findViewById(R.id.scan_card);
         nameSafeIng = view.findViewById(R.id.name_safe_ing);
         categorySafeIng = view.findViewById(R.id.category_safe_ing);
         nameSafe = view.findViewById(R.id.name_safe);
@@ -91,11 +98,18 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
          dbRef = FirebaseDatabase.getInstance().getReference("Ingredients");
 
 
-
         searchCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(requireContext(),SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        scanCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(requireContext(),ScanBarcodeActivity.class);
                 startActivity(intent);
             }
         });
@@ -158,4 +172,6 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
             }
         });
     }
+
+
 }
