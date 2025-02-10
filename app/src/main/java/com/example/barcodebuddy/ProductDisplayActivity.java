@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +22,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -167,31 +167,41 @@ public class ProductDisplayActivity extends AppCompatActivity {
 
     private void setupBarChart(int healthyValue, String healthyLabel) {
         ArrayList<BarEntry> entries = new ArrayList<>();
-        List<String> labels = Arrays.asList("Less Healthy", "Moderate", "Healthy","Un-healthy");
+        List<String> labels = Arrays.asList("Unhealthy", "Less Healthy", "Moderate", "Healthy", "Very Healthy");
 
-        // Determine X-axis position for the category
-        int xAxisIndex;
         int barColor;
-        if (healthyValue == 1) {
-            xAxisIndex = 0; // Less Healthy
-            barColor = Color.RED;
-        } else if (healthyValue == 2) {
-            xAxisIndex = 1; // Moderate
-            barColor = Color.parseColor("#FFA500"); // Orange
-        } else {
-            xAxisIndex = 2; // Healthy
-            barColor = Color.GREEN;
+
+        switch (healthyValue) {
+            case 1:
+                barColor = Color.RED; // Unhealthy
+                break;
+            case 2:
+                barColor = ContextCompat.getColor(this, R.color.light_red); // Using color from colors.xml
+                break;
+
+            case 3:
+                barColor = ContextCompat.getColor(this,R.color.orange); // Orange for Moderate
+                break;
+            case 4:
+                barColor = ContextCompat.getColor(this,R.color.light_green); // Healthy
+                break;
+            case 5:
+                barColor = ContextCompat.getColor(this,R.color.dark_green); // Dark Green for Very Healthy
+                break;
+            default:
+                barColor = Color.GRAY;
+                break;
         }
 
-        entries.add(new BarEntry(xAxisIndex, healthyValue));
+        entries.add(new BarEntry(healthyValue - 1, healthyValue));
 
         BarDataSet dataSet = new BarDataSet(entries, "NutriValue");
-        dataSet.setColor(barColor); // Set color based on health level
+        dataSet.setColor(barColor);
         dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueTextSize(12f);
 
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.4f); // Reduce bar thickness
+        barData.setBarWidth(0.6f);
         barChart.setData(barData);
 
         barChart.getDescription().setEnabled(false);
@@ -201,13 +211,13 @@ public class ProductDisplayActivity extends AppCompatActivity {
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(5);
 
         YAxis yAxis = barChart.getAxisLeft();
         yAxis.setAxisMinimum(1f);
-        yAxis.setAxisMaximum(3f);
+        yAxis.setAxisMaximum(5f);
         yAxis.setGranularity(1f);
-        yAxis.setLabelCount(3);
+        yAxis.setLabelCount(5);
 
         barChart.getAxisRight().setEnabled(false);
     }
