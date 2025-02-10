@@ -44,7 +44,7 @@
             android:id="@+id/btn_add_ingredients"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Ingredients"
+            android:text="Add Ingredients to Firebase"
             android:textSize="14dp"
             android:backgroundTint="@color/dark_green"
             android:layout_marginTop="20dp"

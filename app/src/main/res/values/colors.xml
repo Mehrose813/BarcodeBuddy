@@ -5,7 +5,10 @@
     <color name="dark_green">#FF428612</color>
     <color name="light_green">#FF54AC5A</color>
     <color name="red">#FF0000</color>
+    <color name="light_red">#F64141</color>
     <color name="orange">#FF3D00</color>
+
+
 
 
 </resources>

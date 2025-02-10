@@ -94,6 +94,9 @@ public class IngredientQuantityActivity extends AppCompatActivity {
 
         if (productId == null || productName == null || productcat == null || productH == null||barcode==null) {
             Toast.makeText(this, "Product details are missing!", Toast.LENGTH_SHORT).show();
+            Log.e("Product Details", "ID: " + productId + ", Name: " + productName +
+                    ", Category: " + productcat + ", Health: " + productH + ", Barcode: " + barcode);
+
             finish();
             return;
         }
