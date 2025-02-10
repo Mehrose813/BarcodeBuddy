@@ -40,6 +40,7 @@ public class AdminProfileFragment extends Fragment {
     private Button btnLogout,btnSave;
     private ImageView ivEditIcon, ivProfile,editIconName;
     private Uri imageUri;
+
     private ProgressBar progressbar;
 
     private final ActivityResultLauncher<Uri> captureImage =

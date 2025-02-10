@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -13,6 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.barcodebuddy.recyclerview.IngridentAdapaterdisplay;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,17 +29,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductDisplayActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
-
-    private TextView tvProdName, tvProdCat, tvProDes, tvProHealth,tvBar;
+    private BarChart barChart;
+    private TextView tvProdName, tvProdCat, tvProDes, tvProHealth;
     private ImageView ivProductImage;
-
-    private DatabaseReference ref, Picturref;
+    private DatabaseReference ref, pictureref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,61 +53,43 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProHealth = findViewById(R.id.tv_prohealthy);
         recyclerView = findViewById(R.id.recyclerview);
         ivProductImage = findViewById(R.id.img_product);
+        barChart = findViewById(R.id.chart);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
         ingredientList = new ArrayList<>();
-
-        // Set adapter for ingredients RecyclerView
         adapter = new IngridentAdapaterdisplay(ingredientList);
         recyclerView.setAdapter(adapter);
 
-        // Get product details passed from the previous activity
+        // Get product details from intent
         String productName = getIntent().getStringExtra("name");
         String productCategory = getIntent().getStringExtra("cat");
         String productDesc = getIntent().getStringExtra("desc");
         String productHealthy = getIntent().getStringExtra("healthy");
         String productKey = getIntent().getStringExtra("productKey");
 
-        // Fetch imageId from the "Products" node
-        Picturref = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
-        Picturref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String ImageId = snapshot.child("img").getValue(String.class);
-                    if (ImageId != null) {
-                        fetchProfileImage(ImageId); // Fetch image using the imageId
-                    } else {
-                        Log.e("Firebase", "Image ID not found in database.");
-                    }
-                } else {
-                    Log.e("Firebase", "Product not found in database.");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Error: " + error.getMessage());
-            }
-        });
-
-        // Set product details to TextViews
+        // Set product details in UI
         tvProdName.setText(productName);
         tvProdCat.setText(productCategory);
         tvProDes.setText(productDesc);
         tvProHealth.setText(productHealthy);
 
-        // Fetch ingredients for this product from Firebase
+        // Fetch product image
+        pictureref = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
+        fetchProductImage(productKey);
+
+        // Fetch ingredients
         ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
-        fetchIngredientsForProduct(productKey);
+        fetchIngredientsForProduct();
+
+        // Fetch and update healthy value in bar chart
+        fetchHealthyValue(productKey);
     }
 
-    private void fetchIngredientsForProduct(String productKey) {
+    private void fetchIngredientsForProduct() {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ingredientList.clear(); // Clear the list before adding new data
+                ingredientList.clear();
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                         Ingredient ingredient = ingredientSnapshot.getValue(Ingredient.class);
@@ -106,9 +97,9 @@ public class ProductDisplayActivity extends AppCompatActivity {
                             ingredientList.add(ingredient);
                         }
                     }
-                    adapter.notifyDataSetChanged(); // Notify the adapter that data has changed
+                    adapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(ProductDisplayActivity.this, "No ingredients found for this product", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDisplayActivity.this, "No ingredients found", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -119,23 +110,20 @@ public class ProductDisplayActivity extends AppCompatActivity {
         });
     }
 
-
-    private void fetchProfileImage(String imageId) {
-        FirebaseDatabase.getInstance().getReference("Product Images")
-                .child(imageId)
+    private void fetchProductImage(String productKey) {
+        FirebaseDatabase.getInstance().getReference("Products").child(productKey)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            String imageString = snapshot.getValue(String.class);
-                            if (imageString != null && !imageString.isEmpty()) {
-                                // Base64 string ko Bitmap mein convert karein
-                                ivProductImage.setImageBitmap(MyUtilClass.base64ToBitmap(imageString));
+                            String imageUrl = snapshot.child("img").getValue(String.class);
+                            if (imageUrl != null && !imageUrl.isEmpty()) {
+                                Glide.with(ProductDisplayActivity.this).load(imageUrl).into(ivProductImage);
                             } else {
-                                Log.e("Firebase", "Image string is empty or null.");
+                                Log.e("Firebase", "Image URL is empty.");
                             }
                         } else {
-                            Log.e("Firebase", "Image node not found for imageId: " + imageId);
+                            Log.e("Firebase", "Image node not found.");
                         }
                     }
 
@@ -146,29 +134,81 @@ public class ProductDisplayActivity extends AppCompatActivity {
                 });
     }
 
+    private void fetchHealthyValue(String productKey) {
+        DatabaseReference healthyRef = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("healthy");
+        healthyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String healthyStr = snapshot.getValue(String.class);
+                    if (healthyStr != null) {
+                        try {
+                            String[] parts = healthyStr.split(":");
+                            if (parts.length == 2) {
+                                int healthyValue = Integer.parseInt(parts[0].trim());
+                                String healthyLabel = parts[1].trim();
+                                setupBarChart(healthyValue, healthyLabel);
+                            } else {
+                                Log.e("FirebaseError", "Invalid healthy value format: " + healthyStr);
+                            }
+                        } catch (NumberFormatException e) {
+                            Log.e("FirebaseError", "Error parsing healthy value: " + healthyStr);
+                        }
+                    }
+                }
+            }
 
-//    private void fetchProfileImage(String imageId) {
-//        FirebaseDatabase.getInstance().getReference("Product Images")
-//                .child(imageId)
-//                .addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if (snapshot.exists()) {
-//                            String imageString = snapshot.getValue(String.class);
-//                            if (imageString != null && !imageString.isEmpty()) {
-//                                ivProductImage.setImageBitmap(MyUtilClass.base64ToBitmap(imageString)); // Convert base64 string to Bitmap
-//                            } else {
-//                                Log.e("Firebase", "Image string is empty.");
-//                            }
-//                        } else {
-//                            Log.e("Firebase", "Image not found in Product Images.");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//                        Log.e("Firebase", "Error fetching image: " + error.getMessage());
-//                    }
-//                });
-//    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Error fetching healthy value: " + error.getMessage());
+            }
+        });
+    }
+
+    private void setupBarChart(int healthyValue, String healthyLabel) {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        List<String> labels = Arrays.asList("Less Healthy", "Moderate", "Healthy","Un-healthy");
+
+        // Determine X-axis position for the category
+        int xAxisIndex;
+        int barColor;
+        if (healthyValue == 1) {
+            xAxisIndex = 0; // Less Healthy
+            barColor = Color.RED;
+        } else if (healthyValue == 2) {
+            xAxisIndex = 1; // Moderate
+            barColor = Color.parseColor("#FFA500"); // Orange
+        } else {
+            xAxisIndex = 2; // Healthy
+            barColor = Color.GREEN;
+        }
+
+        entries.add(new BarEntry(xAxisIndex, healthyValue));
+
+        BarDataSet dataSet = new BarDataSet(entries, "NutriValue");
+        dataSet.setColor(barColor); // Set color based on health level
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextSize(12f);
+
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.4f); // Reduce bar thickness
+        barChart.setData(barData);
+
+        barChart.getDescription().setEnabled(false);
+        barChart.invalidate();
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+
+        YAxis yAxis = barChart.getAxisLeft();
+        yAxis.setAxisMinimum(1f);
+        yAxis.setAxisMaximum(3f);
+        yAxis.setGranularity(1f);
+        yAxis.setLabelCount(3);
+
+        barChart.getAxisRight().setEnabled(false);
+    }
 }

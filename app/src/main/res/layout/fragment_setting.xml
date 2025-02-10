@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingFragment">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- Title for Blog List -->
     <TextView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Blogs"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/dark_green"
+        android:textStyle="bold"
+        />
+
+
+    <!-- RecyclerView to show Blogs -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewBlogs"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello_blank_fragment" />
-    
+        android:scrollbars="vertical"/>
 
+    <!-- Button to Add New Blog -->
+<!--    <Button-->
+<!--        android:id="@+id/btnAddBlog"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Add New Blog"-->
+<!--        android:layout_marginTop="10dp"/>-->
 
-
-
-</FrameLayout>
+</LinearLayout>

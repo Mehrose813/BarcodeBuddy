@@ -148,7 +148,7 @@ public class AdminHomeFragment extends Fragment {
         btnAddBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getContext(),AddBlogsActivity.class);
+                Intent intent=new Intent(getContext(),BlogListActivity.class);
                 startActivity(intent);
 
             }
