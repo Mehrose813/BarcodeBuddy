@@ -29,6 +29,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_scan_barcode);
 
+        
         barLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 String scannedBarcode = result.getContents();
