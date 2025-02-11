@@ -17,6 +17,10 @@ import com.bumptech.glide.Glide;
 import com.example.barcodebuddy.recyclerview.IngridentAdapaterdisplay;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
+import android.util.Base64;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -110,29 +114,48 @@ public class ProductDisplayActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchProductImage(String productKey) {
-        FirebaseDatabase.getInstance().getReference("Products").child(productKey)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            String imageUrl = snapshot.child("img").getValue(String.class);
-                            if (imageUrl != null && !imageUrl.isEmpty()) {
-                                Glide.with(ProductDisplayActivity.this).load(imageUrl).into(ivProductImage);
-                            } else {
-                                Log.e("Firebase", "Image URL is empty.");
-                            }
-                        } else {
-                            Log.e("Firebase", "Image node not found.");
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("Firebase", "Error fetching image: " + error.getMessage());
-                    }
-                });
+
+
+    private void fetchProductImage(String productKey) {
+        DatabaseReference imageRef = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
+
+        imageRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Product product = snapshot.getValue(Product.class);
+                if (product != null && product.getImg() != null) {
+                    String imageKey = product.getImg();
+
+                    FirebaseDatabase.getInstance().getReference("Product Images")
+                            .child(imageKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String ImageString = snapshot.getValue(String.class);
+                                    if (ImageString != null) {
+                                        ivProductImage.setImageBitmap(MyUtilClass.base64ToBitmap(ImageString));
+                                    } else {
+                                        Log.e("FirebaseError", "Image data is null");
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Log.e("Firebase", "Error fetching image: " + error.getMessage());
+                                }
+                            });
+                } else {
+                    Log.e("FirebaseError", "Product or Image Key is null");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Error fetching product: " + error.getMessage());
+            }
+        });
     }
+
 
     private void fetchHealthyValue(String productKey) {
         DatabaseReference healthyRef = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("healthy");
