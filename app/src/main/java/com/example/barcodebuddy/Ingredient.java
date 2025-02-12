@@ -4,6 +4,34 @@ public class Ingredient {
     String name;
     String id;
     String qty;
+    String des;
+    String pros;
+
+    public String getCons() {
+        return cons;
+    }
+
+    public void setCons(String cons) {
+        this.cons = cons;
+    }
+
+    public String getPros() {
+        return pros;
+    }
+
+    public void setPros(String pros) {
+        this.pros = pros;
+    }
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des;
+    }
+
+    String cons;
     String healthy;
     String category;
 
