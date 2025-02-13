@@ -29,7 +29,75 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border_style"
-        android:hint="Enter name of ingredient"
+        android:hint="Enter name of Ingredient"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:layout_marginTop="30dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Ingredient Description below:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/dark_green"
+        />
+
+
+
+    <EditText
+        android:id="@+id/et_ingredient_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_style"
+        android:hint="Enter Ingredient Description"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:layout_marginTop="30dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Ingredient Prons  below:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/dark_green"
+        />
+
+
+
+    <EditText
+        android:id="@+id/et_ingredient_pros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_style"
+        android:hint="Enter Ingredient Prons"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:layout_marginTop="30dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Ingredient Cons below:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/dark_green"
+        />
+
+
+
+    <EditText
+        android:id="@+id/et_ingredient_cons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_style"
+        android:hint="Enter Ingredient Cons"
         android:textSize="20sp"
         android:padding="10dp"
         android:layout_marginTop="30dp"

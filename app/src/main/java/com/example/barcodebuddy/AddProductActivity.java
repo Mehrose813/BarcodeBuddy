@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -49,7 +50,7 @@ public class AddProductActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     ArrayList<String> arrayH;
     ArrayAdapter<String> adapterH;
-    ImageView ivImg;
+    ImageView ivImg,iv_productImage;
     private Uri imageUri;
 
     FirebaseDatabase firebaseDatabase;
@@ -75,6 +76,7 @@ public class AddProductActivity extends AppCompatActivity {
         spH = findViewById(R.id.spinner_healthy);
         ivImg = findViewById(R.id.iv_pimg);
         edBar = findViewById(R.id.ed_pbar);
+       iv_productImage=findViewById(R.id.product_image);
 
         String name = getIntent().getStringExtra("name");
         String desc = getIntent().getStringExtra("desc");
@@ -207,7 +209,7 @@ public class AddProductActivity extends AppCompatActivity {
             registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
                 if (result) {
                     if (imageUri != null) {
-                        ivImg.setImageURI(imageUri);
+                        iv_productImage.setImageURI(imageUri);
                         saveImage(imageUri);
                     }
                 }
@@ -216,7 +218,7 @@ public class AddProductActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
                 if (result != null) {
-                    ivImg.setImageURI(result);
+                    iv_productImage.setImageURI(result);
                     saveImage(result);
                 }
             });
@@ -271,6 +273,10 @@ public class AddProductActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+
 
 
 }
