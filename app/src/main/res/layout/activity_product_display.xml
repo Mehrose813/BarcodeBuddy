@@ -16,9 +16,10 @@
 
         <TextView
             android:id="@+id/tv_proname"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:layout_gravity="center"
             android:hint="Product name"
             android:layout_margin="10dp"
             android:paddingTop="10dp"
@@ -27,16 +28,16 @@
             android:gravity="center"
             />
 
+
         <TextView
             android:id="@+id/tv_proCat"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="@color/dark_green"
+            android:layout_gravity="end"
+            android:layout_marginTop="-10dp"
             android:hint="Product Category"
-            android:layout_margin="5dp"
-            android:gravity="center"/>
-
+            android:textColor="@color/dark_green"
+            android:textSize="15sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_product"
@@ -53,15 +54,16 @@
 <!--            android:scaleType="fitCenter"-->
 <!--            android:adjustViewBounds="true" />-->
 
-
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_prohealthy"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/dark_green"
-            android:text="Product Description :"
-            android:layout_margin="10dp" />
+            android:textSize="15sp"
+            android:layout_gravity="end"
+            android:layout_marginTop="-10sp"
+            android:hint="Product healthiness"
+            android:layout_margin="5dp" />
+
 
         <TextView
             android:id="@+id/tv_proDes"
@@ -71,22 +73,9 @@
             android:textColor="#2A2929"
             android:hint="Product Description"
             android:layout_margin="5dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/dark_green"
-            android:text="Product Healthiness :"
-            android:layout_margin="5dp" />
 
-        <TextView
-            android:id="@+id/tv_prohealthy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:hint="Product healthiness"
-            android:layout_margin="5dp" />
+
+
 
         <TextView
             android:layout_width="match_parent"
@@ -110,10 +99,11 @@
         </LinearLayout>
 
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chart"
+        <ImageView
+            android:id="@+id/iv_nutri"
             android:layout_width="match_parent"
-            android:layout_height="200sp"/>
+            android:layout_height="150sp"
+            />
 
     </LinearLayout>
 

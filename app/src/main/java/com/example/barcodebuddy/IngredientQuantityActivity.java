@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class IngredientQuantityActivity extends AppCompatActivity {
 
@@ -92,7 +94,7 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                     });
         }
 
-        if (productId == null || productName == null || productcat == null || productH == null||barcode==null) {
+        if (productId == null || productName == null || productcat == null || productH == null || barcode == null) {
             Toast.makeText(this, "Product details are missing!", Toast.LENGTH_SHORT).show();
             Log.e("Product Details", "ID: " + productId + ", Name: " + productName +
                     ", Category: " + productcat + ", Health: " + productH + ", Barcode: " + barcode);
@@ -133,15 +135,31 @@ public class IngredientQuantityActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 array.clear();
-                array.add("Select an ingredient");
+                array.add("Select an ingredient"); // First item remains fixed
+
+                HashSet<String> uniqueIngredients = new HashSet<>(); // Case-insensitive set
+                ArrayList<String> sortedList = new ArrayList<>(); // List for sorting
 
                 for (DataSnapshot myData : snapshot.getChildren()) {
                     String ingredientName = myData.child("name").getValue(String.class);
                     if (ingredientName != null) {
-                        array.add(ingredientName.trim());
+                        String cleanedName = normalizeIngredient(ingredientName.trim().toLowerCase()); // Normalize name
+
+                        // Ensure uniqueness based on base form
+                        if (!uniqueIngredients.contains(cleanedName)) {
+                            uniqueIngredients.add(cleanedName); // Add normalized name to set
+                            sortedList.add(ingredientName.trim()); // Add original name to list
+                        }
                     }
                 }
-                adapter.notifyDataSetChanged();
+
+                // Sort list alphabetically (A → Z)
+                Collections.sort(sortedList);
+
+                // Add sorted unique items to the main list
+                array.addAll(sortedList);
+
+                adapter.notifyDataSetChanged(); // Update adapter
             }
 
             @Override
@@ -149,6 +167,8 @@ public class IngredientQuantityActivity extends AppCompatActivity {
                 Toast.makeText(IngredientQuantityActivity.this, "Failed to load ingredients", Toast.LENGTH_SHORT).show();
             }
         });
+
+// Function to normalize ingredient names (remove plurals & standardize)
 
         // Add button click listener
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -281,4 +301,12 @@ public class IngredientQuantityActivity extends AppCompatActivity {
             }
         });
     }
+    private String normalizeIngredient(String ingredient) {
+        // Remove trailing 's' if word is plural (e.g., "sugars" → "sugar")
+        if (ingredient.endsWith("s") && ingredient.length() > 1) {
+            return ingredient.substring(0, ingredient.length() - 1); // Remove last 's'
+        }
+        return ingredient;
+    }
+
 }
