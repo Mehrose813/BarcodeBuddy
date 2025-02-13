@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -76,7 +77,19 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                         intent.putExtra("productKey", productKey);
                         startActivity(intent);
                     }
+                    finish();
                 } else {
+                    // If product not found, save missing barcode in Firebase
+                    DatabaseReference missingRef = FirebaseDatabase.getInstance().getReference("MissingProducts");
+                    String missingId = missingRef.push().getKey();
+                    if (missingId != null) {
+                        String userEmail = "";
+                        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                            userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                        }
+                        MissingProduct missingProduct = new MissingProduct(barcode, userEmail);
+                        missingRef.child(missingId).setValue(missingProduct);
+                    }
                     showAlert("No product found for this barcode.");
                 }
             }
@@ -93,6 +106,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Scan Result")
                 .setMessage(message)
+                .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

@@ -9,6 +9,10 @@
         android:title="Status"
         android:icon="@drawable/baseline_settings"
         />
+    <item android:id="@+id/notification_admin"
+        android:title="Notification"
+        android:icon="@drawable/baseline_notifications_24"
+        />
     <item android:id="@+id/profile_admin"
         android:title="Profile"
         android:icon="@drawable/baseline_account_box_24"

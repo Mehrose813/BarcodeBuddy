@@ -37,6 +37,9 @@ Button btnLogout;
                 else if(item.getItemId() == R.id.blog){
                     loadFragment(new BlogFragment());
                 }
+                else if(item.getItemId() == R.id.notification_user){
+                    loadFragment(new UserNotificationFragment());
+                }
                 else{
                     loadFragment(new UserFragment());
                 }
