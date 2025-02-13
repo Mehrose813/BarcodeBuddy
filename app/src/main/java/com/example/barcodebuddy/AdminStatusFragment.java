@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +61,44 @@ public class AdminStatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_status, container, false);
+        View view = inflater.inflate(R.layout.fragment_admin_status, container, false);
+
+        Button btnAddIngredients,btnAddBlogs,btnAddCategory;
+
+        btnAddIngredients = view.findViewById(R.id.btn_add_ingredients);
+        btnAddBlogs = view.findViewById(R.id.btn_add_blogs);
+        btnAddCategory = view.findViewById(R.id.btn_add_category);
+
+
+
+        btnAddIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), IngredientListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Add category listenr
+        btnAddCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(),CategoryListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnAddBlogs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(),BlogListActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        return view;
     }
+
+
 }

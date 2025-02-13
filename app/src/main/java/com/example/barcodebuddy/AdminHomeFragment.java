@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,7 +73,7 @@ public class AdminHomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_home, container, false);
-        Button addProduct = view.findViewById(R.id.btn_add_product);
+        ImageView addProduct = view.findViewById(R.id.btn_add_product);
         Button addCategory=view.findViewById(R.id.btn_add_category);
 
         // Initialize RecyclerView
@@ -117,40 +118,12 @@ public class AdminHomeFragment extends Fragment {
                     }
                 });
 
-        // Add Ingredients button click listener
-        btnAddIngredients = view.findViewById(R.id.btn_add_ingredients);
-        btnAddIngredients.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), IngredientListActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // Add Product button click listener
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddProductActivity.class);
                 startActivity(intent);
-            }
-        });
-        //Add category listenr
-        addCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getContext(),CategoryListActivity.class);
-                startActivity(intent);
-            }
-        });
-        //Listner for Add blogs
-        Button btnAddBlog=view.findViewById(R.id.btn_add_blogs);
-        btnAddBlog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getContext(),BlogListActivity.class);
-                startActivity(intent);
-
             }
         });
 

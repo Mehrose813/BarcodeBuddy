@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminStatusFragment">
+    tools:context=".AdminStatusFragment"
+    android:orientation="vertical"
+    android:layout_margin="20dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <Button
+        android:id="@+id/btn_add_ingredients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Ingredients to Firebase"
+        android:textSize="14dp"
+        android:backgroundTint="@color/dark_green"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="2dp"
 
-</FrameLayout>
+        />
+
+
+
+<Button
+    android:id="@+id/btn_add_category"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Add Category"
+    android:textSize="14dp"
+    android:backgroundTint="@color/dark_green"
+    android:layout_marginTop="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginBottom="2dp"
+    />
+
+<Button
+    android:id="@+id/btn_add_blogs"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Add Blogs"
+    android:textSize="14dp"
+    android:backgroundTint="@color/dark_green"
+    android:layout_marginTop="20dp"
+    android:layout_marginStart="7dp"
+    android:layout_marginBottom="2dp"
+
+    />
+</LinearLayout>

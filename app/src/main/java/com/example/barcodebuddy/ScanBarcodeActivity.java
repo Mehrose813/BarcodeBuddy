@@ -1,6 +1,7 @@
 package com.example.barcodebuddy;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -34,6 +35,9 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             if (result.getContents() != null) {
                 String scannedBarcode = result.getContents();
                 searchProductByBarcode(scannedBarcode);
+            }
+            else{
+                finish();
             }
         });
 
@@ -89,7 +93,14 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Scan Result")
                 .setMessage(message)
-                .setPositiveButton("OK", (dialogInterface, i) -> finish())
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+
+
+        })
                 .create()
                 .show();
     }

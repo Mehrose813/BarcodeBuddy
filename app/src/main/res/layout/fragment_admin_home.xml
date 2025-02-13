@@ -16,78 +16,20 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/dark_green"
         />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_product"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/btn_add_product"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <Button
-            android:id="@+id/btn_add_product"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add New Product"
-            android:textSize="14dp"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="2dp"
-            />
-
-        <Button
-            android:id="@+id/btn_add_ingredients"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Ingredients to Firebase"
-            android:textSize="14dp"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="2dp"
-
-            />
-
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:id="@+id/btn_add_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Category"
-            android:textSize="14dp"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="2dp"
-            android:layout_gravity="center"
-
-            />
-
-        <Button
-            android:id="@+id/btn_add_blogs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Blogs"
-            android:textSize="14dp"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="7dp"
-            android:layout_marginBottom="2dp"
-
-            />
-    </LinearLayout>
-
-
-
+        android:src="@drawable/add_product"
+        android:layout_gravity="end"
+        android:layout_marginEnd="5dp"
+        android:padding="10dp"
+        />
 </LinearLayout>

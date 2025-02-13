@@ -7,12 +7,5 @@
     android:layout_height="match_parent"
     tools:context=".ScanBarcodeActivity">
 
-    <TextView
-        android:id="@+id/scan_prompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scanning..."
-        android:textSize="18sp"
-        android:layout_centerInParent="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
