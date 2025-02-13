@@ -40,9 +40,8 @@ public class ProductDisplayActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
-    private BarChart barChart;
     private TextView tvProdName, tvProdCat, tvProDes, tvProHealth;
-    private ImageView ivProductImage;
+    private ImageView ivProductImage,ivNutri;
     private DatabaseReference ref, pictureref;
 
     @Override
@@ -57,7 +56,8 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProHealth = findViewById(R.id.tv_prohealthy);
         recyclerView = findViewById(R.id.recyclerview);
         ivProductImage = findViewById(R.id.img_product);
-        barChart = findViewById(R.id.chart);
+        ivNutri=findViewById(R.id.iv_nutri);
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         ingredientList = new ArrayList<>();
@@ -85,10 +85,56 @@ public class ProductDisplayActivity extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
         fetchIngredientsForProduct();
 
-        // Fetch and update healthy value in bar chart
-        fetchHealthyValue(productKey);
+        ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("healthy");
+        fetchHealthinessForProduct();
+
     }
 
+    private void fetchHealthinessForProduct() {
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String value = snapshot.getValue(String.class);
+                    if (value != null) {
+                        // Extract first character (Number or Letter)
+                        value = value.split(":")[0].trim(); // Extract before ":"
+
+                        switch (value) {
+                            case "A":
+                            case "1":
+                                ivNutri.setImageResource(R.drawable.a);
+                                break;
+                            case "B":
+                            case "2":
+                                ivNutri.setImageResource(R.drawable.b);
+                                break;
+                            case "C":
+                            case "3":
+                                ivNutri.setImageResource(R.drawable.c);
+                                break;
+                            case "D":
+                            case "4":
+                                ivNutri.setImageResource(R.drawable.d);
+                                break;
+                            case "E":
+                            case "5":
+                                ivNutri.setImageResource(R.drawable.e);
+                                break;
+                            default:
+                                ivNutri.setImageResource(R.drawable.logo);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ProductDisplayActivity.this, "Failed to load healthiness data", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void fetchIngredientsForProduct() {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -156,92 +202,4 @@ public class ProductDisplayActivity extends AppCompatActivity {
         });
     }
 
-
-    private void fetchHealthyValue(String productKey) {
-        DatabaseReference healthyRef = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("healthy");
-        healthyRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String healthyStr = snapshot.getValue(String.class);
-                    if (healthyStr != null) {
-                        try {
-                            String[] parts = healthyStr.split(":");
-                            if (parts.length == 2) {
-                                int healthyValue = Integer.parseInt(parts[0].trim());
-                                String healthyLabel = parts[1].trim();
-                                setupBarChart(healthyValue, healthyLabel);
-                            } else {
-                                Log.e("FirebaseError", "Invalid healthy value format: " + healthyStr);
-                            }
-                        } catch (NumberFormatException e) {
-                            Log.e("FirebaseError", "Error parsing healthy value: " + healthyStr);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Error fetching healthy value: " + error.getMessage());
-            }
-        });
-    }
-
-    private void setupBarChart(int healthyValue, String healthyLabel) {
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        List<String> labels = Arrays.asList("Unhealthy", "Less Healthy", "Moderate", "Healthy", "Very Healthy");
-
-        int barColor;
-
-        switch (healthyValue) {
-            case 1:
-                barColor = Color.RED; // Unhealthy
-                break;
-            case 2:
-                barColor = ContextCompat.getColor(this, R.color.light_red); // Using color from colors.xml
-                break;
-
-            case 3:
-                barColor = ContextCompat.getColor(this,R.color.orange); // Orange for Moderate
-                break;
-            case 4:
-                barColor = ContextCompat.getColor(this,R.color.light_green); // Healthy
-                break;
-            case 5:
-                barColor = ContextCompat.getColor(this,R.color.dark_green); // Dark Green for Very Healthy
-                break;
-            default:
-                barColor = Color.GRAY;
-                break;
-        }
-
-        entries.add(new BarEntry(healthyValue - 1, healthyValue));
-
-        BarDataSet dataSet = new BarDataSet(entries, "NutriValue");
-        dataSet.setColor(barColor);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setValueTextSize(12f);
-
-        BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.6f);
-        barChart.setData(barData);
-
-        barChart.getDescription().setEnabled(false);
-        barChart.invalidate();
-
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setLabelCount(5);
-
-        YAxis yAxis = barChart.getAxisLeft();
-        yAxis.setAxisMinimum(1f);
-        yAxis.setAxisMaximum(5f);
-        yAxis.setGranularity(1f);
-        yAxis.setLabelCount(5);
-
-        barChart.getAxisRight().setEnabled(false);
-    }
 }
