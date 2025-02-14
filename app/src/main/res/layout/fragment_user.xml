@@ -134,6 +134,17 @@
             android:gravity="center"
             android:layout_marginTop="5dp" />
 
+        <TextView
+            android:id="@+id/tv_allergy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Allergies"
+            android:textSize="18dp"
+            android:padding="18dp"
+            android:textColor="@color/orange"
+            android:layout_marginTop="330sp"
+            android:layout_marginStart="10dp"/>
+        
         <!-- Logout Button -->
         <Button
             android:id="@+id/btn_logout"
@@ -143,7 +154,7 @@
             android:textColor="@color/white"
             android:layout_marginStart="80dp"
             android:layout_below="@id/main2"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="90dp"
             android:backgroundTint="#FF428612"
             android:padding="10dp"
             android:layout_centerHorizontal="true" />

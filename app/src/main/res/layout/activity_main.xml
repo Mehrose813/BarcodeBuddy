@@ -47,10 +47,7 @@
         android:layout_marginTop="100sp"
         android:layout_marginEnd="20sp"
         android:padding="10sp"
-        android:text="Unlock the secrets of your plate
-           Track your health, don’t hesitate!
-           Sugar, fats, and all in sight,
-                  Take control and live your life right!"
+        android:text="Unlock the secrets of your plate\nTrack your health, don’t hesitate!\nSugar, fats, and all in sight,\nTake control and live your life right!"
         android:textColor="@color/dark_green"
         android:textSize="20sp"
         android:textStyle="bold" />
