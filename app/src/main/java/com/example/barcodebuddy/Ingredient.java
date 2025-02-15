@@ -7,15 +7,6 @@ public class Ingredient {
     String des;
     String pros;
     int highlightColor=0;
-    boolean isAllergic = false;
-
-    public void setAllergic(boolean isAllergic) {
-        this.isAllergic = isAllergic;
-    }
-
-    public boolean isAllergic() {
-        return isAllergic;
-    }
 
     public String getCons() {
         return cons;
