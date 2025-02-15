@@ -14,5 +14,6 @@ public class IngridentViewHolderdisplay extends RecyclerView.ViewHolder{
         super(itemView);
         tvQuantity=itemView.findViewById(R.id.tv_ingridentquantity);
         tvName=itemView.findViewById(R.id.tv_ingrident_name);
+
     }
 }
