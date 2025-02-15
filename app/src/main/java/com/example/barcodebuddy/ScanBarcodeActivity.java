@@ -84,10 +84,12 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     String missingId = missingRef.push().getKey();
                     if (missingId != null) {
                         String userEmail = "";
+                        String userId="";
                         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
                             userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         }
-                        MissingProduct missingProduct = new MissingProduct(barcode, userEmail);
+                        MissingProduct missingProduct = new MissingProduct(barcode, userEmail , userId);
                         missingRef.child(missingId).setValue(missingProduct);
                     }
                     showAlert("No product found for this barcode.");
