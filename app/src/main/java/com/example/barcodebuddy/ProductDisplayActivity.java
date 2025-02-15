@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,19 +14,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.barcodebuddy.recyclerview.IngridentAdapaterdisplay;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import android.util.Base64;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,16 +23,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ProductDisplayActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
     private TextView tvProdName, tvProdCat, tvProDes, tvProHealth;
-    private ImageView ivProductImage,ivNutri;
+    private ImageView ivProductImage, ivNutri;
     private DatabaseReference ref, pictureref;
+    private Set<String> userAllergies = new HashSet<>(); // Store user's allergies
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +49,8 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProHealth = findViewById(R.id.tv_prohealthy);
         recyclerView = findViewById(R.id.recyclerview);
         ivProductImage = findViewById(R.id.img_product);
-        ivNutri=findViewById(R.id.iv_nutri);
-
+        ivNutri = findViewById(R.id.iv_nutri);
+        scrollView = findViewById(R.id.layout);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         ingredientList = new ArrayList<>();
@@ -81,13 +74,14 @@ public class ProductDisplayActivity extends AppCompatActivity {
         pictureref = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
         fetchProductImage(productKey);
 
-        // Fetch ingredients
-        ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
-        fetchIngredientsForProduct();
+        // Fetch user allergies first
+        fetchUserAllergies(() -> {
+            // Once allergies are loaded, fetch ingredients
+            fetchIngredientsForProduct(productKey);
+        });
 
         ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("healthy");
         fetchHealthinessForProduct();
-
     }
 
     private void fetchHealthinessForProduct() {
@@ -97,7 +91,6 @@ public class ProductDisplayActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     String value = snapshot.getValue(String.class);
                     if (value != null) {
-                        // Extract first character (Number or Letter)
                         value = value.split(":")[0].trim(); // Extract before ":"
 
                         switch (value) {
@@ -135,7 +128,35 @@ public class ProductDisplayActivity extends AppCompatActivity {
             }
         });
     }
-    private void fetchIngredientsForProduct() {
+
+    // Fetch user's allergies from Firebase
+    private void fetchUserAllergies(Runnable callback) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference allergyRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("allergies");
+
+        allergyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userAllergies.clear();
+                if (snapshot.exists()) {
+                    for (DataSnapshot allergySnapshot : snapshot.getChildren()) {
+                        String allergy = allergySnapshot.getValue(String.class);
+                        if (allergy != null) {
+                            userAllergies.add(allergy.toLowerCase().trim()); // Store in lowercase for case-insensitive comparison
+                        }
+                    }
+                }
+                callback.run(); // Call the next step after fetching allergies
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ProductDisplayActivity.this, "Error loading allergies", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void fetchIngredientsForProduct(String productKey) {
+        ref = FirebaseDatabase.getInstance().getReference("Products").child(productKey).child("ingredients");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -144,6 +165,13 @@ public class ProductDisplayActivity extends AppCompatActivity {
                     for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                         Ingredient ingredient = ingredientSnapshot.getValue(Ingredient.class);
                         if (ingredient != null) {
+                            Log.d("IngredientData", "Ingredient: " + ingredient.getName());
+                            // Check if the ingredient is in the user's allergy list
+                            if (userAllergies.contains(ingredient.getName().toLowerCase().trim())) {
+                                Log.d("AllergyMatch", "Allergy matched: " + ingredient.getName());
+                                // Highlight the ingredient in red by changing scrollView background
+                                scrollView.setBackground(ContextCompat.getDrawable(ProductDisplayActivity.this, R.color.red));
+                            }
                             ingredientList.add(ingredient);
                         }
                     }
@@ -160,9 +188,6 @@ public class ProductDisplayActivity extends AppCompatActivity {
         });
     }
 
-
-
-
     private void fetchProductImage(String productKey) {
         DatabaseReference imageRef = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
 
@@ -172,6 +197,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
                 Product product = snapshot.getValue(Product.class);
                 if (product != null && product.getImg() != null) {
                     String imageKey = product.getImg();
+                    Log.d("ProductImage", "Image Key: " + imageKey);
 
                     FirebaseDatabase.getInstance().getReference("Product Images")
                             .child(imageKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -201,5 +227,5 @@ public class ProductDisplayActivity extends AppCompatActivity {
             }
         });
     }
-
 }
+

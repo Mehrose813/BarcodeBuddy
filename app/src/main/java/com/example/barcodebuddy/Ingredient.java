@@ -6,6 +6,16 @@ public class Ingredient {
     String qty;
     String des;
     String pros;
+    int highlightColor=0;
+    boolean isAllergic = false;
+
+    public void setAllergic(boolean isAllergic) {
+        this.isAllergic = isAllergic;
+    }
+
+    public boolean isAllergic() {
+        return isAllergic;
+    }
 
     public String getCons() {
         return cons;
@@ -77,5 +87,13 @@ public class Ingredient {
 
     public void setHealthy(String healthy) {
         this.healthy = healthy;
+    }
+
+    public void setHighlightColor(int highlightColor) {
+        this.highlightColor = highlightColor;
+    }
+
+    public int getHighlightColor() {
+        return highlightColor;
     }
 }

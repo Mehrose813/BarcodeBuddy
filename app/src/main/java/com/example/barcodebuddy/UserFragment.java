@@ -37,7 +37,7 @@ import java.util.UUID;
 
 public class UserFragment extends Fragment {
 
-    private TextView tvName, tvEmail;
+    private TextView tvName, tvEmail,tvAllergy;
     private Button btnLogout,btnSave;
     private ImageView ivEditIcon, ivProfile,editIconName;
     private Uri imageUri;
@@ -87,6 +87,17 @@ public class UserFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btn_logout);
         editIconName=view.findViewById(R.id.edit_iconName);
         progressBar=view.findViewById(R.id.progressBar);
+        tvAllergy = view.findViewById(R.id.tv_allergy);
+
+        tvAllergy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                Intent intent = new Intent(getContext(),SetAllergyActivity.class);
+                intent.putExtra("key",key);
+                startActivity(intent);
+            }
+        });
 
 
         setupEditIcon();
