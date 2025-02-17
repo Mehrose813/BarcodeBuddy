@@ -57,20 +57,20 @@ public class ProductDisplayActivity extends AppCompatActivity {
         adapter = new IngridentAdapaterdisplay(ingredientList);
         recyclerView.setAdapter(adapter);
 
-        // Get product details from intent
+
         String productName = getIntent().getStringExtra("name");
         String productCategory = getIntent().getStringExtra("cat");
         String productDesc = getIntent().getStringExtra("desc");
         String productHealthy = getIntent().getStringExtra("healthy");
         String productKey = getIntent().getStringExtra("productKey");
 
-        // Set product details in UI
+
         tvProdName.setText(productName);
         tvProdCat.setText(productCategory);
         tvProDes.setText(productDesc);
         tvProHealth.setText(productHealthy);
 
-        // Fetch product image
+
         pictureref = FirebaseDatabase.getInstance().getReference("Products").child(productKey);
         fetchProductImage(productKey);
 

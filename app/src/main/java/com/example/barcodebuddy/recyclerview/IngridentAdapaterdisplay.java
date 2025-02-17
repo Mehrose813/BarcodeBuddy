@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.barcodebuddy.Ingredient;  // Assuming Ingredient class is in the same package
+import com.example.barcodebuddy.IngridientInformationActivity;
 import com.example.barcodebuddy.R;
 import com.example.barcodebuddy.authdao.DataCallBack;
 import com.example.barcodebuddy.authdao.UserAllergyDAO;
@@ -57,12 +58,18 @@ public class IngridentAdapaterdisplay extends RecyclerView.Adapter<IngridentView
         // Get context from the holder's itemView
         Context context = holder.itemView.getContext();
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent =new Intent(context, Ingre)
-            }
-        });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent =new Intent(context, IngridientInformationActivity.class);
+//                intent.putExtra("name",ingredient.getName());
+//                intent.putExtra("des",ingredient.getDes());
+//                intent.putExtra("pros",ingredient.getPros());
+//                intent.putExtra("cons",ingredient.getCons());
+//
+//                context.startActivity(intent);
+//            }
+//        });
 
 
         Log.e("onBindViewHolder: ", ingredient.getName()+" "+allergies.contains(ingredient.getName().toLowerCase()));

@@ -41,6 +41,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder
         Ingredient ingredient = ingredients.get(position);
         holder.tvName.setText(ingredient.getName());
 
+
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
