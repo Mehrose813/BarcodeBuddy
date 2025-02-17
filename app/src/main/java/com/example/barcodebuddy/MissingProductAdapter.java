@@ -1,6 +1,7 @@
 package com.example.barcodebuddy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,16 @@ public class MissingProductAdapter extends RecyclerView.Adapter<MissingProductVi
         // Set the title with user email and body with barcode information
         holder.tvNotificationTitle.setText("New Message from " + product.getUserEmail());
         holder.tvNotificationBody.setText("Product with barcode " + product.getBarcode() + " is missing.");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context , ReplyReceiverActivity.class);
+                intent.putExtra("userEmail", product.getUserEmail());
+                intent.putExtra("barcode", product.getBarcode());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

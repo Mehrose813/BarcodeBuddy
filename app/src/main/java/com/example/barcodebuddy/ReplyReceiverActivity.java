@@ -1,13 +1,14 @@
 package com.example.barcodebuddy;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.RemoteInput;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -17,77 +18,62 @@ import java.util.Map;
 
 public class ReplyReceiverActivity extends AppCompatActivity {
 
+    private TextView tvUserEmail, tvMessage;
+    private EditText etReply;
+    private Button btnSendReply;
+    private DatabaseReference databaseReference;
+    private String userEmail, barcode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reply_receiver);
 
-        // Get the remote input bundle from the intent
-        Bundle remoteInputBundle = RemoteInput.getResultsFromIntent(getIntent());
-        if (remoteInputBundle == null) {
-            // No reply was provided
-            finish();
-            return;
+        // Initialize UI elements
+        tvUserEmail = findViewById(R.id.tv_user_email);
+        tvMessage = findViewById(R.id.tvMessage);
+        etReply = findViewById(R.id.etReply);
+        btnSendReply = findViewById(R.id.btnSendReply);
+
+        // Firebase database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference("UserNotifications");
+
+        // Get intent data
+        if (getIntent() != null) {
+            userEmail = getIntent().getStringExtra("userEmail");
+            barcode = getIntent().getStringExtra("barcode");
+
+            tvUserEmail.setText("From: " + userEmail);
+            tvMessage.setText("Product with barcode " + barcode + " is missing.");
         }
 
-        // Retrieve the reply text using the same key you set in your notification ("reply_key")
-        CharSequence replyText = remoteInputBundle.getCharSequence("reply_key");
-        if (replyText == null) {
-            // No reply text provided
-            finish();
-            return;
-        }
+        // Send reply to Firebase
+        btnSendReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String replyMessage = etReply.getText().toString().trim();
+                if (!replyMessage.isEmpty()) {
+                    sendReply(replyMessage);
+                } else {
+                    Toast.makeText(ReplyReceiverActivity.this, "Please enter a reply", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
-        // Get the target user ID from the intent extras (if not provided, use a default)
-        String targetUserId = getIntent().getStringExtra("targetUserId");
-        if (targetUserId == null) {
-            targetUserId = "defaultUserId";
-        }
+    private void sendReply(String replyMessage) {
+        String key = databaseReference.push().getKey();
 
-        // Get a reference to the Firebase node for this user's replies
-        DatabaseReference replyRef = FirebaseDatabase.getInstance()
-                .getReference("UserReplies").child(targetUserId);
+        // Create Reply object
+        Reply reply = new Reply(userEmail, barcode, replyMessage);
 
-        // Create a unique key for the reply and store the reply text directly as a string
-        String replyId = replyRef.push().getKey();
-        if (replyId != null) {
-            replyRef.child(replyId).setValue(replyText.toString());
-        }
-
-        // Finish the activity after processing the reply
-        finish();
-
-//        Bundle bundle = RemoteInput.getResultsFromIntent(getIntent());
-//        if (bundle == null) {
-//            // No reply text provided; finish the activity.
-//            finish();
-//            return;
-//        }
-//        CharSequence charSequence = bundle.getCharSequence("reply_key");
-//        if (charSequence == null) {
-//            // No reply text provided; finish the activity.
-//            finish();
-//            return;
-//        }
-//
-//        String targetUserId = getIntent().getStringExtra("targetUserId");
-//        if (targetUserId == null) {
-//            targetUserId = "defaultUserId";
-//        }
-//
-//        DatabaseReference replyRef = FirebaseDatabase.getInstance()
-//                .getReference("UserReplies").child(targetUserId);
-//        String replyId = replyRef.push().getKey();
-//        if (replyId != null) {
-//            Map<String, Object> replyData = new HashMap<>();
-//            assert charSequence != null;
-//            replyData.put("reply", charSequence.toString());
-//            replyData.put("timestamp", System.currentTimeMillis());
-//            // You can add additional information like admin ID if needed
-//            replyRef.child(replyId).setValue(replyData);
-//        }
-//    // Close the activity after processing the reply
-//    finish();
+        // Save object directly to Firebase
+        databaseReference.child(key).setValue(reply)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(ReplyReceiverActivity.this, "Reply Sent!", Toast.LENGTH_SHORT).show();
+                    finish(); // Close activity after sending reply
+                })
+                .addOnFailureListener(e -> Toast.makeText(ReplyReceiverActivity.this, "Failed to send reply", Toast.LENGTH_SHORT).show());
     }
 }

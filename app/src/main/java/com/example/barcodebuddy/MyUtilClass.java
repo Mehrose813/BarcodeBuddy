@@ -51,117 +51,133 @@ public class MyUtilClass {
     }
 
 
-    //Notification
-
-    public static void showNotification(Context context, String title, String body) {
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        String channelId = "com.example.barcodebuddy";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(
-                    channelId, "Notification", NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.setDescription(body);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        // Build the basic notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setWhen(new Date().getTime())
-                .setSmallIcon(R.drawable.logo)
-                .setContentTitle(title)
-                .setContentText(body);
-
-        // Create the base intent for the notification click
-        Intent notificationIntent = new Intent(context, AdminMainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                context, 565, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        builder.setContentIntent(pendingIntent);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            RemoteInput remoteInput = new RemoteInput.Builder("reply_key")
-                    .setLabel("Enter Your Reply...")
-                    .build();
-
-            //get the user id
-            MissingProduct missing = new MissingProduct();
-
-            Intent replyIntent = new Intent(context, ReplyReceiverActivity.class);
-            replyIntent.putExtra("targetUserId",missing.getUserId());
-            replyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent replyPendingIntent = PendingIntent.getActivity(
-                    context, 1, replyIntent,
-                    PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-
-            // Create the reply action and add the RemoteInput
-            NotificationCompat.Action replyAction =
-                    new NotificationCompat.Action.Builder(R.drawable.baseline_arrow_forward_24, "Reply", replyPendingIntent)
-                            .addRemoteInput(remoteInput)
-                            .build();
-
-            // Add the reply action to the notification builder
-            builder.addAction(replyAction);
-        }
-
-
-        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.bigText(body);
-        builder.setStyle(bigTextStyle);
-
-        // Finally, issue the notification
-        notificationManager.notify(565, builder.build());
-    }
-
-//    public static void showNotification(Context context , String title,String body){
-//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//        String Notification_Channel_Id ="com.example.barcodebuddy";
+//    //Notification
 //
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-//            NotificationChannel notificationChannel = new NotificationChannel(Notification_Channel_Id,
-//                    "Notification",NotificationManager.IMPORTANCE_HIGH);
+//    public static void showNotification(Context context, String title, String body) {
+//        NotificationManager notificationManager = (NotificationManager)
+//                context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        String channelId = "com.example.barcodebuddy";
 //
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel notificationChannel = new NotificationChannel(
+//                    channelId, "Notification", NotificationManager.IMPORTANCE_HIGH);
 //            notificationChannel.setDescription(body);
 //            notificationManager.createNotificationChannel(notificationChannel);
 //        }
 //
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,Notification_Channel_Id);
-//        notificationBuilder.setAutoCancel(true)
+//        // Build the basic notification
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+//                .setAutoCancel(true)
 //                .setPriority(NotificationCompat.PRIORITY_HIGH)
 //                .setWhen(new Date().getTime())
 //                .setSmallIcon(R.drawable.logo)
 //                .setContentTitle(title)
 //                .setContentText(body);
 //
+//        // Create the base intent for the notification click
 //        Intent notificationIntent = new Intent(context, AdminMainActivity.class);
-//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-//        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(
+//                context, 565, notificationIntent,
+//                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+//        builder.setContentIntent(pendingIntent);
 //
-//
-//        // Add inline reply action if API level supports it (API 24+)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            // Create a RemoteInput specifying the key for the input
 //            RemoteInput remoteInput = new RemoteInput.Builder("reply_key")
 //                    .setLabel("Enter Your Reply...")
 //                    .build();
 //
-//            Intent intent = new Intent(context, UserNotificationFragment.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            //get the user id
+//            MissingProduct missing = new MissingProduct();
+//
+//            Intent replyIntent = new Intent(context, ReplyReceiverActivity.class);
+//            replyIntent.putExtra("targetUserId",missing.getUserId());
+//            replyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            PendingIntent replyPendingIntent = PendingIntent.getActivity(
+//                    context, 1, replyIntent,
+//                    PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+//
+//            // Create the reply action and add the RemoteInput
+//            NotificationCompat.Action replyAction =
+//                    new NotificationCompat.Action.Builder(R.drawable.baseline_arrow_forward_24, "Reply", replyPendingIntent)
+//                            .addRemoteInput(remoteInput)
+//                            .build();
+//
+//            // Add the reply action to the notification builder
+//            builder.addAction(replyAction);
+//        }
 //
 //
-//        int id = 565;
+//        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+//        bigTextStyle.bigText(body);
+//        builder.setStyle(bigTextStyle);
 //
-//        Intent[] intentArray= new Intent[]{notificationIntent};
-//        PendingIntent pendingIntent = PendingIntent.getActivities(context,id,intentArray,0);
-//        notificationBuilder.setContentIntent(pendingIntent);
-//
-//        NotificationCompat.BigTextStyle byStyle = new NotificationCompat.BigTextStyle();
-//        byStyle.bigText(body);
-//        notificationBuilder.setStyle(byStyle);
-//        notificationManager.notify(id, notificationBuilder.build());
+//        // Finally, issue the notification
+//        notificationManager.notify(565, builder.build());
 //    }
-//}
+
+    public static void showNotification(Context context , String title,String body){
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String Notification_Channel_Id ="com.example.barcodebuddy";
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = new NotificationChannel(Notification_Channel_Id,
+                    "Notification",NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription(body);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,Notification_Channel_Id);
+        notificationBuilder.setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setWhen(new Date().getTime())
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle(title)
+                .setContentText(body);
+
+        Intent notificationIntent = new Intent(context, AdminMainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        int id = 565;
+
+        Intent[] intentArray= new Intent[]{notificationIntent};
+        PendingIntent pendingIntent = PendingIntent.getActivities(context,id,intentArray, PendingIntent.FLAG_IMMUTABLE);
+        notificationBuilder.setContentIntent(pendingIntent);
+
+        NotificationCompat.BigTextStyle byStyle = new NotificationCompat.BigTextStyle();
+        byStyle.bigText(body);
+        notificationBuilder.setStyle(byStyle);
+        notificationManager.notify(id, notificationBuilder.build());
+    }
+
+    public static void sendNotificationToUser(Context context, String userId, String title, String message) {
+        NotificationManager notificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String channelId = "user_notification_channel";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, "User Notifications", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Notifications for user replies");
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.logo) // make sure this icon exists in your drawable folder
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setWhen(new Date().getTime());
+
+        // When tapped, open the user main screen (adjust as needed)
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra("openFragment", "UserNotificationFragment");
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+
+        notificationManager.notify(1001, builder.build());
+    }
 }

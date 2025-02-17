@@ -1,10 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReplyReceiverActivity">
+    tools:context=".ReplyReceiverActivity"
+    android:orientation="vertical"
+    android:layout_margin="20dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_user_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="From: user@example.com"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product with barcode 12345 is missing."
+            android:textSize="14sp"
+            android:paddingVertical="8dp" />
+
+        <EditText
+            android:id="@+id/etReply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type your reply..."
+            android:padding="8dp"
+            android:background="@android:drawable/editbox_background" />
+
+        <Button
+            android:id="@+id/btnSendReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Reply"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
+

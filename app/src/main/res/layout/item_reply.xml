@@ -7,12 +7,41 @@
     android:layout_margin="10dp"
     card_view:cardCornerRadius="8dp">
 
-    <TextView
-        android:id="@+id/tv_reply"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Sample Reply"
-        android:textSize="16sp" />
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Reply Title -->
+        <TextView
+            android:id="@+id/tv_reply_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reply from Admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+        <!-- Barcode -->
+        <TextView
+            android:id="@+id/tv_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product Barcode: 123456789"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp" />
+
+        <!-- Reply Message -->
+        <TextView
+            android:id="@+id/tv_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your requested product is now available."
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -33,7 +33,9 @@ public class ReplyNotificationAdapter extends RecyclerView.Adapter<ReplyNotifica
     public void onBindViewHolder(@NonNull ReplyNotificationViewHolder holder, int position) {
 
         Reply reply = replyList.get(position);
-        holder.tvReply.setText("Reply from admin " + reply.getReply());
+        holder.tvReplyTitle.setText("Reply from Admin");
+        holder.tvBarcode.setText("Product Barcode: " + reply.getBarcode());
+        holder.tvReply.setText("Reply from Admin: " + reply.getReplyMessage());
     }
 
     @Override

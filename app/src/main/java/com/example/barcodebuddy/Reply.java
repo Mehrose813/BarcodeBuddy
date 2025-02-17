@@ -1,22 +1,29 @@
 package com.example.barcodebuddy;
 
 public class Reply {
-    private String reply;
-    private long timestamp;
+    private String userEmail;
+    private String barcode;
+    private String replyMessage;
 
-    // No-arg constructor required for Firebase
-    public Reply() { }
-
-    public Reply(String reply, long timestamp) {
-        this.reply = reply;
-        this.timestamp = timestamp;
+    // Empty constructor for Firebase
+    public Reply() {
     }
 
-    public String getReply() {
-        return reply;
+    public Reply(String userEmail, String barcode, String replyMessage) {
+        this.userEmail = userEmail;
+        this.barcode = barcode;
+        this.replyMessage = replyMessage;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public String getReplyMessage() {
+        return replyMessage;
     }
 }
