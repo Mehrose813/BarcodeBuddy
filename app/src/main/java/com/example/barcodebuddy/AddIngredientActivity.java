@@ -45,13 +45,13 @@ public class AddIngredientActivity extends AppCompatActivity {
                             Ingredient ingredient = snapshot.getValue(Ingredient.class);
                             if (ingredient != null) {
                                 etIngredientName.setText(ingredient.getName());
-                                etIngredientDes.setText(ingredient.getDescription());  // Correct method
+                                etIngredientDes.setText(ingredient.getDes());  // Correct method
                                 etIngredientPros.setText(ingredient.getPros());
                                 etIngredientCons.setText(ingredient.getCons());
 
                                 // Set Spinner Value
-                                if (ingredient.getSafetyStatus() != null) {
-                                    switch (ingredient.getSafetyStatus()) {
+                                if (ingredient.getCategory() != null) {
+                                    switch (ingredient.getCategory()) {
                                         case "Safe":
                                             spinSafe.setSelection(0);
                                             break;
@@ -94,7 +94,7 @@ public class AddIngredientActivity extends AppCompatActivity {
                         if (snapshot.exists() && TextUtils.isEmpty(id)) {
                             Toast.makeText(AddIngredientActivity.this, "This ingredient already exists!", Toast.LENGTH_SHORT).show();
                         } else {
-                            Ingredient ingredient = new Ingredient(id, name, des, pros, cons, safety);
+                            Ingredient ingredient = new Ingredient(id, name, des, pros, cons,safety);
 
                             if (!TextUtils.isEmpty(id)) {
                                 // Update ingredient
