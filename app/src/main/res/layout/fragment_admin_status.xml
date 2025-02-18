@@ -1,49 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminStatusFragment"
     android:orientation="vertical"
-    android:layout_margin="20dp">
+    android:gravity="center"
+    android:background="@color/white"
+    android:padding="20dp"
+    tools:context=".AdminStatusFragment">
 
-    <Button
-        android:id="@+id/btn_add_ingredients"
-        android:layout_width="wrap_content"
+    <!-- Add Ingredients Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Ingredients to Firebase"
-        android:textSize="14dp"
-        android:backgroundTint="@color/dark_green"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="6dp"
+        android:padding="10dp">
 
-        />
+        <Button
+            android:id="@+id/btn_add_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🍎 Add Ingredients"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/dark_green"
+            android:padding="12dp"/>
+    </androidx.cardview.widget.CardView>
 
+    <!-- Add Category Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="6dp"
+        android:padding="10dp">
 
+        <Button
+            android:id="@+id/btn_add_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📂 Add Category"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/dark_green"
+            android:padding="12dp"/>
+    </androidx.cardview.widget.CardView>
 
-<Button
-    android:id="@+id/btn_add_category"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Add Category"
-    android:textSize="14dp"
-    android:backgroundTint="@color/dark_green"
-    android:layout_marginTop="5dp"
-    android:layout_marginStart="5dp"
-    android:layout_marginBottom="2dp"
-    />
+    <!-- Add Blogs Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="6dp"
+        android:padding="10dp">
 
-<Button
-    android:id="@+id/btn_add_blogs"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Add Blogs"
-    android:textSize="14dp"
-    android:backgroundTint="@color/dark_green"
-    android:layout_marginTop="20dp"
-    android:layout_marginStart="7dp"
-    android:layout_marginBottom="2dp"
+        <Button
+            android:id="@+id/btn_add_blogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📝 Add Blogs"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/dark_green"
+            android:padding="12dp"/>
+    </androidx.cardview.widget.CardView>
 
-    />
 </LinearLayout>
