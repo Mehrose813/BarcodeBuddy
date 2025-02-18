@@ -31,7 +31,7 @@ public class ProductDisplayActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
-    private TextView tvProdName, tvProdCat, tvProDes, tvProHealth;
+    private TextView tvProdName, tvProdCat, tvProDes;
     private ImageView ivProductImage, ivNutri;
     private DatabaseReference ref, pictureref;
     private Set<String> userAllergies = new HashSet<>(); // Store user's allergies
@@ -46,7 +46,6 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProdName = findViewById(R.id.tv_proname);
         tvProdCat = findViewById(R.id.tv_proCat);
         tvProDes = findViewById(R.id.tv_proDes);
-        tvProHealth = findViewById(R.id.tv_prohealthy);
         recyclerView = findViewById(R.id.recyclerview);
         ivProductImage = findViewById(R.id.img_product);
         ivNutri = findViewById(R.id.iv_nutri);
@@ -68,7 +67,6 @@ public class ProductDisplayActivity extends AppCompatActivity {
         tvProdName.setText(productName);
         tvProdCat.setText(productCategory);
         tvProDes.setText(productDesc);
-        tvProHealth.setText(productHealthy);
 
 
         pictureref = FirebaseDatabase.getInstance().getReference("Products").child(productKey);

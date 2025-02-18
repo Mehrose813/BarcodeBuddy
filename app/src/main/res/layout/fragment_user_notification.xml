@@ -8,6 +8,17 @@
     android:orientation="vertical"
     android:layout_margin="10dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="User's Notifications:"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/dark_green"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_replies"
         android:layout_width="match_parent"
