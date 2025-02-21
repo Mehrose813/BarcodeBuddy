@@ -34,7 +34,7 @@ import java.util.List;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment  {
 CardView searchCard,scanCard;
 TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDanger,nameDangerIng,categoryDangerIng;
     // TODO: Rename parameter arguments, choose names that match
@@ -71,6 +71,8 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -83,6 +85,11 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        if (getActivity() instanceof ToolBarActivity) {
+            ((ToolBarActivity) getActivity()).setToolbarTitle("Blog");
+            ((ToolBarActivity) getActivity()).showBackButton(false);
+        }
 
         searchCard = view.findViewById(R.id.search_card);
         scanCard = view.findViewById(R.id.scan_card);

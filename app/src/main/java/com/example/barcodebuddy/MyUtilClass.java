@@ -71,6 +71,7 @@ public class MyUtilClass {
                 .setContentText(body);
 
         Intent notificationIntent = new Intent(context, AdminMainActivity.class);
+        //notificationIntent.putExtra("open",AdminNotificationFragment.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 

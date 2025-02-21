@@ -37,9 +37,9 @@ import java.util.UUID;
 
 public class UserFragment extends Fragment {
 
-    private TextView tvName, tvEmail,tvAllergy;
-    private Button btnLogout,btnSave;
-    private ImageView ivEditIcon, ivProfile,editIconName;
+    private TextView tvName, tvEmail,tvAllergy,btnLogout,editIconName;
+    private Button btnSave;
+    private ImageView ivEditIcon, ivProfile;
     private Uri imageUri;
     EditText etName;
     private ProgressBar progressBar;
