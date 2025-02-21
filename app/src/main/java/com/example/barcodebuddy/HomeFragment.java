@@ -95,6 +95,55 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
         nameDangerIng = view.findViewById(R.id.name_danger_ing);
         categoryDangerIng = view.findViewById(R.id.category_danger_ing);
 
+        nameSafe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                String name = nameSafe.getText().toString();
+                intent.putExtra("name",name);
+                Integer color = R.color.dark_green;
+                intent.putExtra("color",color);
+                startActivity(intent);
+            }
+        });
+
+        nameSafeIng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                String name = nameSafeIng.getText().toString();
+
+                Integer color = R.color.dark_green;
+                intent.putExtra("color",color);
+                intent.putExtra("name",name);
+                startActivity(intent);
+            }
+        });
+
+        nameDanger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                String name = nameDanger.getText().toString();
+                Integer color = R.color.red;
+                intent.putExtra("color",color);
+                intent.putExtra("name",name);
+                startActivity(intent);
+            }
+        });
+
+        nameDangerIng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                String name = nameDangerIng.getText().toString();
+                Integer color = R.color.red;
+                intent.putExtra("color",color);
+                intent.putExtra("name",name);
+                startActivity(intent);
+            }
+        });
+
 
          dbRef = FirebaseDatabase.getInstance().getReference("Ingredients");
 
