@@ -18,6 +18,9 @@
         android:theme="@style/Base.Theme.BarcodeBuddy"
         tools:targetApi="31">
         <activity
+            android:name=".ToolBarActivity"
+            android:exported="false" />
+        <activity
             android:name=".IngridientInformationActivity"
             android:exported="false" />
         <activity

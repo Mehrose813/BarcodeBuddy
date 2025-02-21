@@ -63,6 +63,8 @@ TextView txtLogin;
 
                 String nameRegex = "^[^\\s]+$";
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
+                String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{3,}$";
+
 
                 if(name.isEmpty()){
                     nameSign.setError("Name is required");
@@ -80,8 +82,14 @@ TextView txtLogin;
                     mail.requestFocus();
                     return;
                 }
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    mail.setError("Enter a valid email");
+//                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//                    mail.setError("Enter a valid email");
+//                    mail.requestFocus();
+//                    return;
+//                }
+
+                if (!email.matches(emailRegex)) {
+                    mail.setError("Enter a valid email (e.g., example@gmail.com)");
                     mail.requestFocus();
                     return;
                 }
@@ -115,10 +123,6 @@ TextView txtLogin;
                     return;
 
                 }
-
-
-
-
                 else{
                 progressDialog.show();
                 AuthDAO auth = new AuthDAO();
