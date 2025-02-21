@@ -51,6 +51,7 @@ DatabaseReference missingProductsRef;
                     String title = "New Message from " + missing.getUserEmail();
                     String body = "Product with barcode " + missing.getBarcode() + " is missing.";
                     MyUtilClass.showNotification(AdminMainActivity.this, title, body);
+
                 }
             }
 

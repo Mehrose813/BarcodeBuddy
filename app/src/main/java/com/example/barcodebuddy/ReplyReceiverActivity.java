@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -36,6 +37,8 @@ public class ReplyReceiverActivity extends AppCompatActivity {
         etReply = findViewById(R.id.etReply);
         btnSendReply = findViewById(R.id.btnSendReply);
 
+       String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         // Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("UserNotifications");
 
@@ -55,6 +58,7 @@ public class ReplyReceiverActivity extends AppCompatActivity {
                 String replyMessage = etReply.getText().toString().trim();
                 if (!replyMessage.isEmpty()) {
                     sendReply(replyMessage);
+                    MyUtilClass.sendNotificationToUser(ReplyReceiverActivity.this,id,"Reply from admin",replyMessage);
                 } else {
                     Toast.makeText(ReplyReceiverActivity.this, "Please enter a reply", Toast.LENGTH_SHORT).show();
                 }
