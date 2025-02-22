@@ -86,11 +86,6 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        if (getActivity() instanceof ToolBarActivity) {
-            ((ToolBarActivity) getActivity()).setToolbarTitle("Blog");
-            ((ToolBarActivity) getActivity()).showBackButton(false);
-        }
-
         searchCard = view.findViewById(R.id.search_card);
         scanCard = view.findViewById(R.id.scan_card);
         nameSafeIng = view.findViewById(R.id.name_safe_ing);

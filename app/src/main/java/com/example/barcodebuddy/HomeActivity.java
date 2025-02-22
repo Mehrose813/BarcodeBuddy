@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.blog) {
                     loadFragment(new BlogFragment(), "Blog");
                 } else if (item.getItemId() == R.id.notification_user) {
-                    loadFragment(new UserNotificationFragment(), "User's Notifications");
+                    loadFragment(new UserNotificationFragment(), "Notifications");
                 } else {
                     loadFragment(new UserFragment(), "Profile");
                 }
@@ -49,9 +49,10 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .commit();
 
-
         if (toolbar != null) {
             toolbar.setTitle(title);
+            toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+            toolbar.setBackgroundColor(getResources().getColor(R.color.light_green));
         }
     }
 }

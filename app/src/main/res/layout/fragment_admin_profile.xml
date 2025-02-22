@@ -6,29 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/dark_green"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Profile"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginStart="10dp"
-                android:textSize="25sp"
-                />
-        </LinearLayout>
-
         <!-- Profile Image -->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="#FF428612"
             android:src="@drawable/profile" />
@@ -46,45 +29,6 @@
             android:layout_marginRight="138dp"
             android:layout_marginBottom="38dp"
             android:background="@drawable/editicon" />
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignLeft="@id/profile"
-            android:layout_marginLeft="-19dp"
-            android:layout_marginTop="120dp"
-            android:background="@drawable/circle" />
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignRight="@id/profile"
-            android:layout_alignBottom="@id/profile"
-            android:layout_marginLeft="-29dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginRight="53dp"
-            android:layout_marginBottom="-12dp"
-            android:background="@drawable/darkcircle" />
-
-        <!-- EditText for Name -->
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignBottom="@id/profile"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="300dp"
-            android:layout_marginRight="108dp"
-            android:layout_marginBottom="-14dp"
-            android:background="@drawable/darkcircle" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignLeft="@id/profile"
-            android:layout_marginLeft="36dp"
-            android:layout_marginTop="80dp"
-            android:background="@drawable/lightcircle" />
 
         <RelativeLayout
             android:id="@+id/main2"

@@ -10,6 +10,15 @@
     tools:context=".AdminMainActivity">
 
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_admin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_green"
+        android:title="Home"
+        android:titleTextColor="@android:color/white"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large" />
+
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"

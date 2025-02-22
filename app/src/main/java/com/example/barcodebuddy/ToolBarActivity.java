@@ -29,7 +29,12 @@ public class ToolBarActivity extends AppCompatActivity {
         }
 
         // Handle back button click
-        toolbarBack.setOnClickListener(view -> onBackPressed());
+        toolbarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     // Function to set toolbar title dynamically

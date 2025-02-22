@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class AdminMainActivity extends AppCompatActivity {
 BottomNavigationView navAdmin;
+Toolbar toolbar;
 LinearLayout container;
 DatabaseReference missingProductsRef;
     @Override
@@ -30,7 +32,8 @@ DatabaseReference missingProductsRef;
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_main);
 
-
+        toolbar = findViewById(R.id.toolbar_admin);
+        setSupportActionBar(toolbar);
         missingProductsRef = FirebaseDatabase.getInstance().getReference("MissingProducts");
 
         // Listen for new missing products
@@ -71,22 +74,23 @@ DatabaseReference missingProductsRef;
         navAdmin = findViewById(R.id.nav_admin);
         container = findViewById(R.id.container);
 
-        loadFragment(new AdminHomeFragment());
+
+        loadFragment(new AdminHomeFragment() , "Barcode Buddy");
 
         navAdmin.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()== R.id.home_admin){
-                    loadFragment(new AdminHomeFragment());
+                    loadFragment(new AdminHomeFragment() , "Barcode Buddy");
                 }
                 else if(item.getItemId() == R.id.status_admin){
-                    loadFragment(new AdminStatusFragment());
+                    loadFragment(new AdminStatusFragment() ,"Add");
                 }
                 else if(item.getItemId() == R.id.notification_admin){
-                    loadFragment(new AdminNotificationFragment());
+                    loadFragment(new AdminNotificationFragment(),"Notifications");
                 }
                 else{
-                    loadFragment(new AdminProfileFragment());
+                    loadFragment(new AdminProfileFragment(),"Profile");
                 }
 
                 return true;
@@ -95,8 +99,14 @@ DatabaseReference missingProductsRef;
 
 
     }
-    public void loadFragment(Fragment fragment){
+    public void loadFragment(Fragment fragment , String title){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container , fragment).commit();
+
+        if (toolbar != null) {
+            toolbar.setTitle(title);
+            toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+            toolbar.setBackgroundColor(getResources().getColor(R.color.light_green));
+        }
     }
 }

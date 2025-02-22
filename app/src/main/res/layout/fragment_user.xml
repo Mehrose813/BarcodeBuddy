@@ -149,7 +149,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/edittext_border"
                 android:padding="20dp">
 
                 <LinearLayout
@@ -166,7 +165,6 @@
                         />
 
                 <TextView
-                    android:id="@+id/edit_iconName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -177,6 +175,7 @@
                     android:layout_marginStart="10dp"/>
 
                     <ImageView
+                        android:id="@+id/edit_iconName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/baseline_arrow_forward_24"
@@ -198,7 +197,6 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_allergy"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -209,6 +207,7 @@
                      />
 
                 <ImageView
+                    android:id="@+id/tv_allergy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_arrow_forward_24"
@@ -230,7 +229,6 @@
                     />
 
                 <TextView
-                    android:id="@+id/btn_logout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -240,6 +238,7 @@
                     android:padding="10dp"
                      />
                 <ImageView
+                    android:id="@+id/btn_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_arrow_forward_24"

@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ProductDisplayActivity extends AppCompatActivity {
+public class ProductDisplayActivity extends ToolBarActivity {
     private RecyclerView recyclerView;
     private IngridentAdapaterdisplay adapter;
     private List<Ingredient> ingredientList;
@@ -40,7 +40,14 @@ public class ProductDisplayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_display);
+
+        getLayoutInflater().inflate(R.layout.activity_product_display, findViewById(R.id.container));
+
+        setToolbarTitle("Product Detail");
+        showBackButton(true);
+
+
+       // setContentView(R.layout.activity_product_display);
 
         // Initialize Views
         tvProdName = findViewById(R.id.tv_proname);
