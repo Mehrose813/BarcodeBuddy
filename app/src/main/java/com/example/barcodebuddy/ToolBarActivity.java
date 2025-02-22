@@ -5,17 +5,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class ToolBarActivity extends AppCompatActivity {
-Toolbar toolbarr;
-TextView toolbarTitle;
-ImageView toolbarBack;
+    Toolbar toolbarr;
+    TextView toolbarTitle;
+    ImageView toolbarBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,26 +24,23 @@ ImageView toolbarBack;
 
         setSupportActionBar(toolbarr);
 
-        if(getSupportActionBar()!=null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        toolbarBack.setVisibility(View.GONE);
-        toolbarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        // Handle back button click
+        toolbarBack.setOnClickListener(view -> onBackPressed());
     }
 
-    protected void setToolbarTitle(String title) {
+    // Function to set toolbar title dynamically
+    public void setToolbarTitle(String title) {
         if (toolbarTitle != null) {
             toolbarTitle.setText(title);
         }
     }
 
-    protected void showBackButton(boolean show) {
+    // Function to show/hide the back button
+    public void showBackButton(boolean show) {
         if (toolbarBack != null) {
             toolbarBack.setVisibility(show ? View.VISIBLE : View.GONE);
         }
@@ -54,10 +48,7 @@ ImageView toolbarBack;
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed(); // This will go back to the previous activity
+        finish(); // Finish current activity
     }
 }
