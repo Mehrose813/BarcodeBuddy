@@ -1,6 +1,7 @@
 package com.example.barcodebuddy;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReplyReceiverActivity extends AppCompatActivity {
+public class ReplyReceiverActivity extends ToolBarActivity {
 
     private TextView tvUserEmail, tvMessage;
     private EditText etReply;
@@ -29,8 +30,12 @@ public class ReplyReceiverActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_reply_receiver);
+     //   setContentView(R.layout.activity_reply_receiver);
 
+        getLayoutInflater().inflate(R.layout.activity_reply_receiver, findViewById(R.id.container));
+
+        setToolbarTitle("Reply User");
+        showBackButton(true);
         // Initialize UI elements
         tvUserEmail = findViewById(R.id.tv_user_email);
         tvMessage = findViewById(R.id.tvMessage);

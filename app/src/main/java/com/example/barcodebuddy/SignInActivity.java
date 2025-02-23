@@ -58,6 +58,7 @@ public class SignInActivity extends AppCompatActivity {
                 String mail = email.getText().toString();
                 String pass = passw.getText().toString();
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
+
                 //validation
                 if (mail.isEmpty()) {
                     email.setError("Email is required");
@@ -93,22 +94,11 @@ public class SignInActivity extends AppCompatActivity {
                 progressDialog.show();
 
 
-                // Check if admin credentials are entered
-
-
-
-                // Sign-in Logic
-
                 AuthDAO auth = new AuthDAO();
                 auth.signin(SignInActivity.this, mail, pass, new ResponseCallBack() {
                     @Override
                     public void onSuccess() {
                         progressDialog.dismiss();
-                        // Navigation handled in signin() method
-//                        Intent intent = new Intent(SignInActivity.this,HomeActivity.class);
-//                        startActivity(intent);
-//                        Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
-//                        finish();
 
                         if (mail.equals("superadmin@gmail.com")) {
                             progressDialog.dismiss();

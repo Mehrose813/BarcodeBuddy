@@ -63,8 +63,7 @@ TextView txtLogin;
 
                 String nameRegex = "^[^\\s]+$";
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
-
-                String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{3,}$";
+                String emailRegex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
 
                 if(name.isEmpty()){
                     nameSign.setError("Name is required");
@@ -132,7 +131,6 @@ TextView txtLogin;
 
                         progressDialog.dismiss();
                         Intent intent = new Intent(SignUpActivity.this,HomeActivity.class);
-
                         startActivity(intent);
                         finish();
                     }

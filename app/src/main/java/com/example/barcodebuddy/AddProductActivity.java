@@ -25,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,7 +42,7 @@ import java.util.UUID;
 
 // Inside AddProductActivity.java
 
-public class AddProductActivity extends AppCompatActivity {
+public class AddProductActivity extends ToolBarActivity {
     String id;
     Spinner spCat, spH;
     Button btnSave;
@@ -62,12 +63,16 @@ public class AddProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_product);
+
 
         id = getIntent().getStringExtra("id");
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Products");
 
+
+        getLayoutInflater().inflate(R.layout.activity_add_product, findViewById(R.id.container));
+        setToolbarTitle("Add Product");
+        showBackButton(true);
 
         edPName = findViewById(R.id.ed_pname);
         btnSave = findViewById(R.id.btn_save);

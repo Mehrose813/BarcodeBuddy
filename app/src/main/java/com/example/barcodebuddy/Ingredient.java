@@ -5,38 +5,18 @@ public class Ingredient {
     String id;
     String qty;
     String des;
-    String pros;
-    String cons;
     String healthy;
     String category;
 
-    public Ingredient(String id, String name, String des, String pros, String cons, String safety) {
+    public Ingredient(String id, String name, String des,String safety) {
         this.id = id;
         this.name = name;
         this.des = des;
-        this.pros = pros;
-        this.cons = cons;
         this.category = safety;
     }
 
 
     int highlightColor=0;
-
-    public String getCons() {
-        return cons;
-    }
-
-    public void setCons(String cons) {
-        this.cons = cons;
-    }
-
-    public String getPros() {
-        return pros;
-    }
-
-    public void setPros(String pros) {
-        this.pros = pros;
-    }
 
     public String getDes() {
         return des;

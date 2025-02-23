@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryListActivity extends AppCompatActivity {
+public class CategoryListActivity extends ToolBarActivity {
 
     private RecyclerView rvCategory;
     private Button btnAddCategory;
@@ -26,7 +26,11 @@ public class CategoryListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_list);
+        //setContentView(R.layout.activity_category_list);
+
+        getLayoutInflater().inflate(R.layout.activity_category_list, findViewById(R.id.container));
+        setToolbarTitle("Categories List");
+        showBackButton(true);
 
         // Initialize views
         rvCategory = findViewById(R.id.rv_categories);

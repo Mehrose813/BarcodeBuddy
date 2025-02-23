@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class AddIngredientActivity extends AppCompatActivity {
+public class AddIngredientActivity extends ToolBarActivity {
     EditText etIngredientName, etIngredientDes, etIngredientPros, etIngredientCons;
     Button btnSaveIngredients;
     Spinner spinSafe;
@@ -25,15 +25,19 @@ public class AddIngredientActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_ingredient);
+        //setContentView(R.layout.activity_add_ingredient);
+
+        getLayoutInflater().inflate(R.layout.activity_add_ingredient, findViewById(R.id.container));
+        setToolbarTitle("Add Ingredient");
+        showBackButton(true);
 
         String id = getIntent().getStringExtra("id");
 
         btnSaveIngredients = findViewById(R.id.btn_save_ingredients);
         etIngredientName = findViewById(R.id.et_ingredient_name);
         etIngredientDes = findViewById(R.id.et_ingredient_des);
-        etIngredientPros = findViewById(R.id.et_ingredient_pros);
-        etIngredientCons = findViewById(R.id.et_ingredient_cons);
+        //etIngredientPros = findViewById(R.id.et_ingredient_pros);
+        //etIngredientCons = findViewById(R.id.et_ingredient_cons);
         spinSafe = findViewById(R.id.spin_safe);
 
         if (id != null && !id.isEmpty()) {
@@ -46,8 +50,6 @@ public class AddIngredientActivity extends AppCompatActivity {
                             if (ingredient != null) {
                                 etIngredientName.setText(ingredient.getName());
                                 etIngredientDes.setText(ingredient.getDes());  // Correct method
-                                etIngredientPros.setText(ingredient.getPros());
-                                etIngredientCons.setText(ingredient.getCons());
 
                                 // Set Spinner Value
                                 if (ingredient.getCategory() != null) {
@@ -77,12 +79,21 @@ public class AddIngredientActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = etIngredientName.getText().toString().trim();
                 String des = etIngredientDes.getText().toString().trim();
-                String pros = etIngredientPros.getText().toString().trim();
-                String cons = etIngredientCons.getText().toString().trim();
+//                String pros = etIngredientPros.getText().toString().trim();
+           //     String cons = etIngredientCons.getText().toString().trim();
                 String safety = spinSafe.getSelectedItem().toString();
 
-                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(des) || TextUtils.isEmpty(pros) || TextUtils.isEmpty(cons)) {
-                    Toast.makeText(AddIngredientActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
+//                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(des) || TextUtils.isEmpty(pros) || TextUtils.isEmpty(cons)) {
+//                    Toast.makeText(AddIngredientActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+
+                if(name.isEmpty()){
+                    Toast.makeText(AddIngredientActivity.this, "Enter name of product", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(des.isEmpty()){
+                    Toast.makeText(AddIngredientActivity.this, "Enter description of product", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -94,7 +105,7 @@ public class AddIngredientActivity extends AppCompatActivity {
                         if (snapshot.exists() && TextUtils.isEmpty(id)) {
                             Toast.makeText(AddIngredientActivity.this, "This ingredient already exists!", Toast.LENGTH_SHORT).show();
                         } else {
-                            Ingredient ingredient = new Ingredient(id, name, des, pros, cons,safety);
+                            Ingredient ingredient = new Ingredient(id, name, des,safety);
 
                             if (!TextUtils.isEmpty(id)) {
                                 // Update ingredient

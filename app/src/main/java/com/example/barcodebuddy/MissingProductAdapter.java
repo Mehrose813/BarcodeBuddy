@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MissingProductAdapter extends RecyclerView.Adapter<MissingProductViewHolder> {
@@ -37,6 +39,9 @@ public class MissingProductAdapter extends RecyclerView.Adapter<MissingProductVi
         // Set the title with user email and body with barcode information
         holder.tvNotificationTitle.setText("New Message from " + product.getUserEmail());
         holder.tvNotificationBody.setText("Product with barcode " + product.getBarcode() + " is missing.");
+        holder.tvNotificationTime.setText(product.getTime());
+        holder.tvNotificationDate.setText(product.getDate());
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

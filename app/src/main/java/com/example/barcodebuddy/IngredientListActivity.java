@@ -18,14 +18,18 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientListActivity extends AppCompatActivity {
+public class IngredientListActivity extends ToolBarActivity {
 RecyclerView rvIngredient;
 Button btnAddIngredient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_ingredient_list);
+       // setContentView(R.layout.activity_ingredient_list);
+
+        getLayoutInflater().inflate(R.layout.activity_ingredient_list, findViewById(R.id.container));
+        setToolbarTitle("Ingredients List");
+        showBackButton(true);
 
         rvIngredient = findViewById(R.id.rv_ingredients);
         btnAddIngredient = findViewById(R.id.btn_add_ingredients);

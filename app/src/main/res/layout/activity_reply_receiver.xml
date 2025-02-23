@@ -8,38 +8,80 @@
     android:layout_height="match_parent"
     tools:context=".ReplyReceiverActivity"
     android:orientation="vertical"
-    android:layout_margin="20dp">
+    android:padding="24dp"
+    android:background="#F8F8F8">
 
-        <TextView
-            android:id="@+id/tv_user_email"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="From: user@example.com"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvMessage"
+            <TextView
+                android:id="@+id/tv_user_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From: user@example.com"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"/>
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product with barcode 12345 is missing."
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:textColor="#555555"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Product with barcode 12345 is missing."
-            android:textSize="14sp"
-            android:paddingVertical="8dp" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText
-            android:id="@+id/etReply"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Type your reply..."
-            android:padding="8dp"
-            android:background="@android:drawable/editbox_background" />
-
-        <Button
-            android:id="@+id/btnSendReply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send Reply"
-            android:layout_marginTop="8dp"/>
-    </LinearLayout>
+            <EditText
+                android:id="@+id/etReply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type your reply..."
+                android:padding="12dp"
+                android:textColor="#333333"
+                android:textSize="16sp"/>
 
 
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnSendReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Reply"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/dark_green"
+        android:textColor="#FFFFFF"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp"
+        android:textAllCaps="false"/>
+</LinearLayout>

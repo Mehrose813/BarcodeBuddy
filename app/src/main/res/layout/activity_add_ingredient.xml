@@ -3,95 +3,72 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="#F8F8F8">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="40dp">
+        android:padding="25dp">
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter the name of ingredient below:"
-            android:textSize="20sp"
+            android:text="Ingredient Name:"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            android:textColor="@color/dark_green"/>
+            android:textColor="@color/dark_green"
+            android:layout_marginBottom="3dp"/>
 
         <EditText
             android:id="@+id/et_ingredient_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_style"
+            android:layout_height="56dp"
+            android:background="@drawable/edittext_border"
             android:hint="Enter name of Ingredient"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:layout_marginTop="30dp"/>
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter Ingredient Description below:"
-            android:textSize="20sp"
+            android:text="Ingredient Description:"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            android:textColor="@color/dark_green"/>
+            android:textColor="@color/dark_green"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/et_ingredient_des"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_style"
+            android:layout_height="120dp"
+            android:background="@drawable/edittext_border"
             android:hint="Enter Ingredient Description"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:layout_marginTop="30dp"/>
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:gravity="top|start"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter Ingredient Prons below:"
-            android:textSize="20sp"
+            android:text="Safety:"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            android:textColor="@color/dark_green"/>
-
-        <EditText
-            android:id="@+id/et_ingredient_pros"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_style"
-            android:hint="Enter Ingredient Pros"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:layout_marginTop="30dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter Ingredient Cons below:"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            android:textColor="@color/dark_green"/>
-
-        <EditText
-            android:id="@+id/et_ingredient_cons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_style"
-            android:hint="Enter Ingredient Cons"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:layout_marginTop="30dp"/>
+            android:textColor="@color/dark_green"
+            android:layout_marginBottom="0dp"/>
 
         <Spinner
+
             android:id="@+id/spin_safe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:padding="10dp"
             android:background="@android:drawable/btn_dropdown"
             android:entries="@array/spin_safe"/>
@@ -99,12 +76,13 @@
         <Button
             android:id="@+id/btn_save_ingredients"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:text="Save"
+            android:textSize="18sp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:backgroundTint="@color/dark_green"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="20dp"/> <!-- Bottom Padding added -->
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 </ScrollView>

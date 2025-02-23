@@ -22,6 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ScanBarcodeActivity extends AppCompatActivity {
     private ActivityResultLauncher<ScanOptions> barLauncher;
 
@@ -31,7 +34,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_scan_barcode);
 
-        
+
         barLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 String scannedBarcode = result.getContents();
@@ -89,7 +92,13 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                             userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         }
-                        MissingProduct missingProduct = new MissingProduct(barcode, userEmail , userId);
+                        Date now = new Date();
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                        String time = timeFormat.format(now);
+                        String date = dateFormat.format(now);
+                        MissingProduct missingProduct = new MissingProduct(barcode, userEmail , userId ,time ,date);
                         missingRef.child(missingId).setValue(missingProduct);
                     }
                     showAlert("No product found for this barcode.");

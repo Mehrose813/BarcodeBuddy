@@ -16,7 +16,7 @@ import com.google.firebase.database.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlogListActivity extends AppCompatActivity {
+public class BlogListActivity extends ToolBarActivity {
 
     RecyclerView recyclerBlog;
     Button btnAddBlog;
@@ -26,7 +26,11 @@ public class BlogListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blog_list);
+       // setContentView(R.layout.activity_blog_list);
+
+        getLayoutInflater().inflate(R.layout.activity_blog_list, findViewById(R.id.container));
+        setToolbarTitle("Blogs List");
+        showBackButton(true);
 
         btnAddBlog = findViewById(R.id.btn_add_blog_list);
         recyclerBlog = findViewById(R.id.rv_blog_list_add);

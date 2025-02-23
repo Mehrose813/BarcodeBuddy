@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class IngredientQuantityActivity extends AppCompatActivity {
+public class IngredientQuantityActivity extends ToolBarActivity {
 
     Spinner spIn;
     EditText edQOI;
@@ -41,10 +42,16 @@ public class IngredientQuantityActivity extends AppCompatActivity {
     ArrayList<Ingredient> ingredientsList;
     ImageView ivImg;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ingredient_quantity);
+
+
+
+        getLayoutInflater().inflate(R.layout.activity_ingredient_quantity, findViewById(R.id.container));
+        setToolbarTitle("Product Detail");
+        showBackButton(true);
 
         tvProductName = findViewById(R.id.tv_product_name);
         tvCatName = findViewById(R.id.tv_cat_name);
@@ -104,13 +111,13 @@ public class IngredientQuantityActivity extends AppCompatActivity {
         }
 
         // Set product name and category
-        tvProductName.setText("Product Name : " + productName);
-        tvCatName.setText("Category Name : " + productcat);
-        tvBarcode.setText("Product Barcode Number: " + barcode);
+        tvProductName.setText(productName);
+        tvCatName.setText(productcat);
+        tvBarcode.setText(barcode);
 
 
         if (productH != null) {
-            tvH.setText("Product Nutri value:" + productH);
+            tvH.setText(productH);
             // Set color based on healthiness value
             int color = Color.BLACK;
             if (productH.equals("Un-healthy")) {

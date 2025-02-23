@@ -23,7 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class AddCategoryActivity extends AppCompatActivity {
+public class AddCategoryActivity extends ToolBarActivity {
 Button btnSaveCategoryName;
 EditText etCategryName;
 DatabaseReference ref;
@@ -31,8 +31,11 @@ DatabaseReference ref;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_add_category);
+        //setContentView(R.layout.activity_add_category);
 
+        getLayoutInflater().inflate(R.layout.activity_add_category, findViewById(R.id.container));
+        setToolbarTitle("Add Category");
+        showBackButton(true);
         //Initialize
         String id = getIntent().getStringExtra("id");
         etCategryName=findViewById(R.id.et_category_name);
