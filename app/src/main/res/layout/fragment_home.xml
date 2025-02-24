@@ -1,277 +1,335 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp"
-    android:orientation="vertical"
-    >
-    <LinearLayout
-        android:id="@+id/card_container"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/search_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="15dp"
-            android:backgroundTint="@color/dark_green"
-            >
+        <LinearLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="10dp"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:layout_height="match_parent">
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:padding="10dp"
+                        android:orientation="vertical"
+                        >
+                        <LinearLayout
+                            android:id="@+id/card_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="10dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="15dp"
-                    android:paddingStart="15dp"
-                    android:paddingRight="15dp"
-                    android:paddingBottom="8dp"
-                    android:src="@drawable/baseline_search_24" />
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/search_card"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_margin="8dp"
+                                app:cardCornerRadius="15dp"
+                                android:backgroundTint="@color/dark_green"
+                                >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="for Product"
-                    android:textSize="15sp"
-                    android:paddingBottom="10dp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingTop="15dp"
+                                        android:paddingStart="15dp"
+                                        android:paddingRight="15dp"
+                                        android:paddingBottom="8dp"
+                                        android:src="@drawable/baseline_search_24" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/scan_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="15dp"
-            android:backgroundTint="@color/light_green">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Search"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="for Product"
+                                        android:textSize="15sp"
+                                        android:paddingBottom="10dp"
+                                        android:textStyle="bold"/>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="11dp"
-                    android:paddingStart="15dp"
-                    android:paddingRight="15dp"
-                    android:paddingBottom="8dp"
-                    android:src="@drawable/icon_barcode" />
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/scan_card"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_margin="8dp"
+                                app:cardCornerRadius="15dp"
+                                android:backgroundTint="@color/light_green">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Scan"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Barcode"
-                    android:textSize="15sp"
-                    android:paddingBottom="10dp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingTop="11dp"
+                                        android:paddingStart="15dp"
+                                        android:paddingRight="15dp"
+                                        android:paddingBottom="8dp"
+                                        android:src="@drawable/icon_barcode" />
 
-    <LinearLayout
-        android:id="@+id/text_image_container"
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Scan"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Barcode"
+                                        android:textSize="15sp"
+                                        android:paddingBottom="10dp"
+                                        android:textStyle="bold"/>
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/text_image_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/card_container"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/main_text_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:text="Scan, Learn, and Eat Smart!"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:id="@+id/main_text_description"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Our app makes healthy eating effortless! Simply scan product barcodes to access detailed nutritional facts and get instant insights on what’s safe and what’s not."
+                                    android:textSize="15sp"/>
+                            </LinearLayout>
+                            <ImageView
+                                android:id="@+id/main_image"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginTop="20dp"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/img_health"
+                                android:layout_marginRight="16dp"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ingredient Health Status"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textColor="@color/light_green"
+                            android:paddingBottom="8dp"
+                            android:layout_marginTop="20dp"/>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/name_safe_ing"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:layout_weight="1"
+                                android:text="Name"
+                                android:padding="5dp"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/category_safe_ing"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:text="Category"
+                                android:textSize="15sp"
+                                android:textColor="@color/dark_green"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="5dp"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/name_safe"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Name"
+                                android:textSize="15sp"
+                                android:padding="5dp"
+                                android:layout_marginBottom="8dp" />
+
+                            <TextView
+                                android:id="@+id/category_safe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Category"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/dark_green"
+                                android:layout_marginBottom="16dp"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="5dp"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/name_danger"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Name"
+                                android:padding="5dp"
+                                android:textSize="15sp"
+                                android:layout_marginBottom="8dp" />
+
+                            <TextView
+                                android:id="@+id/category_danger"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Category"
+                                android:textColor="@color/red"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="16dp"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="5dp"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/name_danger_ing"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Name"
+                                android:textSize="15sp"
+                                android:padding="5dp"
+                                android:layout_marginBottom="8dp" />
+
+                            <TextView
+                                android:id="@+id/category_danger_ing"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Category"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/red"
+                                android:layout_marginBottom="16dp"
+                                />
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/overlayLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/white"
+                            android:alpha="0.8"
+                            android:visibility="gone">
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/lottieAnimation"
+                                android:layout_width="200dp"
+                                android:layout_height="200dp"
+                                android:layout_centerInParent="true"
+                                app:lottie_rawRes="@raw/lottie"
+                                app:lottie_autoPlay="false"
+                                app:lottie_loop="false"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </ScrollView>
+            </FrameLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="false"
+        app:lottie_speed="1"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/lottie"/>
+
+    <View
+        android:id="@+id/overlay_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/card_container"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/main_text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Scan, Learn, and Eat Smart!"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/main_text_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Our app makes healthy eating effortless! Simply scan product barcodes to access detailed nutritional facts and get instant insights on what’s safe and what’s not."
-            android:textSize="15sp"/>
-    </LinearLayout>
-        <ImageView
-            android:id="@+id/main_image"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/img_health"
-            android:layout_marginRight="16dp"/>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ingredient Health Status"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="@color/light_green"
-        android:paddingBottom="8dp"
-        android:layout_marginTop="20dp"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <TextView
-            android:id="@+id/name_safe_ing"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:text="Name"
-            android:padding="5dp"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/category_safe_ing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Category"
-            android:textSize="15sp"
-            android:textColor="@color/dark_green"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:layout_marginTop="5dp">
-
-        <TextView
-            android:id="@+id/name_safe"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Name"
-            android:textSize="15sp"
-            android:padding="5dp"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/category_safe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@color/dark_green"
-            android:layout_marginBottom="16dp"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:layout_marginTop="5dp">
-
-        <TextView
-            android:id="@+id/name_danger"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Name"
-            android:padding="5dp"
-            android:textSize="15sp"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/category_danger"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textColor="@color/red"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:layout_marginTop="5dp">
-
-        <TextView
-            android:id="@+id/name_danger_ing"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Name"
-            android:textSize="15sp"
-            android:padding="5dp"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/category_danger_ing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@color/red"
-            android:layout_marginBottom="16dp"
-            />
-    </LinearLayout>
-
-
-
-
-</LinearLayout>
-</ScrollView>
+        android:layout_height="match_parent"
+    android:visibility="gone"/>
+</FrameLayout>

@@ -1,91 +1,49 @@
 package com.example.barcodebuddy;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler; // Correct import for Handler
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.airbnb.lottie.LottieAnimationView; // Import for Lottie Animation
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class HomeFragment extends Fragment  {
-CardView searchCard,scanCard;
-TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDanger,nameDangerIng,categoryDangerIng;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class HomeFragment extends Fragment {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    CardView searchCard, scanCard;
+    LinearLayout mainLayout;
+    TextView nameSafeIng, categorySafeIng, nameSafe, categorySafe, nameDanger, categoryDanger, nameDangerIng, categoryDangerIng;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    // Lottie Animation & Overlay
+    private LottieAnimationView lottieAnimation;
+    private View overlayLayout;
 
     DatabaseReference dbRef;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Initialize UI elements
         searchCard = view.findViewById(R.id.search_card);
         scanCard = view.findViewById(R.id.scan_card);
         nameSafeIng = view.findViewById(R.id.name_safe_ing);
@@ -96,76 +54,46 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
         categoryDanger = view.findViewById(R.id.category_danger);
         nameDangerIng = view.findViewById(R.id.name_danger_ing);
         categoryDangerIng = view.findViewById(R.id.category_danger_ing);
+        mainLayout = view.findViewById(R.id.main_layout);
+
+        // Initialize Lottie Animation and Overlay
+        lottieAnimation = view.findViewById(R.id.lottie_animation);
+        overlayLayout = view.findViewById(R.id.overlay_layout);
 
         nameSafe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),IngDetailActivity.class);
-                String name = nameSafe.getText().toString();
-                intent.putExtra("name",name);
-                Integer color = R.color.dark_green;
-                intent.putExtra("color",color);
-                startActivity(intent);
+                playAnimationThenStartActivity(nameSafe, R.color.dark_green);
             }
         });
-
         nameSafeIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),IngDetailActivity.class);
-                String name = nameSafeIng.getText().toString();
-
-                Integer color = R.color.dark_green;
-                intent.putExtra("color",color);
-                intent.putExtra("name",name);
-                startActivity(intent);
+                playAnimationThenStartActivity(nameSafeIng, R.color.dark_green);
             }
         });
-
         nameDanger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),IngDetailActivity.class);
-                String name = nameDanger.getText().toString();
-                Integer color = R.color.red;
-                intent.putExtra("color",color);
-                intent.putExtra("name",name);
-                startActivity(intent);
+                playAnimationThenStartActivity(nameDanger, R.color.red);
             }
         });
-
         nameDangerIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),IngDetailActivity.class);
-                String name = nameDangerIng.getText().toString();
-                Integer color = R.color.red;
-                intent.putExtra("color",color);
-                intent.putExtra("name",name);
-                startActivity(intent);
+                playAnimationThenStartActivity(nameDangerIng, R.color.red);
             }
         });
 
-
-         dbRef = FirebaseDatabase.getInstance().getReference("Ingredients");
-
+        dbRef = FirebaseDatabase.getInstance().getReference("Ingredients");
 
         searchCard.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(requireContext(),SearchActivity.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                startActivity(new Intent(requireContext(), SearchActivity.class));
             }
         });
-
-        scanCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(requireContext(),ScanBarcodeActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        scanCard.setOnClickListener(v -> startActivity(new Intent(requireContext(), ScanBarcodeActivity.class)));
 
         fetchIngredients();
 
@@ -199,22 +127,22 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
 
                 // Display Safe Ingredients
                 if (safeIngredients.size() > 0) {
-                    nameSafe.setText(safeIngredients.get(0)[0]); // Name
-                    categorySafe.setText(safeIngredients.get(0)[1]); // Category
+                    nameSafe.setText(safeIngredients.get(0)[0]);
+                    categorySafe.setText(safeIngredients.get(0)[1]);
                 }
                 if (safeIngredients.size() > 1) {
-                    nameSafeIng.setText(safeIngredients.get(1)[0]); // Name
-                    categorySafeIng.setText(safeIngredients.get(1)[1]); // Category
+                    nameSafeIng.setText(safeIngredients.get(1)[0]);
+                    categorySafeIng.setText(safeIngredients.get(1)[1]);
                 }
 
                 // Display Dangerous Ingredients
                 if (dangerousIngredients.size() > 0) {
-                    nameDanger.setText(dangerousIngredients.get(0)[0]); // Name
-                    categoryDanger.setText(dangerousIngredients.get(0)[1]); // Category
+                    nameDanger.setText(dangerousIngredients.get(0)[0]);
+                    categoryDanger.setText(dangerousIngredients.get(0)[1]);
                 }
                 if (dangerousIngredients.size() > 1) {
-                    nameDangerIng.setText(dangerousIngredients.get(1)[0]); // Name
-                    categoryDangerIng.setText(dangerousIngredients.get(1)[1]); // Category
+                    nameDangerIng.setText(dangerousIngredients.get(1)[0]);
+                    categoryDangerIng.setText(dangerousIngredients.get(1)[1]);
                 }
             }
 
@@ -225,5 +153,27 @@ TextView nameSafeIng,categorySafeIng,nameSafe,categorySafe,nameDanger,categoryDa
         });
     }
 
+    private void playAnimationThenStartActivity(TextView textView, int color) {
 
+        mainLayout.setVisibility(View.GONE);
+        // Show the overlay layout
+        overlayLayout.setVisibility(View.VISIBLE);
+        lottieAnimation.setVisibility(View.VISIBLE); // Ensure it's visible
+
+        // Start Lottie animation
+        lottieAnimation.playAnimation();
+
+        // Delay for animation duration (2 seconds) before starting the intent
+        new Handler().postDelayed(() -> {
+            // Hide the overlay after animation
+            overlayLayout.setVisibility(View.GONE);
+            lottieAnimation.setVisibility(View.GONE); // Hide the animation after playing
+
+            // Create the intent and pass the data
+            Intent intent = new Intent(getContext(), IngDetailActivity.class);
+            intent.putExtra("name", textView.getText().toString());
+            intent.putExtra("color", color);
+            startActivity(intent);
+        }, 2000); // Adjust this delay if necessary
+    }
 }

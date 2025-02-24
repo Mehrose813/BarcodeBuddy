@@ -64,10 +64,12 @@ public class UserNotificationFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Reply reply = dataSnapshot.getValue(Reply.class);
                     if (reply != null && reply.getUserEmail().equals(currentUserEmail)) {
-                        replyList.add(reply);
+                        replyList.clear();  // Purana data remove karo
+                        replyList.add(reply); // Sirf akhri reply add karo
                     }
                 }
-                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged(); // RecyclerView ko update karo
+                
             }
 
             @Override

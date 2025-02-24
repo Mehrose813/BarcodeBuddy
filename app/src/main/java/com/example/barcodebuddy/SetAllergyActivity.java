@@ -3,6 +3,7 @@ package com.example.barcodebuddy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -150,7 +152,6 @@ public class SetAllergyActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         existingAllergies.add(selectedAllergic.toLowerCase()); // Add to set
                         addAllergyToUI(key, selectedAllergic);
-                        // Set isAllergic to true when the allergy is saved
                         updateAllergyStatus(selectedAllergic, true);
                         Toast.makeText(SetAllergyActivity.this, "Allergy saved!", Toast.LENGTH_SHORT).show();
                     } else {
@@ -166,14 +167,32 @@ public class SetAllergyActivity extends AppCompatActivity {
         ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
         ingredientLayout.setTag(key);
 
+        // Set padding and margins for proper spacing
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.setMargins(0, 0, 0, 10); // Bottom margin
+        ingredientLayout.setLayoutParams(layoutParams);
+        ingredientLayout.setPadding(16, 16, 16, 16);
+
         TextView textView = new TextView(this);
         textView.setText(allergy);
         textView.setTextSize(15);
-        textView.setPadding(16, 0, 0, 0);
+        textView.setPadding(0, 0, 16, 0);
 
         ImageView deleteIcon = new ImageView(this);
-        deleteIcon.setImageResource(android.R.drawable.ic_delete);
-        deleteIcon.setPadding(30, 0, 0, 0);
+        deleteIcon.setImageResource(R.drawable.delete_icon);
+        deleteIcon.setPadding(16, 0, 16, 0);
+
+        // Align deleteIcon to the end
+        LinearLayout.LayoutParams deleteIconParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        deleteIconParams.weight = 1;
+        deleteIconParams.gravity = Gravity.END;
+        deleteIcon.setLayoutParams(deleteIconParams);
 
         ingredientLayout.addView(textView);
         ingredientLayout.addView(deleteIcon);
@@ -188,23 +207,25 @@ public class SetAllergyActivity extends AppCompatActivity {
     }
 
     private void removeAllergyFromDatabase(String key, LinearLayout layout, String allergy) {
-        userRef.child(key).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    selectedLayout.removeView(layout);
-                    existingAllergies.remove(allergy.toLowerCase()); // Remove from set
-                    // Set isAllergic to false when the allergy is removed
-                    updateAllergyStatus(allergy, false);
-                    Toast.makeText(SetAllergyActivity.this, "Allergy removed!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SetAllergyActivity.this, "Failed to remove allergy", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        new AlertDialog.Builder(this)
+                .setTitle("Deleting Allergy item")
+                .setMessage("Are you sure you want to remove this allergy?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    userRef.child(key).removeValue().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            selectedLayout.removeView(layout);
+                            existingAllergies.remove(allergy.toLowerCase());
+                            updateAllergyStatus(allergy, false);
+                            Toast.makeText(SetAllergyActivity.this, "Allergy removed!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SetAllergyActivity.this, "Failed to remove allergy", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
-    // Update allergy status in Firebase
     private void updateAllergyStatus(String allergy, boolean isAllergic) {
         DatabaseReference allergyRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("allergies_status");
         allergyRef.child(allergy.toLowerCase()).setValue(isAllergic);

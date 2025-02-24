@@ -38,8 +38,8 @@ import java.util.UUID;
 public class UserFragment extends Fragment {
 
     private TextView tvName, tvEmail;
-    private Button btnSave;
-    private ImageView ivEditIcon, ivProfile ,tvAllergy,btnLogout,editIconName;
+    private Button btnSave,btnLogOut;
+    private ImageView ivEditIcon, ivProfile ,tvAllergy,editIconName;
     private Uri imageUri;
     EditText etName;
     private ProgressBar progressBar;
@@ -84,7 +84,8 @@ public class UserFragment extends Fragment {
         tvEmail = view.findViewById(R.id.tv_email);
         ivEditIcon = view.findViewById(R.id.editicon);
         ivProfile = view.findViewById(R.id.profile);
-        btnLogout = view.findViewById(R.id.btn_logout);
+        btnLogOut = view.findViewById(R.id.btn_logout);
+
         editIconName=view.findViewById(R.id.edit_iconName);
         progressBar=view.findViewById(R.id.progressBar);
         tvAllergy = view.findViewById(R.id.tv_allergy);
@@ -194,7 +195,7 @@ public class UserFragment extends Fragment {
     }
 
     private void setupLogoutButton() {
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());

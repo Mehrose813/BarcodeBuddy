@@ -215,38 +215,18 @@
                     />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/logout"
-                    android:layout_marginTop="10dp"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="LogOut"
-                    android:textSize="16sp"
-                    android:textColor="@color/red"
-                    android:padding="10dp"
-                     />
-                <ImageView
-                    android:id="@+id/btn_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_arrow_forward_24"
-                    android:layout_marginTop="10dp"
-                    />
-
-            </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/dark_green"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
+
     </LinearLayout>
 </ScrollView>
