@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,16 +12,16 @@
     android:padding="24dp"
     tools:context=".AdminStatusFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Admin Panel"
-        android:textSize="28sp"
-        android:textColor="@color/black"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        android:textStyle="bold" />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Admin Panel"-->
+<!--        android:textSize="28sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:layout_marginBottom="32dp"-->
+<!--        android:textStyle="bold" />-->
 
     <GridLayout
         android:layout_width="match_parent"
@@ -45,8 +49,9 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/ingredients"
-                    app:tint="#4CAF50" />
+                    app:tint="#06640A" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -88,7 +93,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/list"
-                    app:tint="#4CAF50"/>
+                    android:layout_marginTop="10dp"
+                    app:tint="#06640A"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -130,8 +136,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/blog"
-                    android:layout_marginTop="5dp"
-                    app:tint="#4CAF50"/>
+                    android:layout_marginTop="10dp"
+                    app:tint="#06640A"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -157,3 +163,4 @@
     </GridLayout>
 
 </LinearLayout>
+</ScrollView>

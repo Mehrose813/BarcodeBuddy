@@ -1,20 +1,27 @@
 package com.example.barcodebuddy;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.airbnb.lottie.LottieAnimationView; // Import Lottie
 
 public class IngDetailActivity extends AppCompatActivity {
 
     TextView title;
     TextView detail;
+    LottieAnimationView lottieAnimation; // Lottie animation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,43 +29,56 @@ public class IngDetailActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ing_detail);
 
-        title=findViewById(R.id.title);
-        detail=findViewById(R.id.details);
+        title = findViewById(R.id.title);
+        detail = findViewById(R.id.details);
+        lottieAnimation = findViewById(R.id.lottie_animation); // Initialize Lottie
 
-        int color = getIntent().getIntExtra("color", R.color.black);//default if no color provided
+        int color = getIntent().getIntExtra("color", R.color.black);
         String name = getIntent().getStringExtra("name");
 
         if (color != 0) {
             title.setTextColor(getResources().getColor(color, null));
         }
 
-        if(name != null){
+        if (name != null) {
             title.setText(name);
 
-            APIUtill.fetchIngInfo(this, name, new APIUtill.OnFetchCompleteListener() {
-                @Override
-                public void onSuccess(String response) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            detail.setText(response);
-                        }
-                    });
-                }
+            // Show Lottie animation and hide details
+            lottieAnimation.setVisibility(View.VISIBLE);
+            detail.setVisibility(View.GONE);
+            title.setVisibility(View.GONE);
 
-                @Override
-                public void onFailure(String error) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+            // Delay fetching data for 3 seconds (to show Lottie animation)
+            new Handler().postDelayed(() -> {
+                APIUtill.fetchIngInfo(this, name, new APIUtill.OnFetchCompleteListener() {
+                    @Override
+                    public void onSuccess(String response) {
+                        runOnUiThread(() -> {
+                            // Hide Lottie animation and show the data
+                            lottieAnimation.setVisibility(View.GONE);
+                            detail.setVisibility(View.VISIBLE);
+                            title.setVisibility(View.VISIBLE);
+                            detail.setText(formatResponse(response));
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        runOnUiThread(() -> {
+                            lottieAnimation.setVisibility(View.GONE);
+                            detail.setVisibility(View.VISIBLE);
+                            title.setVisibility(View.VISIBLE);
                             detail.setText("Sorry...We are unable to load data");
                             Toast.makeText(IngDetailActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }, 4000); // 3 seconds delay
         }
-
-
     }
+
+    private CharSequence formatResponse(String response) {
+        return response.replace("**", ""); // Simply removes '**' without modifying anything else
+    }
+
 }

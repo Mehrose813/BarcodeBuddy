@@ -40,9 +40,12 @@ public class BlogListActivity extends ToolBarActivity {
         adapter = new BlogListAdapter(this, blogList);
         recyclerBlog.setAdapter(adapter);
 
-        btnAddBlog.setOnClickListener(view -> {
-            Intent intent = new Intent(BlogListActivity.this, AddBlogsActivity.class);
-            startActivity(intent);
+        btnAddBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BlogListActivity.this,AddBlogsActivity.class);
+                startActivity(intent);
+            }
         });
 
         fetchBlogsFromFirebase();

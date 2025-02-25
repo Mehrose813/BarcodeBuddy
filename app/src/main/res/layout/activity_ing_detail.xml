@@ -3,33 +3,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".IngDetailActivity">
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ing Name"
-        android:gravity="center"
-        android:layout_marginTop="25dp"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:textColor="@color/dark_green"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".IngDetailActivity">
 
-    <TextView
-        android:id="@+id/details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:layout_margin="15dp"
-        />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ing Name"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_green"/>
 
-</LinearLayout>
+        <!-- Lottie Animation for Loading -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_animation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            app:lottie_rawRes="@raw/lottie"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_margin="15dp"
+            android:visibility="gone"/>
+    </LinearLayout>
 </ScrollView>

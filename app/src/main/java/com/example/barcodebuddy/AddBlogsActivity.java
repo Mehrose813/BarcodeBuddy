@@ -36,13 +36,10 @@ public class AddBlogsActivity extends AppCompatActivity {
     private Uri imageUri;
     private String blogId, oldImageId;
 
-    // Activity result launchers for capturing and selecting images
     private final ActivityResultLauncher<Uri> captureImage =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
                 if (result != null && result) {
-                    if (imageUri != null) {
-                        ivBlogImage.setImageURI(imageUri); // 📌 Display the captured image
-                    }
+                    ivBlogImage.setImageURI(imageUri);
                 }
             });
 
@@ -50,7 +47,7 @@ public class AddBlogsActivity extends AppCompatActivity {
             registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
                 if (result != null) {
                     imageUri = result;
-                    ivBlogImage.setImageURI(result); // 📌 Display the selected image
+                    ivBlogImage.setImageURI(result);
                 }
             });
 
@@ -62,10 +59,10 @@ public class AddBlogsActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.etTitle);
         etBlogsAuthor = findViewById(R.id.etAuthor);
         etBlogContent = findViewById(R.id.etContent);
-        btnSave = findViewById(R.id.btnSaveBlog);
-//        ivBlogCamera = findViewById(R.id.iv_blog_imageicon);
-//        ivBlogImage = findViewById(R.id.iv_blog_image);
         etLink = findViewById(R.id.etLink);
+        btnSave = findViewById(R.id.btnSaveBlog);
+        ivBlogCamera = findViewById(R.id.iv_blog_imageicon);
+        ivBlogImage = findViewById(R.id.iv_blog_image);
 
         ref = FirebaseDatabase.getInstance().getReference("Blogs");
 
@@ -95,21 +92,7 @@ public class AddBlogsActivity extends AppCompatActivity {
                         etTitle.setText(blog.getBlogName());
                         etBlogsAuthor.setText(blog.getBlogAuthor());
                         etBlogContent.setText(blog.getBlogContent());
-                        oldImageId = blog.getBlogImage(); // 📌 Store old image ID for updates
-
-                        /*
-                        // Load old image from Firebase if exists
-                        if (oldImageId != null && !oldImageId.isEmpty()) {
-                            FirebaseDatabase.getInstance().getReference("imagesString")
-                                    .child(oldImageId)
-                                    .get().addOnCompleteListener(task -> {
-                                        if (task.isSuccessful() && task.getResult().exists()) {
-                                            String base64Image = task.getResult().getValue(String.class);
-                                            ivBlogImage.setImageBitmap(MyUtilClass.base64ToBitmap(base64Image));
-                                        }
-                                    });
-                        }
-                        */
+                        oldImageId = blog.getBlogImage();
                     }
                 }
             }
@@ -133,34 +116,11 @@ public class AddBlogsActivity extends AppCompatActivity {
         }
 
         BlogClass blog = new BlogClass(title, author, content, null, null, link);
-
-        /*
-        // If an image is selected, convert it to Base64 and save in Firebase
-        if (imageUri != null) {
-            String imageString = MyUtilClass.imageUriToBase64(imageUri, getContentResolver());
-            String imageId = UUID.randomUUID().toString();
-
-            FirebaseDatabase.getInstance().getReference("imagesString")
-                    .child(imageId)
-                    .setValue(imageString)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            blog.setBlogImage(imageId);
-                            ref.push().setValue(blog).addOnCompleteListener(blogTask -> {
-                                if (blogTask.isSuccessful()) {
-                                    Toast.makeText(this, "Blog Saved Successfully", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-        } else {
-            */
         ref.push().setValue(blog).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Blog Saved Successfully", Toast.LENGTH_SHORT).show();
             }
         });
-        // }
     }
 
     private void updateBlog() {
@@ -175,38 +135,11 @@ public class AddBlogsActivity extends AppCompatActivity {
         }
 
         BlogClass blog = new BlogClass(title, author, content, blogId, oldImageId, link);
-
-        /*
-        // If a new image is selected, replace the old one in Firebase
-        if (imageUri != null) {
-            String imageString = MyUtilClass.imageUriToBase64(imageUri, getContentResolver());
-            String imageId = UUID.randomUUID().toString();
-
-            FirebaseDatabase.getInstance().getReference("imagesString")
-                    .child(imageId)
-                    .setValue(imageString)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            if (oldImageId != null) {
-                                FirebaseDatabase.getInstance().getReference("imagesString").child(oldImageId).removeValue();
-                            }
-
-                            blog.setBlogImage(imageId);
-                            ref.child(blogId).setValue(blog).addOnCompleteListener(blogTask -> {
-                                if (blogTask.isSuccessful()) {
-                                    Toast.makeText(this, "Blog Updated Successfully", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-        } else {
-        */
         ref.child(blogId).setValue(blog).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Blog Updated Successfully", Toast.LENGTH_SHORT).show();
             }
         });
-        // }
     }
 
     private void setupEditIcon() {

@@ -28,12 +28,9 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     CardView searchCard, scanCard;
-    LinearLayout mainLayout;
     TextView nameSafeIng, categorySafeIng, nameSafe, categorySafe, nameDanger, categoryDanger, nameDangerIng, categoryDangerIng;
 
-    // Lottie Animation & Overlay
-    private LottieAnimationView lottieAnimation;
-    private View overlayLayout;
+
 
     DatabaseReference dbRef;
 
@@ -54,34 +51,41 @@ public class HomeFragment extends Fragment {
         categoryDanger = view.findViewById(R.id.category_danger);
         nameDangerIng = view.findViewById(R.id.name_danger_ing);
         categoryDangerIng = view.findViewById(R.id.category_danger_ing);
-        mainLayout = view.findViewById(R.id.main_layout);
 
-        // Initialize Lottie Animation and Overlay
-        lottieAnimation = view.findViewById(R.id.lottie_animation);
-        overlayLayout = view.findViewById(R.id.overlay_layout);
 
         nameSafe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playAnimationThenStartActivity(nameSafe, R.color.dark_green);
-            }
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                intent.putExtra("name",nameSafe.getText().toString());
+                intent.putExtra("color",R.color.dark_green);
+                startActivity(intent);            }
         });
         nameSafeIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playAnimationThenStartActivity(nameSafeIng, R.color.dark_green);
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                intent.putExtra("name",nameSafeIng.getText().toString());
+                intent.putExtra("color",R.color.dark_green);
+                startActivity(intent);
             }
         });
         nameDanger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playAnimationThenStartActivity(nameDanger, R.color.red);
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                intent.putExtra("name",nameDanger.getText().toString());
+                intent.putExtra("color",R.color.red);
+                startActivity(intent);
             }
         });
         nameDangerIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playAnimationThenStartActivity(nameDangerIng, R.color.red);
+                Intent intent = new Intent(getContext(),IngDetailActivity.class);
+                intent.putExtra("name",nameDangerIng.getText().toString());
+                intent.putExtra("color",R.color.red);
+                startActivity(intent);
             }
         });
 
@@ -151,29 +155,5 @@ public class HomeFragment extends Fragment {
                 // Handle database error
             }
         });
-    }
-
-    private void playAnimationThenStartActivity(TextView textView, int color) {
-
-        mainLayout.setVisibility(View.GONE);
-        // Show the overlay layout
-        overlayLayout.setVisibility(View.VISIBLE);
-        lottieAnimation.setVisibility(View.VISIBLE); // Ensure it's visible
-
-        // Start Lottie animation
-        lottieAnimation.playAnimation();
-
-        // Delay for animation duration (2 seconds) before starting the intent
-        new Handler().postDelayed(() -> {
-            // Hide the overlay after animation
-            overlayLayout.setVisibility(View.GONE);
-            lottieAnimation.setVisibility(View.GONE); // Hide the animation after playing
-
-            // Create the intent and pass the data
-            Intent intent = new Intent(getContext(), IngDetailActivity.class);
-            intent.putExtra("name", textView.getText().toString());
-            intent.putExtra("color", color);
-            startActivity(intent);
-        }, 2000); // Adjust this delay if necessary
     }
 }

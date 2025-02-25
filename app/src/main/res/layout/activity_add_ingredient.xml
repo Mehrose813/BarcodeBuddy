@@ -32,6 +32,25 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:layout_marginBottom="24dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Safety:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_green"
+            android:layout_marginBottom="0dp"/>
+
+        <Spinner
+
+            android:id="@+id/spin_safe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:entries="@array/spin_safe"/>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,24 +73,6 @@
             android:gravity="top|start"
             android:layout_marginBottom="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Safety:"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/dark_green"
-            android:layout_marginBottom="0dp"/>
-
-        <Spinner
-
-            android:id="@+id/spin_safe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:entries="@array/spin_safe"/>
 
         <Button
             android:id="@+id/btn_save_ingredients"

@@ -81,10 +81,10 @@ DatabaseReference missingProductsRef;
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()== R.id.home_admin){
-                    loadFragment(new AdminHomeFragment() , "Barcode Buddy");
+                    loadFragment(new AdminHomeFragment() , "\uD83D\uDCE6 Product's List");
                 }
                 else if(item.getItemId() == R.id.status_admin){
-                    loadFragment(new AdminStatusFragment() ,"Add");
+                    loadFragment(new AdminStatusFragment() ,"Manage resources");
                 }
                 else if(item.getItemId() == R.id.notification_admin){
                     loadFragment(new AdminNotificationFragment(),"Notifications");

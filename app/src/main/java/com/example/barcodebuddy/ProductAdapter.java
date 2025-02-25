@@ -36,7 +36,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-
         Product product = products.get(position);
         holder.tvName.setText(product.getName());
         holder.tvCat.setText(product.getCat());
@@ -45,12 +44,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, IngredientQuantityActivity.class);
-                intent.putExtra("id",product.getId());
-                intent.putExtra("name",product.getName());
-                intent.putExtra("category",product.getCat());
-                intent.putExtra("healthiness",product.getHealthy());
-                intent.putExtra("img",product.getImg());
-                intent.putExtra("barcode",product.getBarcode());
+                intent.putExtra("id", product.getId());
+                intent.putExtra("name", product.getName());
+                intent.putExtra("category", product.getCat());
+                intent.putExtra("healthiness", product.getHealthy());
+                intent.putExtra("img", product.getImg());
+                intent.putExtra("barcode", product.getBarcode());
 
                 context.startActivity(intent);
             }
@@ -88,20 +87,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         holder.ivEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Open the AddIngredientActivity to edit the product
+                // Open the AddProductActivity to edit the product
                 Intent intent = new Intent(context, AddProductActivity.class);
                 intent.putExtra("id", product.getId());
-                intent.putExtra("name",product.getName());
-                intent.putExtra("desc",product.getDesc());
-                intent.putExtra("cat",product.getCat());
-                intent.putExtra("health",product.getHealthy());
-                intent.putExtra("img",product.getImg());
+                intent.putExtra("name", product.getName());
+                intent.putExtra("desc", product.getDesc());
+                intent.putExtra("cat", product.getCat());
+                intent.putExtra("health", product.getHealthy());
+                intent.putExtra("img", product.getImg());
+                intent.putExtra("barcode", product.getBarcode()); // Ensure barcode is included
                 context.startActivity(intent);
             }
         });
-
     }
-
     @Override
     public int getItemCount() {
         return products.size();
