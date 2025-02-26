@@ -1,6 +1,8 @@
 package com.example.barcodebuddy;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,74 +30,62 @@ Button btn;
         btn = findViewById(R.id.btn);
 
 
-        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            // User not logged in, show login button
             btn.setVisibility(View.VISIBLE);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this,SignInActivity.class);
-                    startActivity(intent);
-                   finish();
-                }
+            btn.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                startActivity(intent);
+                finish();
             });
-
-        }
-
-        else {
+        } else {
+            // User logged in, hide login button
             btn.setVisibility(View.GONE);
 
-            // Fetch user type from the database
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            // Check if internet is available
+            if (isInternetAvailable()) {
+                // Fetch user type from the database if internet is available
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
-            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        String userType = snapshot.child("type").getValue(String.class);
-
-                        if ("admin".equals(userType)) {
-                            Intent intent = new Intent(MainActivity.this, AdminMainActivity.class);
-                            startActivity(intent);
-                            finish();
+                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String userType = snapshot.child("type").getValue(String.class);
+                            if ("admin".equals(userType)) {
+                                startActivity(new Intent(MainActivity.this, AdminMainActivity.class));
+                            } else {
+                                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                            }
                         } else {
-                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(MainActivity.this, SignInActivity.class));
                         }
-                    } else {
-                        FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                        startActivity(intent);
-                        //finish();
+                        finish();
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                    startActivity(intent);
-                    //finish();
-                }
-            });
-
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                        finish();
+                    }
+                });
+            } else {
+                // No internet, go to HomeActivity directly
+                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                finish();
+            }
         }
+    }
 
-
-//        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-//
-//                btn.setVisibility(View.GONE);
-//                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//                startActivity(intent);
-//                finish();
-
-
-        }
-
-
-
-
+    // Function to check if internet is available
+    private boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
 
 
 

@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 
-public class AddBlogsActivity extends AppCompatActivity {
+public class AddBlogsActivity extends ToolBarActivity {
 
     EditText etBlogsAuthor, etBlogContent, etTitle, etLink;
     ImageView ivBlogCamera, ivBlogImage;
@@ -54,7 +54,12 @@ public class AddBlogsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_blogs);
+        //setContentView(R.layout.activity_add_blogs);
+
+        getLayoutInflater().inflate(R.layout.activity_add_blogs, findViewById(R.id.container));
+
+        setToolbarTitle("Add Blog");
+        showBackButton(true);
 
         etTitle = findViewById(R.id.etTitle);
         etBlogsAuthor = findViewById(R.id.etAuthor);

@@ -58,6 +58,8 @@ public class SignInActivity extends AppCompatActivity {
                 String mail = email.getText().toString();
                 String pass = passw.getText().toString();
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
+                String emailRegex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+
 
                 //validation
                 if (mail.isEmpty()) {
@@ -65,8 +67,8 @@ public class SignInActivity extends AppCompatActivity {
                     email.requestFocus();
                     return;
                 }
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
-                    email.setError("Enter a valid email");
+                if (mail.isEmpty()) {
+                    email.setError("Email is required");
                     email.requestFocus();
                     return;
                 }

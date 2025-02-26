@@ -30,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class AddProductActivity extends AppCompatActivity {
+public class AddProductActivity extends ToolBarActivity {
     String id;
     Spinner spCat, spH;
     Button btnSave;
@@ -50,8 +50,13 @@ public class AddProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_product); // Ensure you set the correct layout
+       // setContentView(R.layout.activity_add_product); // Ensure you set the correct layout
 
+
+        getLayoutInflater().inflate(R.layout.activity_add_product, findViewById(R.id.container));
+
+        setToolbarTitle("Add Product");
+        showBackButton(true);
         id = getIntent().getStringExtra("id");
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Products");
