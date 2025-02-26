@@ -60,10 +60,9 @@
         android:layout_height="wrap_content"
         android:text="Product Nutri value:"
         android:textSize="15sp"
-        android:layout_marginTop="10dp"
         android:textColor="@color/dark_green"
         android:textStyle="bold"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="16dp"
         />
 
     <TextView
