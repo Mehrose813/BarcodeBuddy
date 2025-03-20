@@ -1,5 +1,6 @@
 package com.example.barcodebuddy;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,6 +26,8 @@ public class AddIngredientActivity extends ToolBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         //setContentView(R.layout.activity_add_ingredient);
 
         getLayoutInflater().inflate(R.layout.activity_add_ingredient, findViewById(R.id.container));

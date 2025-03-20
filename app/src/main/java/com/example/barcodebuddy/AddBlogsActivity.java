@@ -2,6 +2,7 @@ package com.example.barcodebuddy;
 
 import android.content.ContentValues;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -53,6 +54,12 @@ public class AddBlogsActivity extends ToolBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //status bar color ka lia ha
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.light_green));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.light_green));
+        }
+
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_add_blogs);
 

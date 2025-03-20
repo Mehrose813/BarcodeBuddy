@@ -29,7 +29,7 @@ DatabaseReference missingProductsRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_main);
 
         toolbar = findViewById(R.id.toolbar_admin);
