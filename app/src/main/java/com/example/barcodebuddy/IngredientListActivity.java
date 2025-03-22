@@ -24,7 +24,7 @@ Button btnAddIngredient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this);
        // setContentView(R.layout.activity_ingredient_list);
 
         getLayoutInflater().inflate(R.layout.activity_ingredient_list, findViewById(R.id.container));
