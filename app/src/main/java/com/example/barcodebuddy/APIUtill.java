@@ -1,6 +1,5 @@
 package com.example.barcodebuddy;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,10 +28,6 @@ public class APIUtill {
     }
 
     public static void fetchIngInfo(Context context, String name, OnFetchCompleteListener listener) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Fetching Details...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
         dbRef.child(name.toLowerCase()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -40,21 +35,19 @@ public class APIUtill {
                 if (snapshot.exists()) {
                     String cachedData = snapshot.getValue(String.class);
                     listener.onSuccess(cachedData);
-                    progressDialog.dismiss();
                 } else {
-                   callAPI(context, name, listener, progressDialog);
+                    callAPI(context, name, listener);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                progressDialog.dismiss();
                 listener.onFailure("Firebase Error: " + error.getMessage());
             }
         });
     }
 
-    private static void callAPI(Context context, String name, OnFetchCompleteListener listener, ProgressDialog progressDialog) {
+    private static void callAPI(Context context, String name, OnFetchCompleteListener listener) {
         OkHttpClient client = new OkHttpClient();
 
         String jsonRequest = "{\"system_instruction\": { \"parts\": { \"text\": \"You are an expert AI in nutrition and health. Your job is to provide detailed information about ingredients when a user asks. For each ingredient, generate a structured response with the following details: Introduction, Uses, Base Ingredients, Uses in Food, Health Effects (Diabetic Patients, Heart Patients, Pregnant Women), and Conclusion. Your response should be informative, fact-based, and easy to understand.\" } }, \"contents\": [ { \"parts\": [ { \"text\": \"Tell me about " + name + "\" } ] } ], \"generationConfig\": { \"temperature\": 0.1, \"topP\": 0.1, \"topK\": 10 } }";
@@ -69,7 +62,6 @@ public class APIUtill {
             @Override
             public void onFailure(Call call, IOException e) {
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    progressDialog.dismiss();
                     Toast.makeText(context, "Error fetching info", Toast.LENGTH_SHORT).show();
                 });
                 listener.onFailure("Error fetching info.");
@@ -77,7 +69,6 @@ public class APIUtill {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                new Handler(Looper.getMainLooper()).post(() -> progressDialog.dismiss());
 
                 if (!response.isSuccessful()) {
                     new Handler(Looper.getMainLooper()).post(() -> {
@@ -96,6 +87,12 @@ public class APIUtill {
                             .getJSONArray("parts");
 
                     String info = contents.getJSONObject(0).getString("text");
+
+                    // Replace **text** with 👉 text 👈 and make it dark green
+                    info = info.replaceAll("\\*\\*(.*?)\\*\\*", "<b><font color='#006400'>👉 $1 👈</font></b>");
+
+                    // Remove ##
+                    info = info.replaceAll("##", "");
 
                     dbRef.child(name.toLowerCase()).setValue(info);
 

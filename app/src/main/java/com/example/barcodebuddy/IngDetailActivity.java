@@ -10,7 +10,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,16 +68,14 @@ public class IngDetailActivity extends AppCompatActivity {
                             detail.setVisibility(View.VISIBLE);
                             title.setVisibility(View.VISIBLE);
                             detail.setText("Sorry...We are unable to load data");
-                            Toast.makeText(IngDetailActivity.this, error, Toast.LENGTH_SHORT).show();
                         });
                     }
                 });
-            }, 4000); // 3 seconds delay
+            }, 4000); // 4 seconds delay
         }
     }
 
     private CharSequence formatResponse(String response) {
         return response.replace("**", ""); // Simply removes '**' without modifying anything else
     }
-
 }
