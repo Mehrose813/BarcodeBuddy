@@ -30,27 +30,33 @@
         </activity>
         <activity
             android:name=".IngDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.BarcodeBuddy"/>
         <activity
             android:name=".IngridientInformationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.BarcodeBuddy"/>
         <activity
             android:name=".ReplyReceiverActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.BarcodeBuddy"/>
         <activity
             android:name=".SetAllergyActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.BarcodeBuddy"/>
         <activity
             android:name=".BlogListActivity"
             android:exported="false"
             android:label="@string/title_activity_blog_list"
-            android:theme="@style/Base.Theme.BarcodeBuddy.NoActionBar" />
+            android:theme="@style/Base.Theme.BarcodeBuddy" />
         <activity
             android:name=".AddBlogsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.BarcodeBuddy"/>
         <activity
             android:name=".ScanBarcodeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.BarcodeBuddy"/>
         <activity
             android:name=".ScanBarcode"
             android:exported="false"
