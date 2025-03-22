@@ -54,7 +54,6 @@ public class AddProductActivity extends ToolBarActivity {
 
 
 
-
         getLayoutInflater().inflate(R.layout.activity_add_product, findViewById(R.id.container));
 
         setToolbarTitle("Add Product");

@@ -55,10 +55,6 @@ public class AddBlogsActivity extends ToolBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //status bar color ka lia ha
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.light_green));
-            getWindow().setStatusBarColor(getResources().getColor(R.color.light_green));
-        }
 
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_add_blogs);
