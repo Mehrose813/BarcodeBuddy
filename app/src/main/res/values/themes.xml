@@ -1,25 +1,26 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.BarcodeBuddy" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
         <!-- Status bar color -->
-        <item name="android:statusBarColor">@color/dark_green</item>
+        <item name="android:statusBarColor">#4CBC31</item>
         <!-- Navigation bar color -->
-        <item name="android:navigationBarColor">@color/light_green</item>
-        <!-- Status bar icons black (false if status bar color is dark) -->
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">#4CBC31</item>
+        <!-- Light icons on navigation bar -->
+
+        <item name="android:windowLightStatusBar">true</item> <!-- Black icons on status bar -->
+
+
     </style>
 
     <style name="Theme.BarcodeBuddy" parent="Base.Theme.BarcodeBuddy" />
-
-    <style name="Base.Theme.BarcodeBuddy.NoActionBar" parent="Base.Theme.BarcodeBuddy">
+    <style name="Base.Theme.BarcodeBuddy.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
     <style name="Base.Theme.BarcodeBuddy.AppBarOverlay"
         parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Base.Theme.BarcodeBuddy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <!-- Popup ka styling define karo agar zaroori ho -->
-    </style>
+    <style name="Base.Theme.BarcodeBuddy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
