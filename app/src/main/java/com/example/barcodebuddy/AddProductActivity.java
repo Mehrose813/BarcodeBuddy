@@ -51,11 +51,8 @@ public class AddProductActivity extends ToolBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_add_product); // Ensure you set the correct layout
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.light_green));
-            getWindow().setStatusBarColor(getResources().getColor(R.color.light_green));
-        }
+
+
 
 
         getLayoutInflater().inflate(R.layout.activity_add_product, findViewById(R.id.container));

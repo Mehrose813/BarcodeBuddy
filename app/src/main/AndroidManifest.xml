@@ -43,7 +43,7 @@
         <activity
             android:name=".SetAllergyActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.BarcodeBuddy"/>
+            />
         <activity
             android:name=".BlogListActivity"
             android:exported="false"
