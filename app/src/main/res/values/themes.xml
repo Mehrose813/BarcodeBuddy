@@ -4,7 +4,7 @@
         <!-- Status bar color -->
         <item name="android:statusBarColor">@color/dark_green</item>
         <!-- Navigation bar color -->
-        <item name="android:navigationBarColor">@color/light_green</item>
+        <item name="android:navigationBarColor">@color/dark_green</item>
         <!-- Status bar icons black (false if status bar color is dark) -->
         <item name="android:windowLightStatusBar">true</item>
     </style>
@@ -20,6 +20,6 @@
         parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Base.Theme.BarcodeBuddy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <!-- Popup ka styling define karo agar zaroori ho -->
+
     </style>
 </resources>
