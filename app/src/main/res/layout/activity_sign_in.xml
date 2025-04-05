@@ -66,6 +66,7 @@
         android:hint="Enter you email"
         android:background="@drawable/border_style"
         android:padding="10dp"
+        android:drawableStart="@drawable/baseline_email_24"
         />
     <TextView
         android:layout_width="match_parent"
@@ -87,6 +88,7 @@
         android:inputType="textPassword"
         android:background="@drawable/border_style"
         android:padding="10dp"
+        android:drawableStart="@drawable/baseline_lock_24"
         />
     </LinearLayout>
 

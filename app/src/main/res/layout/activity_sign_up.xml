@@ -68,6 +68,7 @@
         android:hint="Enter you name"
         android:background="@drawable/border_style"
         android:padding="10dp"
+        android:drawableStart="@drawable/baseline_person_24"
 
         />
 
@@ -90,6 +91,7 @@
         android:background="@drawable/border_style"
         android:padding="10dp"
         android:id="@+id/email"
+        android:drawableStart="@drawable/baseline_email_24"
         />
 
     <TextView
@@ -112,6 +114,7 @@
         android:background="@drawable/border_style"
         android:padding="10dp"
         android:inputType="textPassword"
+        android:drawableStart="@drawable/baseline_lock_24"
 
         />
 
@@ -135,6 +138,7 @@
         android:padding="10dp"
         android:id="@+id/con_pass"
         android:inputType="textPassword"
+        android:drawableStart="@drawable/baseline_lock_24"
         />
     </LinearLayout>
 

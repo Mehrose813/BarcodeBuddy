@@ -1,5 +1,7 @@
 package com.example.barcodebuddy;
 
+import com.google.firebase.auth.FirebaseUser;
+
 public class Profile {
     String name ,email,password,profileimageid,type;
 
@@ -49,7 +51,7 @@ public class Profile {
     public void setPassword(String password) {
         this.password = password;
     }
-    public Profile(){
+    public Profile(FirebaseUser currentUser){
 
     }
 }

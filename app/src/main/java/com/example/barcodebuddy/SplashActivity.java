@@ -10,7 +10,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -33,11 +35,17 @@ public class SplashActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    Profile profile = new Profile(FirebaseAuth.getInstance().getCurrentUser());
+                    if(profile.type =="Admin"){
+                        Intent intent = new Intent(SplashActivity.this,AdminMainActivity.class);
+                        startActivity(intent);
+                    }
                     Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish(); // Close SplashActivity
                 }
             }, 4000);
         }
+        finish();
     }
 }

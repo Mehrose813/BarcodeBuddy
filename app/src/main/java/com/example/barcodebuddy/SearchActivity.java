@@ -124,34 +124,3 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 }
-//
-//    private void searchProducts(String query) {
-//        Query searchQuery = databaseReference.orderByChild("name").startAt(query).endAt(query + "\uf8ff");
-//        searchQuery.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                productList.clear(); // Clear existing data to avoid duplicates
-//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                    Product product = dataSnapshot.getValue(Product.class);
-//                    if (product != null) {
-//                        productList.add(product); // Add product to the list
-//                    }
-//                }
-//                productAdapter.notifyDataSetChanged(); // Notify adapter about data changes
-//
-//                // Show or hide RecyclerView based on data
-//                if (productList.isEmpty()) {
-//                    rvProducts.setVisibility(View.GONE);
-//                    Toast.makeText(SearchActivity.this, "No products found", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    rvProducts.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(SearchActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//}
