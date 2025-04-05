@@ -1,6 +1,8 @@
 package com.example.barcodebuddy;
 
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ public class IngridientInformationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingridient_information);
+
 
         tvIngName = findViewById(R.id.tv_ingname);
         tvIngDes = findViewById(R.id.tv_ingdes);
