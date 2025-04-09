@@ -5,6 +5,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class Profile {
     String name ,email,password,profileimageid,type;
 
+    public Profile(){
+
+    }
+
     public String getType() {
         return type;
     }
