@@ -59,9 +59,10 @@ TextView txtLogin;
                 String name = nameSign.getText().toString();
                 String type="user";
 
-                String nameRegex = "^[^\\s]+$";
+                String nameRegex = "^[^\\s]{3,}$";
+                String emailRegex = "^[a-zA-Z0-9._%+-]{3,}@gmail\\.com$";
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
-                String emailRegex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+               // String emailRegex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
 
                 if(name.isEmpty()){
                     nameSign.setError("Name is required");
@@ -69,7 +70,7 @@ TextView txtLogin;
                     return;
                 }
                 if(!name.matches(nameRegex)){
-                    nameSign.setError("Spaces are not allowed in naming");
+                    nameSign.setError("Name must be at least 3 characters with no spaces");
                     nameSign.requestFocus();
                     return;
                 }
