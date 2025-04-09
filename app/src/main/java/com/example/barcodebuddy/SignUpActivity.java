@@ -26,7 +26,6 @@ TextView txtLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
 
         btnSignup = findViewById(R.id.btn_signup);
@@ -46,7 +45,6 @@ TextView txtLogin;
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SignUpActivity.this,SignInActivity.class);
-
                 startActivity(intent);
                 finish();
             }

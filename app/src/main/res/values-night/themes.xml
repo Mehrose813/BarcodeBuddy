@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme for dark mode -->
     <style name="Base.Theme.BarcodeBuddy" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Status bar color in dark mode -->
+        <item name="android:statusBarColor">#3B6121</item>
     </style>
 </resources>

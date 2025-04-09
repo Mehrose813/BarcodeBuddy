@@ -67,8 +67,8 @@ public class SignInActivity extends AppCompatActivity {
                     email.requestFocus();
                     return;
                 }
-                if (mail.isEmpty()) {
-                    email.setError("Email is required");
+                if(!mail.matches(emailRegex)){
+                    email.setError("Enter a valid email");
                     email.requestFocus();
                     return;
                 }
