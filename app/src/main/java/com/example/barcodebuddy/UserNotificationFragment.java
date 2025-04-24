@@ -56,26 +56,51 @@ public class UserNotificationFragment extends Fragment {
         return view;
     }
 
-    private void loadReplies() {
-        userRepliesRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                replyList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Reply reply = dataSnapshot.getValue(Reply.class);
-                    if (reply != null && reply.getUserEmail().equals(currentUserEmail)) {
-                        replyList.clear();  // Purana data remove karo
-                        replyList.add(reply); // Sirf akhri reply add karo
-                    }
+//    private void loadReplies() {
+//        userRepliesRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                replyList.clear();
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    Reply reply = dataSnapshot.getValue(Reply.class);
+//                    if (reply != null && reply.getUserEmail().equals(currentUserEmail)) {
+//                        replyList.clear();  // Purana data remove karo
+//                        replyList.add(reply); // Sirf akhri reply add karo
+//                    }
+//                }
+//                adapter.notifyDataSetChanged(); // RecyclerView ko update karo
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                // Handle possible errors
+//            }
+//        });
+//    }
+private void loadReplies() {
+    userRepliesRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            replyList.clear(); // Pehle purani list clear karo
+
+            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                Reply reply = dataSnapshot.getValue(Reply.class);
+
+                if (reply != null && reply.getUserEmail().equals(currentUserEmail)) {
+                    replyList.add(reply); // Sirf current user ke replies add karo
                 }
-                adapter.notifyDataSetChanged(); // RecyclerView ko update karo
-                
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle possible errors
-            }
-        });
-    }
+            adapter.notifyDataSetChanged(); // RecyclerView update karo
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            // Error handle karo yahan
+        }
+    });
+}
+
+
 }
