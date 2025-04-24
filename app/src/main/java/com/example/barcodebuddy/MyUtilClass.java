@@ -87,32 +87,60 @@ public class MyUtilClass {
         notificationManager.notify(id, notificationBuilder.build());
     }
 
-    public static void sendNotificationToUser(Context context, String userId, String title, String message) {
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        String channelId = "user_notification_channel";
+//    public static void sendNotificationToUser(Context context, String userId, String title, String message) {
+//        NotificationManager notificationManager = (NotificationManager)
+//                context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        String channelId = "user_notification_channel";
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel(channelId, "User Notifications", NotificationManager.IMPORTANCE_HIGH);
+//            channel.setDescription("Notifications for user replies");
+//            notificationManager.createNotificationChannel(channel);
+//        }
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+//                .setAutoCancel(true)
+//                .setSmallIcon(R.drawable.logo) // make sure this icon exists in your drawable folder
+//                .setContentTitle(title)
+//                .setContentText(message)
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setWhen(new Date().getTime());
+//
+//        // When tapped, open the user main screen (adjust as needed)
+//        Intent intent = new Intent(context, HomeActivity.class);
+//        intent.putExtra("openFragment", "UserNotificationFragment");
+//        PendingIntent pendingIntent = PendingIntent.getActivity(
+//                context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+//        builder.setContentIntent(pendingIntent);
+//
+//        notificationManager.notify(1001, builder.build());
+//    }
+public static void sendNotificationToUser(Context context, String userId, String title, String message) {
+    NotificationManager notificationManager = (NotificationManager)
+            context.getSystemService(Context.NOTIFICATION_SERVICE);
+    String channelId = "user_notification_channel";
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, "User Notifications", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Notifications for user replies");
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.logo) // make sure this icon exists in your drawable folder
-                .setContentTitle(title)
-                .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setWhen(new Date().getTime());
-
-        // When tapped, open the user main screen (adjust as needed)
-        Intent intent = new Intent(context, HomeActivity.class);
-        intent.putExtra("openFragment", "UserNotificationFragment");
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        builder.setContentIntent(pendingIntent);
-
-        notificationManager.notify(1001, builder.build());
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationChannel channel = new NotificationChannel(channelId, "User Notifications", NotificationManager.IMPORTANCE_HIGH);
+        channel.setDescription("Notifications for user replies");
+        notificationManager.createNotificationChannel(channel);
     }
+
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+            .setAutoCancel(true)
+            .setSmallIcon(R.drawable.logo) // make sure this icon exists in your drawable folder
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setWhen(new Date().getTime());
+
+    // When tapped, open the user main screen (adjust as needed)
+    Intent intent = new Intent(context, HomeActivity.class);
+    intent.putExtra("openFragment", "UserNotificationFragment");
+    PendingIntent pendingIntent = PendingIntent.getActivity(
+            context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+    builder.setContentIntent(pendingIntent);
+
+    notificationManager.notify(1001, builder.build());
+}
 }
