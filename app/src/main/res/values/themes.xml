@@ -5,6 +5,7 @@
         <item name="android:statusBarColor">@color/light_green</item>
         <!-- Navigation bar color -->
         <item name="android:navigationBarColor">@color/light_green</item>
+        <item name="android:toolbarStyle">@color/dark_green</item>
         <!-- Status bar icons black (false if status bar color is dark) -->
         <item name="android:windowLightStatusBar">true</item>
     </style>

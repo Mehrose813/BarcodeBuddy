@@ -2,6 +2,7 @@ package com.example.barcodebuddy;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,25 +24,34 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 public class AddProductActivity extends ToolBarActivity {
+
+    private ActivityResultLauncher<ScanOptions> codeLauncher;
+
     String id;
     Spinner spCat, spH;
     Button btnSave;
-    EditText edDes, edPName, edBar;
+    EditText edDes, edPName;
     ArrayList<String> list;
+    TextView txtScan;
     ArrayAdapter<String> adapter;
     ArrayList<String> arrayH;
     ArrayAdapter<String> adapterH;
-    ImageView ivImg, iv_productImage;
+    ImageView ivImg, iv_productImage,ivScan;
     private Uri imageUri;
 
     FirebaseDatabase firebaseDatabase;
@@ -69,12 +80,29 @@ public class AddProductActivity extends ToolBarActivity {
         spCat = findViewById(R.id.sp_cat);
         spH = findViewById(R.id.spinner_healthy);
         ivImg = findViewById(R.id.iv_pimg);
-        edBar = findViewById(R.id.ed_pbar);
+        ivScan = findViewById(R.id.iv_scan);
+        txtScan = findViewById(R.id.txt_scan);
         iv_productImage = findViewById(R.id.product_image);
 
         // Load categories and healthiness options
         loadCategories();
         loadHealthiness();
+
+        // Register the barcode scanner
+        codeLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+                String scannedBarcode = result.getContents();
+                txtScan.setText(scannedBarcode);
+                txtScan.setVisibility(View.VISIBLE);
+                ivScan.setVisibility(View.GONE);
+            } else {
+                Toast.makeText(this, "Scan cancelled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ivScan.setOnClickListener(v -> {
+            scanCode(); // call the method when image is clicked
+        });
 
         // Set existing product data if editing
         if (id != null && !id.isEmpty()) {
@@ -87,7 +115,7 @@ public class AddProductActivity extends ToolBarActivity {
                 String selectedCategory = spCat.getSelectedItem().toString();
                 String description = edDes.getText().toString();
                 String selectedH = spH.getSelectedItem().toString().trim();
-                String no = edBar.getText().toString();
+                String no = txtScan.getText().toString();
 
                 saveProductToFirebase(pname, description, selectedCategory, selectedH, uuid, no);
             }
@@ -122,7 +150,7 @@ public class AddProductActivity extends ToolBarActivity {
                     if (product != null) {
                         edPName.setText(product.getName());
                         edDes.setText(product.getDesc());
-                        edBar.setText(product.getBarcode());
+                        txtScan.setText(product.getBarcode());
 
                         // Set the spinner selections
                         ArrayAdapter<String> catAdapter = (ArrayAdapter<String>) spCat.getAdapter();
@@ -152,7 +180,7 @@ public class AddProductActivity extends ToolBarActivity {
         String description = edDes.getText().toString();
         String selectedCategory = spCat.getSelectedItem().toString();
         String selectedH = spH.getSelectedItem().toString().trim();
-        String barcode = edBar.getText().toString();
+        String barcode = txtScan.getText().toString();
 
         if (pname.isEmpty()) {
             Toast.makeText(this, "Please enter name of product", Toast.LENGTH_SHORT).show();
@@ -291,4 +319,16 @@ public class AddProductActivity extends ToolBarActivity {
                     }
                 });
     }
+
+    private void scanCode() {
+        ScanOptions options = new ScanOptions();
+        options.setPrompt("Scanning...");
+        options.setBeepEnabled(true);
+        options.setOrientationLocked(true);
+        options.setCaptureActivity(ScanBarcode.class); // ✅ scanner class here
+        codeLauncher.launch(options);
+    }
+
+
+
 }

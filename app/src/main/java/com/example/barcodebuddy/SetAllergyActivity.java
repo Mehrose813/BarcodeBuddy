@@ -156,6 +156,7 @@ public class SetAllergyActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
+                        selectedLayout.setVisibility(View.VISIBLE);
                         existingAllergies.add(selectedAllergic.toLowerCase()); // Add to set
                         addAllergyToUI(key, selectedAllergic);
                         updateAllergyStatus(selectedAllergic, true);
