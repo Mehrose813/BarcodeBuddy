@@ -60,8 +60,8 @@ TextView txtLogin;
                 String type="user";
 
                 String nameRegex = "^[^\\s]{3,}$";
-                String emailRegex = "^[a-zA-Z0-9._%+-]{3,}@gmail\\.com$";
-                String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
+                //String emailRegex = "^(?=[^_])(?!.*__)([a-zA-Z]{3,}[\\w.-]*)@gmail\\.com$";
+                String emailRegex = "^(?!_)(?!.*__)([a-zA-Z0-9]*[a-zA-Z]{3}[a-zA-Z0-9._-]*)@gmail\\.com$";                String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
                // String emailRegex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
 
                 if(name.isEmpty()){
@@ -80,12 +80,11 @@ TextView txtLogin;
                     mail.requestFocus();
                     return;
                 }
-//                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-//                    mail.setError("Enter a valid email");
-//                    mail.requestFocus();
-//                    return;
-//                }
-
+                if (email.startsWith("_")) {
+                    mail.setError("Email cannot start with an underscore");
+                    mail.requestFocus();
+                    return;
+                }
                 if (!email.matches(emailRegex)) {
                     mail.setError("Enter a valid email (e.g., example@gmail.com)");
                     mail.requestFocus();

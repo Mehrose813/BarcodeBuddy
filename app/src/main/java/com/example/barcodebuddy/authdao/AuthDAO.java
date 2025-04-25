@@ -40,12 +40,8 @@ public class AuthDAO {
                                         Intent intent = new Intent(context, AdminMainActivity.class);
                                         context.startActivity(intent);
                                         context.finish();
-                                        //callBack.onSuccess(); // Call success after navigation
                                     } else {
-                                        // Navigate to User screen
-//                                        Intent intent = new Intent(context, HomeActivity.class);
-//                                        context.startActivity(intent);
-//                                        context.finish();
+
                                         callBack.onSuccess(); // Call success after navigation
                                     }
                                 } else {
@@ -101,35 +97,4 @@ public class AuthDAO {
 
 
     }
-
-
-    public void fetchDetail(String userId, ResponseFetch callback) {
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful() && task.getResult().exists()) {
-                    DataSnapshot snapshot = task.getResult();
-                    String email = snapshot.child("email").getValue(String.class);
-                    String name = snapshot.child("name").getValue(String.class);
-                    String type=snapshot.child("type").getValue(String.class);
-
-                    // Create a Profile object with the fetched data
-                    Profile profile = new Profile(name, email,type);
-
-                    // Pass the profile object to the callback
-                    callback.onSuccess(profile); // Pass the profile object here
-                } else {
-                    callback.onError(task.getException().getMessage());
-                }
-            }
-
-
-        });
-    }
-
-
-
-
 }
