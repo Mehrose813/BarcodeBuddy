@@ -60,9 +60,9 @@ TextView txtLogin;
                 String type="user";
 
                 String nameRegex = "^[^\\s]{3,}$";
-                //String emailRegex = "^(?=[^_])(?!.*__)([a-zA-Z]{3,}[\\w.-]*)@gmail\\.com$";
-                String emailRegex = "^(?!_)(?!.*__)([a-zA-Z0-9]*[a-zA-Z]{3}[a-zA-Z0-9._-]*)@gmail\\.com$";                String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
-               // String emailRegex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+                String emailRegex = "^(?!_)(?!.*__)([a-zA-Z0-9]*[a-zA-Z]{3}[a-zA-Z0-9._-]*)@gmail\\.com$";
+                String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
+
 
                 if(name.isEmpty()){
                     nameSign.setError("Name is required");
