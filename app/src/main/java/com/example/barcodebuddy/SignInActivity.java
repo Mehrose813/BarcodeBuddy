@@ -58,12 +58,17 @@ public class SignInActivity extends AppCompatActivity {
                 String mail = email.getText().toString();
                 String pass = passw.getText().toString();
                 String passwordVal = "^(?=.*[!@#$%^&*(),.?\":{}|<>])[^\\s]+$";
-                String emailRegex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+                String emailRegex = "^(?!_)(?!.*__)([a-zA-Z0-9_]*[a-zA-Z]{3}[a-zA-Z0-9_-]*)@gmail\\.com$";
 
 
                 //validation
                 if (mail.isEmpty()) {
                     email.setError("Email is required");
+                    email.requestFocus();
+                    return;
+                }
+                if (mail.startsWith("_")) {
+                    email.setError("Email cannot start with an underscore");
                     email.requestFocus();
                     return;
                 }

@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class SetAllergyActivity extends AppCompatActivity {
+public class SetAllergyActivity extends ToolBarActivity {
 
     Spinner spAllergy;
     LinearLayout selectedLayout;
@@ -48,11 +48,12 @@ public class SetAllergyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        EdgeToEdge.enable(this);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.dark_green));
-//        }
-        setContentView(R.layout.activity_set_allergy);
+        getLayoutInflater().inflate(R.layout.activity_set_allergy, findViewById(R.id.container));
+
+        setToolbarTitle("Set Allergy");
+        showBackButton(true);
+
+    //    setContentView(R.layout.activity_set_allergy);
 
         spAllergy = findViewById(R.id.spinner_allergic);
         selectedLayout = findViewById(R.id.selected_allergy_layout);

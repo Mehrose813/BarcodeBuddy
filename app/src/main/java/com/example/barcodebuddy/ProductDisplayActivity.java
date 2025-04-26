@@ -46,7 +46,6 @@ public class ProductDisplayActivity extends ToolBarActivity {
         setToolbarTitle("Product Detail");
         showBackButton(true);
 
-
        // setContentView(R.layout.activity_product_display);
 
         // Initialize Views
