@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignInActivity extends AppCompatActivity {
     AppCompatButton btnLogin;
     EditText email,passw;
-    TextView txtSigup;
+    TextView txtSigup,txtforgotPas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,15 @@ public class SignInActivity extends AppCompatActivity {
         email = findViewById(R.id.mail);
         passw = findViewById(R.id.pass);
         txtSigup = findViewById(R.id.txt_sigup);
+        txtforgotPas=findViewById(R.id.txt_forgotPas);
 
+       txtforgotPas.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent=new Intent(SignInActivity.this,ForgetPassActivity.class);
+               startActivity(intent);
+           }
+       });
 
         ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this);
         progressDialog.setTitle("SignIn in process");

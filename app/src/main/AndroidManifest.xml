@@ -20,6 +20,9 @@
         android:theme="@style/Base.Theme.BarcodeBuddy"
         tools:targetApi="31">
         <activity
+            android:name=".ForgetPassActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -31,19 +34,18 @@
         <activity
             android:name=".IngDetailActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.BarcodeBuddy"/>
+            android:theme="@style/Base.Theme.BarcodeBuddy" />
         <activity
             android:name=".IngridientInformationActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.BarcodeBuddy"/>
+            android:theme="@style/Base.Theme.BarcodeBuddy" />
         <activity
             android:name=".ReplyReceiverActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.BarcodeBuddy"/>
+            android:theme="@style/Base.Theme.BarcodeBuddy" />
         <activity
             android:name=".SetAllergyActivity"
-            android:exported="false"
-            />
+            android:exported="false" />
         <activity
             android:name=".BlogListActivity"
             android:exported="false"
@@ -52,11 +54,11 @@
         <activity
             android:name=".AddBlogsActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.BarcodeBuddy"/>
+            android:theme="@style/Base.Theme.BarcodeBuddy" />
         <activity
             android:name=".ScanBarcodeActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.BarcodeBuddy"/>
+            android:theme="@style/Base.Theme.BarcodeBuddy" />
         <activity
             android:name=".ScanBarcode"
             android:exported="false"
@@ -113,12 +115,12 @@
             android:theme="@style/Base.Theme.BarcodeBuddy" />
         <activity
             android:name=".SignInActivity"
-            android:windowSoftInputMode="adjustResize"
             android:exported="false"
-            android:theme="@style/Base.Theme.BarcodeBuddy" />
+            android:theme="@style/Base.Theme.BarcodeBuddy"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>
